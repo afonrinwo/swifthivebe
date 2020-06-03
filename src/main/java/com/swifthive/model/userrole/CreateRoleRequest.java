@@ -1,4 +1,4 @@
-package com.swifthive.model.userRole;
+package com.swifthive.model.userrole;
 
 import javax.persistence.Column;
 import javax.persistence.Id;

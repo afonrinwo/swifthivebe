@@ -1,7 +1,4 @@
-/**
- * 
- */
-package com.swifthive.model.createMenu;
+package com.swifthive.model.userrole;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -14,19 +11,14 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-/**
- * @author emmanuel.afonrinwo
- *
- */
 @Entity
-@Table(name = "Menu", uniqueConstraints = @UniqueConstraint(columnNames= {"menuName"}))
-public class CreateMenuObject implements Serializable {
-
+@Table(name = "UserRole", uniqueConstraints = @UniqueConstraint(columnNames= {"roleName"}))
+public class UserRoleObject implements Serializable{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -9075553277449854133L;
-	
+	private static final long serialVersionUID = -95930250254700549L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "uniqueId", nullable = false)
@@ -35,8 +27,8 @@ public class CreateMenuObject implements Serializable {
 	@Column(name = "clientId", nullable = false)
 	private Long clientId;
 	
-	@Column(name = "menuName", nullable = false)
-	private String menuName;
+	@Column(name = "roleName", nullable = false)
+	private String roleName;
 	
 	@Column(name = "createdBy", nullable = false)
 	private String createdBy;
@@ -53,7 +45,7 @@ public class CreateMenuObject implements Serializable {
 	/**
 	 * 
 	 */
-	public CreateMenuObject() {
+	public UserRoleObject() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -61,18 +53,18 @@ public class CreateMenuObject implements Serializable {
 	/**
 	 * @param uniqueId
 	 * @param clientId
-	 * @param menuName
+	 * @param roleName
 	 * @param createdBy
 	 * @param dateCreated
 	 * @param approvedBy
 	 * @param dateApproved
 	 */
-	public CreateMenuObject(Long uniqueId, Long clientId, String menuName, String createdBy, LocalDateTime dateCreated,
+	public UserRoleObject(Long uniqueId, Long clientId, String roleName, String createdBy, LocalDateTime dateCreated,
 			String approvedBy, LocalDateTime dateApproved) {
 		super();
 		this.uniqueId = uniqueId;
 		this.clientId = clientId;
-		this.menuName = menuName;
+		this.roleName = roleName;
 		this.createdBy = createdBy;
 		this.dateCreated = dateCreated;
 		this.approvedBy = approvedBy;
@@ -108,17 +100,17 @@ public class CreateMenuObject implements Serializable {
 	}
 
 	/**
-	 * @return the menuName
+	 * @return the roleName
 	 */
-	public String getMenuName() {
-		return menuName;
+	public String getRoleName() {
+		return roleName;
 	}
 
 	/**
-	 * @param menuName the menuName to set
+	 * @param roleName the roleName to set
 	 */
-	public void setMenuName(String menuName) {
-		this.menuName = menuName;
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
 	}
 
 	/**
@@ -183,7 +175,5 @@ public class CreateMenuObject implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	
-	
 
 }

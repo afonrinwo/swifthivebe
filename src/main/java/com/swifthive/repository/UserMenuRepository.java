@@ -8,13 +8,13 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.swifthive.model.createMenu.CreateMenuObject;
+import com.swifthive.model.usermenu.UserMenuObject;
 
 @Repository
 @EnableTransactionManagement
 @Transactional
-public interface UserMenuRepository extends CrudRepository<CreateMenuObject, Serializable> {
+public interface UserMenuRepository extends CrudRepository<UserMenuObject, Serializable> {
 	
-	Iterable<CreateMenuObject> findAll();
+	Iterable<UserMenuObject> findAll();
 	
 }

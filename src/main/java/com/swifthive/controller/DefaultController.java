@@ -15,11 +15,12 @@ import com.swifthive.manager.UserFunction;
 import com.swifthive.manager.UserRole;
 import com.swifthive.manager.UserMenu;
 import com.swifthive.model.Response;
-import com.swifthive.model.createMenu.CreateMenuRequest;
-import com.swifthive.model.userRole.CreateRoleRequest;
-import com.swifthive.model.userRole.UserRoleObject;
 import com.swifthive.model.userfunction.CreateUserFunctionRequest;
 import com.swifthive.model.userfunction.UserFunctionObject;
+import com.swifthive.model.usermenu.CreateUserMenuRequest;
+import com.swifthive.model.usermenu.UserMenuObject;
+import com.swifthive.model.userrole.CreateRoleRequest;
+import com.swifthive.model.userrole.UserRoleObject;
 
 @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 @RestController
@@ -47,7 +48,7 @@ public class DefaultController {
 		return userFunction.processListUserFunction();
 	}
 	
-	@RequestMapping(value = "/userRole", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+	@RequestMapping(value = "/createUserRole", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public @ResponseBody Response createRole(@Valid @RequestBody CreateRoleRequest createRoleRequest) {
 		return userRole.processCreateRole(createRoleRequest);
 	}	
@@ -57,8 +58,13 @@ public class DefaultController {
 		return userRole.processListUserRole();
 	}
 	
-	@RequestMapping(value = "/userMenu", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
-	public @ResponseBody Response createMenu(@Valid @RequestBody CreateMenuRequest createMenuRequest) {
-		return userMenu.processCreateMenu(createMenuRequest);
+	@RequestMapping(value = "/createUserMenu", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+	public @ResponseBody Response createMenu(@Valid @RequestBody CreateUserMenuRequest createUserMenuRequest) {
+		return userMenu.processCreateMenu(createUserMenuRequest);
+	}
+	
+	@RequestMapping(value = "/listUserMenu", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody Iterable<UserMenuObject> listUserMenu() {
+		return userMenu.processListUserMenu();
 	}
 }

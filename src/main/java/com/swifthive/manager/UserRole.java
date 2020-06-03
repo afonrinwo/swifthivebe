@@ -17,9 +17,9 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.swifthive.model.Response;
-import com.swifthive.model.userRole.UserRoleObject;
+import com.swifthive.model.userrole.CreateRoleRequest;
+import com.swifthive.model.userrole.UserRoleObject;
 import com.swifthive.repository.UserRoleRepository;
-import com.swifthive.model.userRole.CreateRoleRequest;
 
 public class UserRole {
 	

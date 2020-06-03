@@ -11,9 +11,9 @@ import com.swifthive.manager.UserFunction;
 import com.swifthive.manager.UserMenu;
 import com.swifthive.manager.UserRole;
 import com.swifthive.model.Response;
-import com.swifthive.model.createMenu.CreateMenuObject;
-import com.swifthive.model.userRole.UserRoleObject;
 import com.swifthive.model.userfunction.UserFunctionObject;
+import com.swifthive.model.usermenu.UserMenuObject;
+import com.swifthive.model.userrole.UserRoleObject;
 
 @Configuration
 @PropertySource("classpath:responseCode.properties")
@@ -25,8 +25,8 @@ public class SwiftHiveBEConfiguration {
 	}
 	
 	@Bean
-	public CreateMenuObject createMenuObject() {
-		return new CreateMenuObject();
+	public UserMenuObject createMenuObject() {
+		return new UserMenuObject();
 	}
 	
 	@Bean

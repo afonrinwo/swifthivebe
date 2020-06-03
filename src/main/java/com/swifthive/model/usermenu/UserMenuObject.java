@@ -1,4 +1,4 @@
-package com.swifthive.model.userRole;
+package com.swifthive.model.usermenu;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -11,14 +11,19 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+/**
+ * @author emmanuel.afonrinwo
+ *
+ */
 @Entity
-@Table(name = "UserRole", uniqueConstraints = @UniqueConstraint(columnNames= {"roleName"}))
-public class UserRoleObject implements Serializable{
+@Table(name = "UserMenu", uniqueConstraints = @UniqueConstraint(columnNames= {"menuName"}))
+public class UserMenuObject implements Serializable {
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -95930250254700549L;
-
+	private static final long serialVersionUID = -5997527843442877657L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "uniqueId", nullable = false)
@@ -27,8 +32,8 @@ public class UserRoleObject implements Serializable{
 	@Column(name = "clientId", nullable = false)
 	private Long clientId;
 	
-	@Column(name = "roleName", nullable = false)
-	private String roleName;
+	@Column(name = "menuName", nullable = false)
+	private String menuName;
 	
 	@Column(name = "createdBy", nullable = false)
 	private String createdBy;
@@ -41,35 +46,41 @@ public class UserRoleObject implements Serializable{
 	
 	@Column(name = "dateApproved")
 	private LocalDateTime dateApproved;
+	
+	
 
 	/**
 	 * 
 	 */
-	public UserRoleObject() {
+	public UserMenuObject() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
+
+
 	/**
 	 * @param uniqueId
 	 * @param clientId
-	 * @param roleName
+	 * @param menuName
 	 * @param createdBy
 	 * @param dateCreated
 	 * @param approvedBy
 	 * @param dateApproved
 	 */
-	public UserRoleObject(Long uniqueId, Long clientId, String roleName, String createdBy, LocalDateTime dateCreated,
+	public UserMenuObject(Long uniqueId, Long clientId, String menuName, String createdBy, LocalDateTime dateCreated,
 			String approvedBy, LocalDateTime dateApproved) {
 		super();
 		this.uniqueId = uniqueId;
 		this.clientId = clientId;
-		this.roleName = roleName;
+		this.menuName = menuName;
 		this.createdBy = createdBy;
 		this.dateCreated = dateCreated;
 		this.approvedBy = approvedBy;
 		this.dateApproved = dateApproved;
 	}
+
+
 
 	/**
 	 * @return the uniqueId
@@ -78,12 +89,16 @@ public class UserRoleObject implements Serializable{
 		return uniqueId;
 	}
 
+
+
 	/**
 	 * @param uniqueId the uniqueId to set
 	 */
 	public void setUniqueId(Long uniqueId) {
 		this.uniqueId = uniqueId;
 	}
+
+
 
 	/**
 	 * @return the clientId
@@ -92,6 +107,8 @@ public class UserRoleObject implements Serializable{
 		return clientId;
 	}
 
+
+
 	/**
 	 * @param clientId the clientId to set
 	 */
@@ -99,19 +116,25 @@ public class UserRoleObject implements Serializable{
 		this.clientId = clientId;
 	}
 
-	/**
-	 * @return the roleName
-	 */
-	public String getRoleName() {
-		return roleName;
-	}
+
 
 	/**
-	 * @param roleName the roleName to set
+	 * @return the menuName
 	 */
-	public void setRoleName(String roleName) {
-		this.roleName = roleName;
+	public String getMenuName() {
+		return menuName;
 	}
+
+
+
+	/**
+	 * @param menuName the menuName to set
+	 */
+	public void setMenuName(String menuName) {
+		this.menuName = menuName;
+	}
+
+
 
 	/**
 	 * @return the createdBy
@@ -120,12 +143,16 @@ public class UserRoleObject implements Serializable{
 		return createdBy;
 	}
 
+
+
 	/**
 	 * @param createdBy the createdBy to set
 	 */
 	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
 	}
+
+
 
 	/**
 	 * @return the dateCreated
@@ -134,12 +161,16 @@ public class UserRoleObject implements Serializable{
 		return dateCreated;
 	}
 
+
+
 	/**
 	 * @param dateCreated the dateCreated to set
 	 */
 	public void setDateCreated(LocalDateTime dateCreated) {
 		this.dateCreated = dateCreated;
 	}
+
+
 
 	/**
 	 * @return the approvedBy
@@ -148,12 +179,16 @@ public class UserRoleObject implements Serializable{
 		return approvedBy;
 	}
 
+
+
 	/**
 	 * @param approvedBy the approvedBy to set
 	 */
 	public void setApprovedBy(String approvedBy) {
 		this.approvedBy = approvedBy;
 	}
+
+
 
 	/**
 	 * @return the dateApproved
@@ -162,6 +197,8 @@ public class UserRoleObject implements Serializable{
 		return dateApproved;
 	}
 
+
+
 	/**
 	 * @param dateApproved the dateApproved to set
 	 */
@@ -169,11 +206,15 @@ public class UserRoleObject implements Serializable{
 		this.dateApproved = dateApproved;
 	}
 
+
+
 	/**
 	 * @return the serialversionuid
 	 */
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+	
+	
 
 }

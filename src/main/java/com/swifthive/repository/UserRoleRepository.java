@@ -8,7 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.swifthive.model.userRole.UserRoleObject;
+import com.swifthive.model.userrole.UserRoleObject;
 
 @Repository
 @EnableTransactionManagement

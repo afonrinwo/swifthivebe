@@ -4,6 +4,7 @@
 package com.swifthive.manager;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -19,8 +20,8 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.swifthive.model.Response;
-import com.swifthive.model.createMenu.CreateMenuObject;
-import com.swifthive.model.createMenu.CreateMenuRequest;
+import com.swifthive.model.usermenu.CreateUserMenuRequest;
+import com.swifthive.model.usermenu.UserMenuObject;
 import com.swifthive.repository.UserMenuRepository;
 
 /**
@@ -31,7 +32,8 @@ public class UserMenu {
 
 	private static final Logger logger = Logger.getLogger(UserFunction.class);
 
-	CreateMenuObject createMenuObject;
+	UserMenuObject userMenuObject;
+	private Iterable<UserMenuObject> iUserMenuObject;
 
 	@Autowired
 	UserMenuRepository sqlRepository;
@@ -48,7 +50,7 @@ public class UserMenu {
 	DefaultTransactionDefinition defaultTransactionDefinition = new DefaultTransactionDefinition();
 
 	@Transactional
-	public Response processCreateMenu(@Valid CreateMenuRequest createMenuRequest) {
+	public Response processCreateMenu(@Valid CreateUserMenuRequest createUserMenuRequest) {
 
 		TransactionStatus status = null;
 
@@ -59,15 +61,15 @@ public class UserMenu {
 			status = transactionManager.getTransaction(defaultTransactionDefinition);
 
 			// persist function information
-			createMenuObject = new CreateMenuObject();
-			createMenuObject.setClientId(createMenuRequest.getClientId());
-			createMenuObject.setMenuName(createMenuRequest.getMenuName());
-			createMenuObject.setCreatedBy(createMenuRequest.getUserId());
-			createMenuObject.setDateCreated(LocalDateTime.now());
-			sqlRepository.save(createMenuObject);
+			userMenuObject = new UserMenuObject();
+			userMenuObject.setClientId(createUserMenuRequest.getClientId());
+			userMenuObject.setMenuName(createUserMenuRequest.getMenuName());
+			userMenuObject.setCreatedBy(createUserMenuRequest.getUserId());
+			userMenuObject.setDateCreated(LocalDateTime.now());
+			sqlRepository.save(userMenuObject);
 			transactionManager.commit(status);
-			response.setUniqueId(createMenuObject.getUniqueId());
-			response.setClientId(createMenuRequest.getClientId());
+			response.setUniqueId(userMenuObject.getUniqueId());
+			response.setClientId(createUserMenuRequest.getClientId());
 			response.setResponseCode("00");
 			response.setResponseMessage("Successful");
 
@@ -83,17 +85,27 @@ public class UserMenu {
 
 			if (ex instanceof DataIntegrityViolationException) {
 				response.setUniqueId(null);
-				response.setClientId(createMenuRequest.getClientId());
+				response.setClientId(createUserMenuRequest.getClientId());
 				response.setResponseCode("007");
 				response.setResponseMessage(env.getProperty("007"));
 			} else {
 				response.setUniqueId(null);
-				response.setClientId(createMenuRequest.getClientId());
+				response.setClientId(createUserMenuRequest.getClientId());
 				response.setResponseCode("099");
 				response.setResponseMessage(env.getProperty("099"));
 			}
 		}
 
 		return response;
+	}
+
+	public Iterable<UserMenuObject> processListUserMenu() {
+		try {
+			iUserMenuObject = sqlRepository.findAll();
+		} catch (Exception ex) {
+			iUserMenuObject = new ArrayList<>();
+			iUserMenuObject.forEach(null);
+		}
+		return iUserMenuObject;
 	}
 }
