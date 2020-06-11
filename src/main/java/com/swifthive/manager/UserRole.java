@@ -58,6 +58,7 @@ public class UserRole {
 			userRoleObject.setRoleName(createRoleRequest.getRoleName());
 			userRoleObject.setCreatedBy(createRoleRequest.getUserId());
 			userRoleObject.setDateCreated(LocalDateTime.now());	
+			userRoleObject.setStatus("0");
 			sqlRepository.save(userRoleObject);
 			transactionManager.commit(status);
 			response.setUniqueId(userRoleObject.getUniqueId());

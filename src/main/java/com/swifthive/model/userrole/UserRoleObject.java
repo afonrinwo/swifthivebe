@@ -36,6 +36,9 @@ public class UserRoleObject implements Serializable{
 	@Column(name = "dateCreated", nullable = false)
 	private LocalDateTime dateCreated;
 	
+	@Column(name = "status", nullable = false)
+	private String status;
+	
 	@Column(name = "approvedBy")
 	private String approvedBy;
 	
@@ -56,17 +59,19 @@ public class UserRoleObject implements Serializable{
 	 * @param roleName
 	 * @param createdBy
 	 * @param dateCreated
+	 * @param status
 	 * @param approvedBy
 	 * @param dateApproved
 	 */
 	public UserRoleObject(Long uniqueId, Long clientId, String roleName, String createdBy, LocalDateTime dateCreated,
-			String approvedBy, LocalDateTime dateApproved) {
+			String status, String approvedBy, LocalDateTime dateApproved) {
 		super();
 		this.uniqueId = uniqueId;
 		this.clientId = clientId;
 		this.roleName = roleName;
 		this.createdBy = createdBy;
 		this.dateCreated = dateCreated;
+		this.status = status;
 		this.approvedBy = approvedBy;
 		this.dateApproved = dateApproved;
 	}
@@ -142,6 +147,20 @@ public class UserRoleObject implements Serializable{
 	}
 
 	/**
+	 * @return the status
+	 */
+	public String getStatus() {
+		return status;
+	}
+
+	/**
+	 * @param status the status to set
+	 */
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	/**
 	 * @return the approvedBy
 	 */
 	public String getApprovedBy() {
@@ -176,4 +195,5 @@ public class UserRoleObject implements Serializable{
 		return serialVersionUID;
 	}
 
+	
 }

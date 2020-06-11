@@ -58,6 +58,7 @@ public class UserFunction {
 			userFunctionObject.setClientId(createUserFunctionRequest.getClientId());
 			userFunctionObject.setFunctionName(createUserFunctionRequest.getFunctionName());
 			userFunctionObject.setCreatedBy(createUserFunctionRequest.getUserId());
+			userFunctionObject.setStatus("0");
 			userFunctionObject.setDateCreated(LocalDateTime.now());
 			sqlRepository.save(userFunctionObject);
 			transactionManager.commit(status);

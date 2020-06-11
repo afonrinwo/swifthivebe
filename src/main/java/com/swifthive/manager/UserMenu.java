@@ -21,7 +21,10 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.swifthive.model.Response;
 import com.swifthive.model.usermenu.CreateUserMenuRequest;
+import com.swifthive.model.usermenu.UserMenuMappingRequest;
+import com.swifthive.model.usermenu.UserMenuMappingObject;
 import com.swifthive.model.usermenu.UserMenuObject;
+import com.swifthive.repository.UserMenuMappingRepository;
 import com.swifthive.repository.UserMenuRepository;
 
 /**
@@ -32,11 +35,15 @@ public class UserMenu {
 
 	private static final Logger logger = Logger.getLogger(UserFunction.class);
 
-	UserMenuObject userMenuObject;
+	private UserMenuObject userMenuObject;
+	private UserMenuMappingObject userMenuMappingObject;
 	private Iterable<UserMenuObject> iUserMenuObject;
 
 	@Autowired
 	UserMenuRepository sqlRepository;
+	
+	@Autowired
+	UserMenuMappingRepository userMenuMappingRepository;
 
 	@Autowired
 	Response response;
@@ -66,6 +73,7 @@ public class UserMenu {
 			userMenuObject.setMenuName(createUserMenuRequest.getMenuName());
 			userMenuObject.setCreatedBy(createUserMenuRequest.getUserId());
 			userMenuObject.setDateCreated(LocalDateTime.now());
+			userMenuObject.setStatus("0");
 			sqlRepository.save(userMenuObject);
 			transactionManager.commit(status);
 			response.setUniqueId(userMenuObject.getUniqueId());
@@ -107,5 +115,55 @@ public class UserMenu {
 			iUserMenuObject.forEach(null);
 		}
 		return iUserMenuObject;
+	}
+
+	public Response processMenuMapping(@Valid UserMenuMappingRequest userMenuMappingRequest) {
+		TransactionStatus status = null;
+		try {
+			// execute your business logic here
+			defaultTransactionDefinition.setName("transaction");
+			defaultTransactionDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+			status = transactionManager.getTransaction(defaultTransactionDefinition);
+
+			// persist function information
+			userMenuMappingObject = new UserMenuMappingObject();
+			userMenuMappingObject.setClientId(userMenuMappingRequest.getClientId());
+			userMenuMappingObject.setFunctionName(userMenuMappingRequest.getFunctionName());
+			userMenuMappingObject.setRoleName(userMenuMappingRequest.getRoleName());
+			userMenuMappingObject.setSelectedMenuList(userMenuMappingRequest.getSelectedMenuList());
+			userMenuMappingObject.setCreatedBy(userMenuMappingRequest.getUserId());
+			userMenuMappingObject.setDateCreated(LocalDateTime.now());
+			userMenuMappingObject.setStatus("0");
+			userMenuMappingRepository.save(userMenuMappingObject);
+			transactionManager.commit(status);
+			response.setUniqueId(userMenuMappingObject.getUniqueId());
+			response.setClientId(userMenuMappingRequest.getClientId());
+			response.setResponseCode("00");
+			response.setResponseMessage("Successful");
+			
+		} catch (Exception ex) {
+
+			try {
+				transactionManager.rollback(status);
+			} catch (Exception e) {
+				logger.error(e.getMessage() + "\n" + e.getLocalizedMessage() + "\n" + ExceptionUtils.getStackTrace(e));
+			}
+
+			logger.error(ex.getMessage() + "\n" + ex.getLocalizedMessage() + "\n" + ExceptionUtils.getStackTrace(ex));
+
+			if (ex instanceof DataIntegrityViolationException) {
+				response.setUniqueId(null);
+				response.setClientId(userMenuMappingRequest.getClientId());
+				response.setResponseCode("007");
+				response.setResponseMessage(env.getProperty("007"));
+			} else {
+				response.setUniqueId(null);
+				response.setClientId(userMenuMappingRequest.getClientId());
+				response.setResponseCode("099");
+				response.setResponseMessage(env.getProperty("099"));
+			}
+		}
+		
+		return response;
 	}
 }

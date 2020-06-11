@@ -1,4 +1,4 @@
-package com.swifthive.model.userfunction;
+package com.swifthive.model.usermenu;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -11,16 +11,19 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-
+/**
+ * @author emmanuel.afonrinwo
+ *
+ */
 @Entity
-@Table(name = "UserFunction", uniqueConstraints = @UniqueConstraint(columnNames= {"functionName"}))
-public  class UserFunctionObject implements Serializable {
+@Table(name = "UserMenuMapping", uniqueConstraints = @UniqueConstraint(columnNames= {"functionName", "roleName"}))
+public class UserMenuMappingObject implements Serializable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 4208769574218004830L;
-
+	private static final long serialVersionUID = -5997527843442877657L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "uniqueId", nullable = false)
@@ -31,6 +34,12 @@ public  class UserFunctionObject implements Serializable {
 	
 	@Column(name = "functionName", nullable = false)
 	private String functionName;
+	
+	@Column(name = "roleName", nullable = false)
+	private String roleName;
+	
+	@Column(name = "selectedMenuList", nullable = false)
+	private String selectedMenuList;
 	
 	@Column(name = "createdBy", nullable = false)
 	private String createdBy;
@@ -47,39 +56,41 @@ public  class UserFunctionObject implements Serializable {
 	@Column(name = "dateApproved")
 	private LocalDateTime dateApproved;
 	
-	
 	/**
 	 * 
 	 */
-	public UserFunctionObject() {
+	public UserMenuMappingObject() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
 
 	/**
 	 * @param uniqueId
 	 * @param clientId
 	 * @param functionName
+	 * @param roleName
+	 * @param selectedMenuList
 	 * @param createdBy
 	 * @param dateCreated
 	 * @param status
 	 * @param approvedBy
 	 * @param dateApproved
 	 */
-	public UserFunctionObject(Long uniqueId, Long clientId, String functionName, String createdBy,
-			LocalDateTime dateCreated, String status, String approvedBy, LocalDateTime dateApproved) {
+	public UserMenuMappingObject(Long uniqueId, Long clientId, String functionName, String roleName,
+			String selectedMenuList, String createdBy, LocalDateTime dateCreated, String status, String approvedBy,
+			LocalDateTime dateApproved) {
 		super();
 		this.uniqueId = uniqueId;
 		this.clientId = clientId;
 		this.functionName = functionName;
+		this.roleName = roleName;
+		this.selectedMenuList = selectedMenuList;
 		this.createdBy = createdBy;
 		this.dateCreated = dateCreated;
 		this.status = status;
 		this.approvedBy = approvedBy;
 		this.dateApproved = dateApproved;
 	}
-
 
 	/**
 	 * @return the uniqueId
@@ -88,14 +99,12 @@ public  class UserFunctionObject implements Serializable {
 		return uniqueId;
 	}
 
-
 	/**
 	 * @param uniqueId the uniqueId to set
 	 */
 	public void setUniqueId(Long uniqueId) {
 		this.uniqueId = uniqueId;
 	}
-
 
 	/**
 	 * @return the clientId
@@ -104,14 +113,12 @@ public  class UserFunctionObject implements Serializable {
 		return clientId;
 	}
 
-
 	/**
 	 * @param clientId the clientId to set
 	 */
 	public void setClientId(Long clientId) {
 		this.clientId = clientId;
 	}
-
 
 	/**
 	 * @return the functionName
@@ -120,7 +127,6 @@ public  class UserFunctionObject implements Serializable {
 		return functionName;
 	}
 
-
 	/**
 	 * @param functionName the functionName to set
 	 */
@@ -128,6 +134,33 @@ public  class UserFunctionObject implements Serializable {
 		this.functionName = functionName;
 	}
 
+	/**
+	 * @return the roleName
+	 */
+	public String getRoleName() {
+		return roleName;
+	}
+
+	/**
+	 * @param roleName the roleName to set
+	 */
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
+
+	/**
+	 * @return the selectedMenuList
+	 */
+	public String getSelectedMenuList() {
+		return selectedMenuList;
+	}
+
+	/**
+	 * @param selectedMenuList the selectedMenuList to set
+	 */
+	public void setSelectedMenuList(String selectedMenuList) {
+		this.selectedMenuList = selectedMenuList;
+	}
 
 	/**
 	 * @return the createdBy
@@ -136,14 +169,12 @@ public  class UserFunctionObject implements Serializable {
 		return createdBy;
 	}
 
-
 	/**
 	 * @param createdBy the createdBy to set
 	 */
 	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
 	}
-
 
 	/**
 	 * @return the dateCreated
@@ -152,14 +183,12 @@ public  class UserFunctionObject implements Serializable {
 		return dateCreated;
 	}
 
-
 	/**
 	 * @param dateCreated the dateCreated to set
 	 */
 	public void setDateCreated(LocalDateTime dateCreated) {
 		this.dateCreated = dateCreated;
 	}
-
 
 	/**
 	 * @return the status
@@ -168,14 +197,12 @@ public  class UserFunctionObject implements Serializable {
 		return status;
 	}
 
-
 	/**
 	 * @param status the status to set
 	 */
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
 
 	/**
 	 * @return the approvedBy
@@ -184,14 +211,12 @@ public  class UserFunctionObject implements Serializable {
 		return approvedBy;
 	}
 
-
 	/**
 	 * @param approvedBy the approvedBy to set
 	 */
 	public void setApprovedBy(String approvedBy) {
 		this.approvedBy = approvedBy;
 	}
-
 
 	/**
 	 * @return the dateApproved
@@ -200,14 +225,12 @@ public  class UserFunctionObject implements Serializable {
 		return dateApproved;
 	}
 
-
 	/**
 	 * @param dateApproved the dateApproved to set
 	 */
 	public void setDateApproved(LocalDateTime dateApproved) {
 		this.dateApproved = dateApproved;
 	}
-
 
 	/**
 	 * @return the serialversionuid

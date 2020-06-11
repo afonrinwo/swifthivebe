@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Id;
 
 public class CreateUserMenuRequest {
+	
 	@Id
 	@Column(name = "clientId", nullable = false)
 	private Long clientId;

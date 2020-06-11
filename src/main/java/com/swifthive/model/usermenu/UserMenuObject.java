@@ -41,14 +41,15 @@ public class UserMenuObject implements Serializable {
 	@Column(name = "dateCreated", nullable = false)
 	private LocalDateTime dateCreated;
 	
+	@Column(name = "status", nullable = false)
+	private String status;
+	
 	@Column(name = "approvedBy")
 	private String approvedBy;
 	
 	@Column(name = "dateApproved")
 	private LocalDateTime dateApproved;
 	
-	
-
 	/**
 	 * 
 	 */
@@ -57,30 +58,28 @@ public class UserMenuObject implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-
-
 	/**
 	 * @param uniqueId
 	 * @param clientId
 	 * @param menuName
 	 * @param createdBy
 	 * @param dateCreated
+	 * @param status
 	 * @param approvedBy
 	 * @param dateApproved
 	 */
 	public UserMenuObject(Long uniqueId, Long clientId, String menuName, String createdBy, LocalDateTime dateCreated,
-			String approvedBy, LocalDateTime dateApproved) {
+			String status, String approvedBy, LocalDateTime dateApproved) {
 		super();
 		this.uniqueId = uniqueId;
 		this.clientId = clientId;
 		this.menuName = menuName;
 		this.createdBy = createdBy;
 		this.dateCreated = dateCreated;
+		this.status = status;
 		this.approvedBy = approvedBy;
 		this.dateApproved = dateApproved;
 	}
-
-
 
 	/**
 	 * @return the uniqueId
@@ -89,16 +88,12 @@ public class UserMenuObject implements Serializable {
 		return uniqueId;
 	}
 
-
-
 	/**
 	 * @param uniqueId the uniqueId to set
 	 */
 	public void setUniqueId(Long uniqueId) {
 		this.uniqueId = uniqueId;
 	}
-
-
 
 	/**
 	 * @return the clientId
@@ -107,16 +102,12 @@ public class UserMenuObject implements Serializable {
 		return clientId;
 	}
 
-
-
 	/**
 	 * @param clientId the clientId to set
 	 */
 	public void setClientId(Long clientId) {
 		this.clientId = clientId;
 	}
-
-
 
 	/**
 	 * @return the menuName
@@ -125,16 +116,12 @@ public class UserMenuObject implements Serializable {
 		return menuName;
 	}
 
-
-
 	/**
 	 * @param menuName the menuName to set
 	 */
 	public void setMenuName(String menuName) {
 		this.menuName = menuName;
 	}
-
-
 
 	/**
 	 * @return the createdBy
@@ -143,16 +130,12 @@ public class UserMenuObject implements Serializable {
 		return createdBy;
 	}
 
-
-
 	/**
 	 * @param createdBy the createdBy to set
 	 */
 	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
 	}
-
-
 
 	/**
 	 * @return the dateCreated
@@ -161,8 +144,6 @@ public class UserMenuObject implements Serializable {
 		return dateCreated;
 	}
 
-
-
 	/**
 	 * @param dateCreated the dateCreated to set
 	 */
@@ -170,7 +151,19 @@ public class UserMenuObject implements Serializable {
 		this.dateCreated = dateCreated;
 	}
 
+	/**
+	 * @return the status
+	 */
+	public String getStatus() {
+		return status;
+	}
 
+	/**
+	 * @param status the status to set
+	 */
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
 	/**
 	 * @return the approvedBy
@@ -179,16 +172,12 @@ public class UserMenuObject implements Serializable {
 		return approvedBy;
 	}
 
-
-
 	/**
 	 * @param approvedBy the approvedBy to set
 	 */
 	public void setApprovedBy(String approvedBy) {
 		this.approvedBy = approvedBy;
 	}
-
-
 
 	/**
 	 * @return the dateApproved
@@ -197,8 +186,6 @@ public class UserMenuObject implements Serializable {
 		return dateApproved;
 	}
 
-
-
 	/**
 	 * @param dateApproved the dateApproved to set
 	 */
@@ -206,15 +193,12 @@ public class UserMenuObject implements Serializable {
 		this.dateApproved = dateApproved;
 	}
 
-
-
 	/**
 	 * @return the serialversionuid
 	 */
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	
-	
 
+	
 }

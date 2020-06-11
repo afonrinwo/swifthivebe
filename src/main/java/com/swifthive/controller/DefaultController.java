@@ -18,6 +18,7 @@ import com.swifthive.model.Response;
 import com.swifthive.model.userfunction.CreateUserFunctionRequest;
 import com.swifthive.model.userfunction.UserFunctionObject;
 import com.swifthive.model.usermenu.CreateUserMenuRequest;
+import com.swifthive.model.usermenu.UserMenuMappingRequest;
 import com.swifthive.model.usermenu.UserMenuObject;
 import com.swifthive.model.userrole.CreateRoleRequest;
 import com.swifthive.model.userrole.UserRoleObject;
@@ -66,5 +67,10 @@ public class DefaultController {
 	@RequestMapping(value = "/listUserMenu", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody Iterable<UserMenuObject> listUserMenu() {
 		return userMenu.processListUserMenu();
+	}
+	
+	@RequestMapping(value = "/menuMapping", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+	public @ResponseBody Response menuMapping(@Valid @RequestBody UserMenuMappingRequest userMenuMappingRequest) {
+		return userMenu.processMenuMapping(userMenuMappingRequest);
 	}
 }
