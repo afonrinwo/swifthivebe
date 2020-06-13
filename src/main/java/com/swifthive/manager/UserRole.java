@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
@@ -21,6 +22,8 @@ import com.swifthive.model.userrole.CreateRoleRequest;
 import com.swifthive.model.userrole.UserRoleObject;
 import com.swifthive.repository.UserRoleRepository;
 
+@Service
+@Transactional
 public class UserRole {
 	
 	private static final Logger logger = Logger.getLogger(UserRole.class);
@@ -28,7 +31,7 @@ public class UserRole {
 	private Iterable<UserRoleObject> iUserRoleObject;
 
 	@Autowired
-	UserRoleRepository sqlRepository;
+	UserRoleRepository userRoleRepository;
 
 	@Autowired
 	Response response;
@@ -59,7 +62,7 @@ public class UserRole {
 			userRoleObject.setCreatedBy(createRoleRequest.getUserId());
 			userRoleObject.setDateCreated(LocalDateTime.now());	
 			userRoleObject.setStatus("0");
-			sqlRepository.save(userRoleObject);
+			userRoleRepository.save(userRoleObject);
 			transactionManager.commit(status);
 			response.setUniqueId(userRoleObject.getUniqueId());
 			response.setClientId(createRoleRequest.getClientId());
@@ -94,11 +97,23 @@ public class UserRole {
 
 	public Iterable<UserRoleObject> processListUserRole() {
 		try {
-			iUserRoleObject = sqlRepository.findAll();
+			iUserRoleObject = userRoleRepository.findAll();
 		} catch (Exception ex) {
 			iUserRoleObject = new ArrayList<>();
 			iUserRoleObject.forEach(null);
 		}
+		return iUserRoleObject;
+	}
+
+	public Iterable<UserRoleObject> processListUserRoleAPL(String status) {
+		try {
+			iUserRoleObject = new ArrayList<>();
+			iUserRoleObject = userRoleRepository.findByStatus(status);
+		} catch (Exception ex) {
+			iUserRoleObject = new ArrayList<>();
+			iUserRoleObject.forEach(null);
+		}
+
 		return iUserRoleObject;
 	}
 

@@ -16,5 +16,7 @@ import com.swifthive.model.usermenu.UserMenuObject;
 public interface UserMenuRepository extends CrudRepository<UserMenuObject, Serializable> {
 	
 	Iterable<UserMenuObject> findAll();
+
+	Iterable<UserMenuObject> findByStatus(String status);
 	
 }

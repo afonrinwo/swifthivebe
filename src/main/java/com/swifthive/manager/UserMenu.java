@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
@@ -31,6 +32,8 @@ import com.swifthive.repository.UserMenuRepository;
  * @author emmanuel.afonrinwo
  *
  */
+@Service
+@Transactional
 public class UserMenu {
 
 	private static final Logger logger = Logger.getLogger(UserFunction.class);
@@ -38,9 +41,10 @@ public class UserMenu {
 	private UserMenuObject userMenuObject;
 	private UserMenuMappingObject userMenuMappingObject;
 	private Iterable<UserMenuObject> iUserMenuObject;
+	private Iterable<UserMenuMappingObject> iUserMenuMappingObject;
 
 	@Autowired
-	UserMenuRepository sqlRepository;
+	UserMenuRepository userMenuRepository;
 	
 	@Autowired
 	UserMenuMappingRepository userMenuMappingRepository;
@@ -74,7 +78,7 @@ public class UserMenu {
 			userMenuObject.setCreatedBy(createUserMenuRequest.getUserId());
 			userMenuObject.setDateCreated(LocalDateTime.now());
 			userMenuObject.setStatus("0");
-			sqlRepository.save(userMenuObject);
+			userMenuRepository.save(userMenuObject);
 			transactionManager.commit(status);
 			response.setUniqueId(userMenuObject.getUniqueId());
 			response.setClientId(createUserMenuRequest.getClientId());
@@ -109,7 +113,7 @@ public class UserMenu {
 
 	public Iterable<UserMenuObject> processListUserMenu() {
 		try {
-			iUserMenuObject = sqlRepository.findAll();
+			iUserMenuObject = userMenuRepository.findAll();
 		} catch (Exception ex) {
 			iUserMenuObject = new ArrayList<>();
 			iUserMenuObject.forEach(null);
@@ -166,4 +170,30 @@ public class UserMenu {
 		
 		return response;
 	}
+
+	public Iterable<UserMenuObject> processListUserMenuAPL(String status) {
+		try {
+			iUserMenuObject = new ArrayList<>();
+			iUserMenuObject = userMenuRepository.findByStatus(status);
+		} catch (Exception ex) {
+			iUserMenuObject = new ArrayList<>();
+			iUserMenuObject.forEach(null);
+		}
+
+		return iUserMenuObject;
+	}	
+	
+	public Iterable<UserMenuMappingObject> processMenuMappingAPL(String status) {
+		try {
+			iUserMenuMappingObject = new ArrayList<>();
+			iUserMenuMappingObject = userMenuMappingRepository.findByStatus(status);
+		} catch (Exception ex) {
+			iUserMenuMappingObject = new ArrayList<>();
+			iUserMenuMappingObject.forEach(null);
+		}
+
+		return iUserMenuMappingObject;
+	}
+
+
 }

@@ -7,9 +7,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import com.swifthive.manager.UserFunction;
-import com.swifthive.manager.UserMenu;
-import com.swifthive.manager.UserRole;
 import com.swifthive.model.Response;
 import com.swifthive.model.userfunction.UserFunctionObject;
 import com.swifthive.model.usermenu.UserMenuObject;
@@ -29,32 +26,19 @@ public class SwiftHiveBEConfiguration {
 		return new UserMenuObject();
 	}
 	
-	@Bean
-	public UserMenu userMenu() {
-		return new UserMenu();
-	}
 	
 	@Bean
 	public UserRoleObject userRoleObject() {
 		return new UserRoleObject();
 	}
 	
-	@Bean
-	public UserRole userRole() {
-		return new UserRole();
-	}
 	
 	@Bean
 	public UserFunctionObject userFunctionObject() {
 		return new UserFunctionObject();
 	}
 	
-	@Bean
-	public UserFunction createFunction() {
-		return new UserFunction();
-	}
-	
-	
+
 	@Bean
 	@Autowired
 	public PlatformTransactionManager transactionManager() {

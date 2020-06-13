@@ -16,5 +16,7 @@ import com.swifthive.model.userrole.UserRoleObject;
 public interface UserRoleRepository extends CrudRepository<UserRoleObject, Serializable> {
 	
 	Iterable<UserRoleObject> findAll();
+
+	Iterable<UserRoleObject> findByStatus(String status);
 	
 }

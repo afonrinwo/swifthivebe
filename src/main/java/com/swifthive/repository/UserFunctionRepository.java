@@ -16,5 +16,6 @@ import com.swifthive.model.userfunction.*;
 public interface UserFunctionRepository extends CrudRepository<UserFunctionObject, Serializable> {
 	
 	Iterable<UserFunctionObject> findAll();
-	
+
+	Iterable<UserFunctionObject> findByStatus(String status);	
 }

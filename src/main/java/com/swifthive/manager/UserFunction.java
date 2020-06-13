@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
@@ -21,6 +22,8 @@ import com.swifthive.model.userfunction.UserFunctionObject;
 import com.swifthive.repository.UserFunctionRepository;
 import com.swifthive.model.userfunction.CreateUserFunctionRequest;
 
+@Service
+@Transactional
 public class UserFunction {
 
 	private static final Logger logger = Logger.getLogger(UserFunction.class);
@@ -29,7 +32,7 @@ public class UserFunction {
 	private Iterable<UserFunctionObject> iUserFunctionObject;
 
 	@Autowired
-	UserFunctionRepository sqlRepository;
+	UserFunctionRepository userFunctionRepository;
 
 	@Autowired
 	Response response;
@@ -42,7 +45,6 @@ public class UserFunction {
 
 	DefaultTransactionDefinition defaultTransactionDefinition = new DefaultTransactionDefinition();
 
-	@Transactional
 	public Response processCreateUserFunction(@Valid CreateUserFunctionRequest createUserFunctionRequest) {
 
 		TransactionStatus status = null;
@@ -60,7 +62,7 @@ public class UserFunction {
 			userFunctionObject.setCreatedBy(createUserFunctionRequest.getUserId());
 			userFunctionObject.setStatus("0");
 			userFunctionObject.setDateCreated(LocalDateTime.now());
-			sqlRepository.save(userFunctionObject);
+			userFunctionRepository.save(userFunctionObject);
 			transactionManager.commit(status);
 			response.setUniqueId(userFunctionObject.getUniqueId());
 			response.setClientId(createUserFunctionRequest.getClientId());
@@ -96,7 +98,8 @@ public class UserFunction {
 	@Transactional
 	public Iterable<UserFunctionObject> processListUserFunction() {
 		try {
-			iUserFunctionObject = sqlRepository.findAll();
+			iUserFunctionObject = new ArrayList<>();
+			iUserFunctionObject = userFunctionRepository.findAll();
 		} catch (Exception ex) {
 			iUserFunctionObject = new ArrayList<>();
 			iUserFunctionObject.forEach(null);
@@ -104,4 +107,15 @@ public class UserFunction {
 		return iUserFunctionObject;
 	}
 
+	public Iterable<UserFunctionObject> processListUserFunctionAPL(String status) {
+		try {
+			iUserFunctionObject = new ArrayList<>();
+			iUserFunctionObject = userFunctionRepository.findByStatus(status);
+		} catch (Exception ex) {
+			iUserFunctionObject = new ArrayList<>();
+			iUserFunctionObject.forEach(null);
+		}
+
+		return iUserFunctionObject;
+	}
 }
