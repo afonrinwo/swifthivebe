@@ -3,12 +3,14 @@ package com.swifthive.utilities;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+
 
 public class Crypto {
 
-	private static final Logger logger = Logger.getLogger(Crypto.class);
+	private static final Logger logger = LogManager.getLogger(Crypto.class);
 
 	public static String encryptThisString(String a, String b) {
 		String hashtext = null;
@@ -35,7 +37,7 @@ public class Crypto {
 
 			// For specifying wrong message digest algorithms
 		} catch (Exception ex) {
-			logger.error(ex.getMessage() + "\n" + ex.getLocalizedMessage() + "\n" + ExceptionUtils.getStackTrace(ex));
+			logger.error(ex.getMessage() + "\n" + ex.getLocalizedMessage() + "\n" + ex.getStackTrace());
 			hashtext = "0";
 		}
 		return hashtext;

@@ -3,8 +3,8 @@ package com.swifthive.manager;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ import com.swifthive.repository.ClientErrorLogRepository;
 @Transactional
 public class ClientLog {
 	
-	private static final Logger logger = Logger.getLogger(UserFunction.class);
+	private static final Logger logger = LogManager.getLogger(UserFunction.class);
 
 	private ClientErrorLogObject clientErrorLogObject;
 	private ClientAuditLogObject clientAuditLogObject;
@@ -69,10 +69,10 @@ public class ClientLog {
 				try {
 					transactionManager.rollback(status);
 				} catch (Exception e) {
-					logger.error(e.getMessage() + "\n" + e.getLocalizedMessage() + "\n" + ExceptionUtils.getStackTrace(e) + "\n" + clientLogRequest.getClientId() + "\n" + clientLogRequest.getFuctionCalled() + "\n" + clientLogRequest.getStatus() + "\n" + clientLogRequest.getStatus() + "\n" + clientLogRequest.getCurrentDateTime());
+					logger.error(e.getMessage() + "\n" + e.getLocalizedMessage() + "\n" + e.getStackTrace() + "\n" + clientLogRequest.getClientId() + "\n" + clientLogRequest.getFuctionCalled() + "\n" + clientLogRequest.getStatus() + "\n" + clientLogRequest.getStatus() + "\n" + clientLogRequest.getCurrentDateTime());
 				}
 
-				logger.error(ex.getMessage() + "\n" + ex.getLocalizedMessage() + "\n" + ExceptionUtils.getStackTrace(ex) + "\n" + clientLogRequest.getClientId() + "\n" + clientLogRequest.getFuctionCalled() + "\n" + clientLogRequest.getStatus() + "\n" + clientLogRequest.getStatus() + "\n" + clientLogRequest.getCurrentDateTime());
+				logger.error(ex.getMessage() + "\n" + ex.getLocalizedMessage() + "\n" + ex.getStackTrace() + "\n" + clientLogRequest.getClientId() + "\n" + clientLogRequest.getFuctionCalled() + "\n" + clientLogRequest.getStatus() + "\n" + clientLogRequest.getStatus() + "\n" + clientLogRequest.getCurrentDateTime());
 
 			}
 		} else {
@@ -108,10 +108,10 @@ public class ClientLog {
 				try {
 					transactionManager.rollback(status);
 				} catch (Exception e) {
-					logger.error(e.getMessage() + "\n" + e.getLocalizedMessage() + "\n" + ExceptionUtils.getStackTrace(e) + "\n" + clientLogRequest.getClientId() + "\n" + clientLogRequest.getFuctionCalled() + "\n" + clientLogRequest.getStatus() + "\n" + clientLogRequest.getStatus() + "\n" + clientLogRequest.getCurrentDateTime());
+					logger.error(e.getMessage() + "\n" + e.getLocalizedMessage() + "\n" + e.getStackTrace() + "\n" + clientLogRequest.getClientId() + "\n" + clientLogRequest.getFuctionCalled() + "\n" + clientLogRequest.getStatus() + "\n" + clientLogRequest.getStatus() + "\n" + clientLogRequest.getCurrentDateTime());
 				}
 
-				logger.error(ex.getMessage() + "\n" + ex.getLocalizedMessage() + "\n" + ExceptionUtils.getStackTrace(ex) + "\n" + clientLogRequest.getClientId() + "\n" + clientLogRequest.getFuctionCalled() + "\n" + clientLogRequest.getStatus() + "\n" + clientLogRequest.getStatus() + "\n" + clientLogRequest.getCurrentDateTime());
+				logger.error(ex.getMessage() + "\n" + ex.getLocalizedMessage() + "\n" + ex.getStackTrace() + "\n" + clientLogRequest.getClientId() + "\n" + clientLogRequest.getFuctionCalled() + "\n" + clientLogRequest.getStatus() + "\n" + clientLogRequest.getStatus() + "\n" + clientLogRequest.getCurrentDateTime());
 
 			}
 		}

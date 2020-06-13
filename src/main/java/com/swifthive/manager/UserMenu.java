@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -36,7 +36,7 @@ import com.swifthive.repository.UserMenuRepository;
 @Transactional
 public class UserMenu {
 
-	private static final Logger logger = Logger.getLogger(UserFunction.class);
+	private static final Logger logger = LogManager.getLogger(UserFunction.class);
 
 	private UserMenuObject userMenuObject;
 	private UserMenuMappingObject userMenuMappingObject;
@@ -90,10 +90,10 @@ public class UserMenu {
 			try {
 				transactionManager.rollback(status);
 			} catch (Exception e) {
-				logger.error(e.getMessage() + "\n" + e.getLocalizedMessage() + "\n" + ExceptionUtils.getStackTrace(e));
+				logger.error(e.getMessage() + "\n" + e.getLocalizedMessage() + "\n" + e.getStackTrace());
 			}
 
-			logger.error(ex.getMessage() + "\n" + ex.getLocalizedMessage() + "\n" + ExceptionUtils.getStackTrace(ex));
+			logger.error(ex.getMessage() + "\n" + ex.getLocalizedMessage() + "\n" + ex.getStackTrace());
 
 			if (ex instanceof DataIntegrityViolationException) {
 				response.setUniqueId(null);
@@ -150,10 +150,10 @@ public class UserMenu {
 			try {
 				transactionManager.rollback(status);
 			} catch (Exception e) {
-				logger.error(e.getMessage() + "\n" + e.getLocalizedMessage() + "\n" + ExceptionUtils.getStackTrace(e));
+				logger.error(e.getMessage() + "\n" + e.getLocalizedMessage() + "\n" + e.getStackTrace());
 			}
 
-			logger.error(ex.getMessage() + "\n" + ex.getLocalizedMessage() + "\n" + ExceptionUtils.getStackTrace(ex));
+			logger.error(ex.getMessage() + "\n" + ex.getLocalizedMessage() + "\n" + ex.getStackTrace());
 
 			if (ex instanceof DataIntegrityViolationException) {
 				response.setUniqueId(null);
