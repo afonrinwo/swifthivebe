@@ -2,22 +2,15 @@ package com.swifthive.manager;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
-
 import com.swifthive.model.Response;
+import com.swifthive.model.ResponseCode;
 import com.swifthive.model.userfunction.UserFunctionObject;
 import com.swifthive.repository.UserFunctionRepository;
 import com.swifthive.model.userfunction.CreateUserFunctionRequest;
@@ -27,9 +20,9 @@ import com.swifthive.model.userfunction.CreateUserFunctionRequest;
 public class UserFunction {
 
 	private static final Logger logger = LogManager.getLogger(UserFunction.class);
-
 	private UserFunctionObject userFunctionObject;
 	private Iterable<UserFunctionObject> iUserFunctionObject;
+	private StringBuilder stringBuilder;
 
 	@Autowired
 	UserFunctionRepository userFunctionRepository;
@@ -38,64 +31,41 @@ public class UserFunction {
 	Response response;
 
 	@Autowired
-	Environment env;
-
-	@Autowired
-	PlatformTransactionManager transactionManager;
-
-	DefaultTransactionDefinition defaultTransactionDefinition = new DefaultTransactionDefinition();
+	ResponseCode responseCode;
 
 	public Response processCreateUserFunction(@Valid CreateUserFunctionRequest createUserFunctionRequest) {
 
-		TransactionStatus status = null;
-
+		stringBuilder = new StringBuilder();
 		try {
-			// execute your business logic here
-			defaultTransactionDefinition.setName("transaction");
-			defaultTransactionDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-			status = transactionManager.getTransaction(defaultTransactionDefinition);
-
-			// persist function information
+			// execute your business logic here, persist function information
 			userFunctionObject = new UserFunctionObject();
 			userFunctionObject.setClientId(createUserFunctionRequest.getClientId());
 			userFunctionObject.setFunctionName(createUserFunctionRequest.getFunctionName());
 			userFunctionObject.setCreatedBy(createUserFunctionRequest.getUserId());
 			userFunctionObject.setStatus("0");
 			userFunctionObject.setDateCreated(LocalDateTime.now());
-			userFunctionRepository.save(userFunctionObject);
-			transactionManager.commit(status);
-			response.setUniqueId(userFunctionObject.getUniqueId());
-			response.setClientId(createUserFunctionRequest.getClientId());
-			response.setResponseCode("00");
-			response.setResponseMessage("Successful");
+			if (userFunctionRepository.existsById(userFunctionObject.getFunctionName())) {
+				response.setUniqueId(0L);
+				response.setResponseCode(String.format("%03d", 7));
+				response.setResponseMessage(stringBuilder.append(responseCode.getResponseMessage()[7]).toString());
+			} else {
+				userFunctionRepository.save(userFunctionObject);
+				response.setUniqueId(userFunctionObject.getUniqueId());
+				response.setResponseCode(String.format("%03d", 0));
+				response.setResponseMessage("Successful");
+			}
 
 		} catch (Exception ex) {
-
-			try {
-				transactionManager.rollback(status);
-			} catch (Exception e) {
-				logger.error(e.getMessage() + "\n" + e.getLocalizedMessage() + "\n" + e.getStackTrace());
-			}
-
 			logger.error(ex.getMessage() + "\n" + ex.getLocalizedMessage() + "\n" + ex.getStackTrace());
-
-			if (ex instanceof DataIntegrityViolationException) {
-				response.setUniqueId(null);
-				response.setClientId(createUserFunctionRequest.getClientId());
-				response.setResponseCode("007");
-				response.setResponseMessage(env.getProperty("007"));
-			} else {
-				response.setUniqueId(null);
-				response.setClientId(createUserFunctionRequest.getClientId());
-				response.setResponseCode("099");
-				response.setResponseMessage(env.getProperty("099"));
-			}
+			response.setUniqueId(0L);
+			response.setResponseCode(String.format("%03d", 99));
+			response.setResponseMessage(stringBuilder.append(responseCode.getResponseMessage()[99]).toString());
 		}
-
+		
+		response.setClientId(createUserFunctionRequest.getClientId());
 		return response;
 	}
 
-	@Transactional
 	public Iterable<UserFunctionObject> processListUserFunction() {
 		try {
 			iUserFunctionObject = new ArrayList<>();

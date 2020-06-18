@@ -18,5 +18,7 @@ public interface UserMenuRepository extends CrudRepository<UserMenuObject, Seria
 	Iterable<UserMenuObject> findAll();
 
 	Iterable<UserMenuObject> findByStatus(String status);
+
+	boolean existsByMenuName(String menuName);
 	
 }

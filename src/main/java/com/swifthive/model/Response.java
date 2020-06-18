@@ -4,7 +4,7 @@ import javax.persistence.Column;
 
 public class Response {
 	
-	@Column(name = "uniqueId", nullable = false)
+	@Column(name = "uniqueId" , nullable = false)
 	private Long uniqueId;
 	
 	@Column(name = "clientId", nullable = false)

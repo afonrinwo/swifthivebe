@@ -12,15 +12,9 @@ import javax.validation.Valid;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
-
 import com.swifthive.model.Response;
+import com.swifthive.model.ResponseCode;
 import com.swifthive.model.usermenu.CreateUserMenuRequest;
 import com.swifthive.model.usermenu.UserMenuMappingRequest;
 import com.swifthive.model.usermenu.UserMenuMappingObject;
@@ -36,16 +30,17 @@ import com.swifthive.repository.UserMenuRepository;
 @Transactional
 public class UserMenu {
 
-	private static final Logger logger = LogManager.getLogger(UserFunction.class);
+	private static final Logger logger = LogManager.getLogger(UserMenu.class);
 
 	private UserMenuObject userMenuObject;
 	private UserMenuMappingObject userMenuMappingObject;
 	private Iterable<UserMenuObject> iUserMenuObject;
 	private Iterable<UserMenuMappingObject> iUserMenuMappingObject;
+	private StringBuilder stringBuilder;
 
 	@Autowired
 	UserMenuRepository userMenuRepository;
-	
+
 	@Autowired
 	UserMenuMappingRepository userMenuMappingRepository;
 
@@ -53,61 +48,38 @@ public class UserMenu {
 	Response response;
 
 	@Autowired
-	Environment env;
-
-	@Autowired
-	PlatformTransactionManager transactionManager;
-
-	DefaultTransactionDefinition defaultTransactionDefinition = new DefaultTransactionDefinition();
+	ResponseCode responseCode;
 
 	@Transactional
 	public Response processCreateMenu(@Valid CreateUserMenuRequest createUserMenuRequest) {
 
-		TransactionStatus status = null;
-
 		try {
-			// execute your business logic here
-			defaultTransactionDefinition.setName("transaction");
-			defaultTransactionDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-			status = transactionManager.getTransaction(defaultTransactionDefinition);
-
-			// persist function information
+			// execute your business logic here, persist function information
 			userMenuObject = new UserMenuObject();
 			userMenuObject.setClientId(createUserMenuRequest.getClientId());
 			userMenuObject.setMenuName(createUserMenuRequest.getMenuName());
 			userMenuObject.setCreatedBy(createUserMenuRequest.getUserId());
 			userMenuObject.setDateCreated(LocalDateTime.now());
 			userMenuObject.setStatus("0");
-			userMenuRepository.save(userMenuObject);
-			transactionManager.commit(status);
-			response.setUniqueId(userMenuObject.getUniqueId());
-			response.setClientId(createUserMenuRequest.getClientId());
-			response.setResponseCode("00");
-			response.setResponseMessage("Successful");
+			if (userMenuRepository.existsById(userMenuObject.getMenuName())) {
+				response.setUniqueId(0L);
+				response.setResponseCode(String.format("%03d", 7));
+				response.setResponseMessage(stringBuilder.append(responseCode.getResponseMessage()[7]).toString());
+			} else {
+				userMenuRepository.save(userMenuObject);
+				response.setUniqueId(userMenuObject.getUniqueId());
+				response.setResponseCode(String.format("%03d", 0));
+				response.setResponseMessage(stringBuilder.append(responseCode.getResponseMessage()[0]).toString());
+			}
 
 		} catch (Exception ex) {
-
-			try {
-				transactionManager.rollback(status);
-			} catch (Exception e) {
-				logger.error(e.getMessage() + "\n" + e.getLocalizedMessage() + "\n" + e.getStackTrace());
-			}
-
 			logger.error(ex.getMessage() + "\n" + ex.getLocalizedMessage() + "\n" + ex.getStackTrace());
-
-			if (ex instanceof DataIntegrityViolationException) {
-				response.setUniqueId(null);
-				response.setClientId(createUserMenuRequest.getClientId());
-				response.setResponseCode("007");
-				response.setResponseMessage(env.getProperty("007"));
-			} else {
-				response.setUniqueId(null);
-				response.setClientId(createUserMenuRequest.getClientId());
-				response.setResponseCode("099");
-				response.setResponseMessage(env.getProperty("099"));
-			}
+			response.setUniqueId(0L);
+			response.setResponseCode(String.format("%03d", 99));
+			response.setResponseMessage(stringBuilder.append(responseCode.getResponseMessage()[99]).toString());
 		}
 
+		response.setClientId(createUserMenuRequest.getClientId());
 		return response;
 	}
 
@@ -122,13 +94,7 @@ public class UserMenu {
 	}
 
 	public Response processMenuMapping(@Valid UserMenuMappingRequest userMenuMappingRequest) {
-		TransactionStatus status = null;
 		try {
-			// execute your business logic here
-			defaultTransactionDefinition.setName("transaction");
-			defaultTransactionDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-			status = transactionManager.getTransaction(defaultTransactionDefinition);
-
 			// persist function information
 			userMenuMappingObject = new UserMenuMappingObject();
 			userMenuMappingObject.setClientId(userMenuMappingRequest.getClientId());
@@ -138,36 +104,24 @@ public class UserMenu {
 			userMenuMappingObject.setCreatedBy(userMenuMappingRequest.getUserId());
 			userMenuMappingObject.setDateCreated(LocalDateTime.now());
 			userMenuMappingObject.setStatus("0");
-			userMenuMappingRepository.save(userMenuMappingObject);
-			transactionManager.commit(status);
-			response.setUniqueId(userMenuMappingObject.getUniqueId());
-			response.setClientId(userMenuMappingRequest.getClientId());
-			response.setResponseCode("00");
-			response.setResponseMessage("Successful");
-			
-		} catch (Exception ex) {
-
-			try {
-				transactionManager.rollback(status);
-			} catch (Exception e) {
-				logger.error(e.getMessage() + "\n" + e.getLocalizedMessage() + "\n" + e.getStackTrace());
-			}
-
-			logger.error(ex.getMessage() + "\n" + ex.getLocalizedMessage() + "\n" + ex.getStackTrace());
-
-			if (ex instanceof DataIntegrityViolationException) {
-				response.setUniqueId(null);
-				response.setClientId(userMenuMappingRequest.getClientId());
-				response.setResponseCode("007");
-				response.setResponseMessage(env.getProperty("007"));
+			if (userMenuMappingRepository.existsByIds(userMenuMappingObject.getFunctionName() , userMenuMappingObject.getRoleName())) {
+				response.setUniqueId(0L);
+				response.setResponseCode(String.format("%03d", 7));
+				response.setResponseMessage(stringBuilder.append(responseCode.getResponseMessage()[7]).toString());
 			} else {
-				response.setUniqueId(null);
-				response.setClientId(userMenuMappingRequest.getClientId());
-				response.setResponseCode("099");
-				response.setResponseMessage(env.getProperty("099"));
+				userMenuMappingRepository.save(userMenuMappingObject);
+				response.setUniqueId(userMenuMappingObject.getUniqueId());
+				response.setResponseCode(String.format("%03d", 99));
+				response.setResponseMessage(stringBuilder.append(responseCode.getResponseMessage()[0]).toString());
 			}
+
+		} catch (Exception ex) {
+			logger.error(ex.getMessage() + "\n" + ex.getLocalizedMessage() + "\n" + ex.getStackTrace());
+			response.setUniqueId(0L);
+			response.setResponseCode(String.format("%03d", 99));
+			response.setResponseMessage(stringBuilder.append(responseCode.getResponseMessage()[99]).toString());
 		}
-		
+		response.setClientId(userMenuMappingRequest.getClientId());
 		return response;
 	}
 
@@ -181,8 +135,8 @@ public class UserMenu {
 		}
 
 		return iUserMenuObject;
-	}	
-	
+	}
+
 	public Iterable<UserMenuMappingObject> processMenuMappingAPL(String status) {
 		try {
 			iUserMenuMappingObject = new ArrayList<>();
@@ -194,6 +148,5 @@ public class UserMenu {
 
 		return iUserMenuMappingObject;
 	}
-
 
 }

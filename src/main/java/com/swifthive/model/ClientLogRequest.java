@@ -19,10 +19,13 @@ public class ClientLogRequest {
 	private Long clientId;
 	
 	@Column(name = "userId", nullable = false)
-	private Long userId;
+	private String userId;
 	
-	@Column(name = "fuctionCalled", nullable = false)
-	private String fuctionCalled;
+	@Column(name = "functionCalled", nullable = false)
+	private String functionCalled;
+	
+	@Column(name = "activity", nullable = false)
+	private String activity;
 	
 	@Column(name = "status", nullable = false)
 	private String status;
@@ -30,8 +33,8 @@ public class ClientLogRequest {
 	@Column(name = "message", nullable = false)
 	private String message;
 	
-	@Column(name = "currentDateTime", nullable = false)
-	private String currentDateTime;
+	@Column(name = "logTime", nullable = false)
+	private String logTime;
 
 	/**
 	 * 
@@ -46,20 +49,22 @@ public class ClientLogRequest {
 	 * @param clientId
 	 * @param userId
 	 * @param fuctionCalled
+	 * @param activity
 	 * @param status
 	 * @param message
-	 * @param currentDateTime
+	 * @param logTime
 	 */
-	public ClientLogRequest(String logType, Long clientId, Long userId, String fuctionCalled, String status,
-			String message, String currentDateTime) {
+	public ClientLogRequest(String logType, Long clientId, String userId, String functionCalled, String activity,
+			String status, String message, String logTime) {
 		super();
 		this.logType = logType;
 		this.clientId = clientId;
 		this.userId = userId;
-		this.fuctionCalled = fuctionCalled;
+		this.functionCalled = functionCalled;
+		this.activity = activity;
 		this.status = status;
 		this.message = message;
-		this.currentDateTime = currentDateTime;
+		this.logTime = logTime;
 	}
 
 	/**
@@ -93,29 +98,43 @@ public class ClientLogRequest {
 	/**
 	 * @return the userId
 	 */
-	public Long getUserId() {
+	public String getUserId() {
 		return userId;
 	}
 
 	/**
 	 * @param userId the userId to set
 	 */
-	public void setUserId(Long userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 
 	/**
 	 * @return the fuctionCalled
 	 */
-	public String getFuctionCalled() {
-		return fuctionCalled;
+	public String getFunctionCalled() {
+		return functionCalled;
 	}
 
 	/**
 	 * @param fuctionCalled the fuctionCalled to set
 	 */
-	public void setFuctionCalled(String fuctionCalled) {
-		this.fuctionCalled = fuctionCalled;
+	public void setFunctionCalled(String functionCalled) {
+		this.functionCalled = functionCalled;
+	}
+
+	/**
+	 * @return the activity
+	 */
+	public String getActivity() {
+		return activity;
+	}
+
+	/**
+	 * @param activity the activity to set
+	 */
+	public void setActivity(String activity) {
+		this.activity = activity;
 	}
 
 	/**
@@ -147,17 +166,17 @@ public class ClientLogRequest {
 	}
 
 	/**
-	 * @return the currentDateTime
+	 * @return the logTime
 	 */
-	public String getCurrentDateTime() {
-		return currentDateTime;
+	public String getLogTime() {
+		return logTime;
 	}
 
 	/**
-	 * @param currentDateTime the currentDateTime to set
+	 * @param logTime the logTime to set
 	 */
-	public void setCurrentDateTime(String currentDateTime) {
-		this.currentDateTime = currentDateTime;
+	public void setLogTime(String logTime) {
+		this.logTime = logTime;
 	}
 
 	

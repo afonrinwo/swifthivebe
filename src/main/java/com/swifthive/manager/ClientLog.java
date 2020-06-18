@@ -6,13 +6,7 @@ import javax.validation.Valid;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
-
 import com.swifthive.model.ClientAuditLogObject;
 import com.swifthive.model.ClientErrorLogObject;
 import com.swifthive.model.ClientLogRequest;
@@ -23,7 +17,7 @@ import com.swifthive.repository.ClientErrorLogRepository;
 @Transactional
 public class ClientLog {
 	
-	private static final Logger logger = LogManager.getLogger(UserFunction.class);
+	private static final Logger logger = LogManager.getLogger(ClientLog.class);
 
 	private ClientErrorLogObject clientErrorLogObject;
 	private ClientAuditLogObject clientAuditLogObject;
@@ -33,86 +27,51 @@ public class ClientLog {
 
 	@Autowired
 	ClientAuditLogRepository clientAuditLogRepository;
-	
-	@Autowired
-	Environment env;
-
-	@Autowired
-	PlatformTransactionManager transactionManager;
-
-	DefaultTransactionDefinition defaultTransactionDefinition = new DefaultTransactionDefinition();
-	
 
 	public void processClientLog(@Valid ClientLogRequest clientLogRequest) {
-		TransactionStatus status = null;
-		
-		if(clientLogRequest.getLogType().toUpperCase() == "AUDIT") {
-			try {
-				// execute your business logic here
-				defaultTransactionDefinition.setName("transaction");
-				defaultTransactionDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-				status = transactionManager.getTransaction(defaultTransactionDefinition);
 
+		if("AUDIT".equals(clientLogRequest.getLogType().toUpperCase())) {
+			try {
 				// persist function information
 				clientAuditLogObject = new ClientAuditLogObject();
 				clientAuditLogObject.setClientId(clientLogRequest.getClientId());
 				clientAuditLogObject.setUserId(clientLogRequest.getUserId());
-				clientAuditLogObject.setFuctionCalled(clientLogRequest.getFuctionCalled());
+				clientAuditLogObject.setFunctionCalled(clientLogRequest.getFunctionCalled());
+				clientAuditLogObject.setActivity(clientLogRequest.getActivity());
 				clientAuditLogObject.setStatus(clientLogRequest.getStatus());
 				clientAuditLogObject.setMessage(clientLogRequest.getMessage());
-				clientAuditLogObject.setCurrentDateTime(clientLogRequest.getCurrentDateTime());
+				clientAuditLogObject.setLogTime(clientLogRequest.getLogTime());
 				clientAuditLogRepository.save(clientAuditLogObject);
-				transactionManager.commit(status);
-
 			} catch (Exception ex) {
-
-				try {
-					transactionManager.rollback(status);
-				} catch (Exception e) {
-					logger.error(e.getMessage() + "\n" + e.getLocalizedMessage() + "\n" + e.getStackTrace() + "\n" + clientLogRequest.getClientId() + "\n" + clientLogRequest.getFuctionCalled() + "\n" + clientLogRequest.getStatus() + "\n" + clientLogRequest.getStatus() + "\n" + clientLogRequest.getCurrentDateTime());
-				}
-
-				logger.error(ex.getMessage() + "\n" + ex.getLocalizedMessage() + "\n" + ex.getStackTrace() + "\n" + clientLogRequest.getClientId() + "\n" + clientLogRequest.getFuctionCalled() + "\n" + clientLogRequest.getStatus() + "\n" + clientLogRequest.getStatus() + "\n" + clientLogRequest.getCurrentDateTime());
-
+				logger.error(ex.getMessage() + "\n" + ex.getLocalizedMessage() + "\n" + ex.getStackTrace() + "\n" + clientLogRequest.getClientId() + "\n" + clientLogRequest.getUserId() + "\n" + clientLogRequest.getFunctionCalled() + "\n" + clientLogRequest.getActivity() + "\n" + clientLogRequest.getStatus() + "\n" + clientLogRequest.getMessage() + "\n" + clientLogRequest.getLogTime());
 			}
 		} else {
 			
 			try {
-				// execute your business logic here
-				defaultTransactionDefinition.setName("transaction");
-				defaultTransactionDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-				status = transactionManager.getTransaction(defaultTransactionDefinition);
-
 				// persist audit log function information 
 				clientAuditLogObject = new ClientAuditLogObject();
 				clientAuditLogObject.setClientId(clientLogRequest.getClientId());
 				clientAuditLogObject.setUserId(clientLogRequest.getUserId());
-				clientAuditLogObject.setFuctionCalled(clientLogRequest.getFuctionCalled());
+				clientAuditLogObject.setFunctionCalled(clientLogRequest.getFunctionCalled());
+				clientAuditLogObject.setActivity(clientLogRequest.getActivity());
 				clientAuditLogObject.setStatus(clientLogRequest.getStatus());
 				clientAuditLogObject.setMessage(clientLogRequest.getMessage());
-				clientAuditLogObject.setCurrentDateTime(clientLogRequest.getCurrentDateTime());
+				clientAuditLogObject.setLogTime(clientLogRequest.getLogTime());
 				clientAuditLogRepository.save(clientAuditLogObject);
 				
 				// persist error log function information 
 				clientErrorLogObject = new ClientErrorLogObject();
 				clientErrorLogObject.setClientId(clientLogRequest.getClientId());
-				clientErrorLogObject.setFuctionCalled(clientLogRequest.getFuctionCalled());
+				clientErrorLogObject.setUserId(clientLogRequest.getUserId());
+				clientErrorLogObject.setFunctionCalled(clientLogRequest.getFunctionCalled());
+				clientErrorLogObject.setActivity(clientLogRequest.getActivity());
 				clientErrorLogObject.setStatus(clientLogRequest.getStatus());
-				clientErrorLogObject.setCurrentDateTime(clientLogRequest.getCurrentDateTime());
+				clientErrorLogObject.setMessage(clientLogRequest.getMessage());
+				clientErrorLogObject.setLogTime(clientLogRequest.getLogTime());
 				clientErrorLogRepository.save(clientErrorLogObject);
-				
-				transactionManager.commit(status);
 
 			} catch (Exception ex) {
-
-				try {
-					transactionManager.rollback(status);
-				} catch (Exception e) {
-					logger.error(e.getMessage() + "\n" + e.getLocalizedMessage() + "\n" + e.getStackTrace() + "\n" + clientLogRequest.getClientId() + "\n" + clientLogRequest.getFuctionCalled() + "\n" + clientLogRequest.getStatus() + "\n" + clientLogRequest.getStatus() + "\n" + clientLogRequest.getCurrentDateTime());
-				}
-
-				logger.error(ex.getMessage() + "\n" + ex.getLocalizedMessage() + "\n" + ex.getStackTrace() + "\n" + clientLogRequest.getClientId() + "\n" + clientLogRequest.getFuctionCalled() + "\n" + clientLogRequest.getStatus() + "\n" + clientLogRequest.getStatus() + "\n" + clientLogRequest.getCurrentDateTime());
-
+				logger.error(ex.getMessage() + "\n" + ex.getLocalizedMessage() + "\n" + ex.getStackTrace() + "\n" + clientLogRequest.getClientId() + "\n" + clientLogRequest.getUserId() + "\n" + clientLogRequest.getFunctionCalled() + "\n" + clientLogRequest.getActivity() + "\n" + clientLogRequest.getStatus() + "\n" + clientLogRequest.getMessage() + "\n" + clientLogRequest.getLogTime());
 			}
 		}
 

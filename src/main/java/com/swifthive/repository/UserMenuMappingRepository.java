@@ -17,5 +17,7 @@ public interface UserMenuMappingRepository extends CrudRepository<UserMenuMappin
 
 	Iterable<UserMenuMappingObject> findByStatus(String status);
 
+	boolean existsByIds(String functionName, String roleName);
+
 		
 }

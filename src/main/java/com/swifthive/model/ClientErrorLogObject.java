@@ -36,10 +36,13 @@ public class ClientErrorLogObject implements Serializable {
 	private Long clientId;
 	
 	@Column(name = "userId", nullable = false)
-	private Long userId;
+	private String userId;
 	
-	@Column(name = "fuctionCalled", nullable = false)
-	private String fuctionCalled;
+	@Column(name = "functionCalled", nullable = false)
+	private String functionCalled;
+	
+	@Column(name = "activity", nullable = false)
+	private String activity;
 	
 	@Column(name = "status", nullable = false)
 	private String status;
@@ -47,11 +50,11 @@ public class ClientErrorLogObject implements Serializable {
 	@Column(name = "message", nullable = false)
 	private String message;
 	
-	@Column(name = "currentDateTime", nullable = false)
-	private String currentDateTime;
+	@Column(name = "logTime", nullable = false)
+	private String logTime;
 	
-    @Column(name="timeStamp", columnDefinition = "datetime default getdate()")
-    private Date timeStamp;
+    @Column(name="timeStamp", nullable = false)
+    private Date timeStamp = new Date();
 
 	/**
 	 * 
@@ -61,28 +64,34 @@ public class ClientErrorLogObject implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
+	
+
 	/**
 	 * @param uniqueId
 	 * @param clientId
 	 * @param userId
 	 * @param fuctionCalled
+	 * @param activity
 	 * @param status
 	 * @param message
-	 * @param currentDateTime
+	 * @param logTime
 	 * @param timeStamp
 	 */
-	public ClientErrorLogObject(Long uniqueId, Long clientId, Long userId, String fuctionCalled, String status,
-			String message, String currentDateTime, Date timeStamp) {
+	public ClientErrorLogObject(Long uniqueId, Long clientId, String userId, String functionCalled, String activity,
+			String status, String message, String logTime, Date timeStamp) {
 		super();
 		this.uniqueId = uniqueId;
 		this.clientId = clientId;
 		this.userId = userId;
-		this.fuctionCalled = fuctionCalled;
+		this.functionCalled = functionCalled;
+		this.activity = activity;
 		this.status = status;
 		this.message = message;
-		this.currentDateTime = currentDateTime;
+		this.logTime = logTime;
 		this.timeStamp = timeStamp;
 	}
+
+
 
 	/**
 	 * @return the uniqueId
@@ -115,29 +124,43 @@ public class ClientErrorLogObject implements Serializable {
 	/**
 	 * @return the userId
 	 */
-	public Long getUserId() {
+	public String getUserId() {
 		return userId;
 	}
 
 	/**
 	 * @param userId the userId to set
 	 */
-	public void setUserId(Long userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 
 	/**
 	 * @return the fuctionCalled
 	 */
-	public String getFuctionCalled() {
-		return fuctionCalled;
+	public String getFunctionCalled() {
+		return functionCalled;
 	}
 
 	/**
 	 * @param fuctionCalled the fuctionCalled to set
 	 */
-	public void setFuctionCalled(String fuctionCalled) {
-		this.fuctionCalled = fuctionCalled;
+	public void setFunctionCalled(String functionCalled) {
+		this.functionCalled = functionCalled;
+	}
+
+	/**
+	 * @return the activity
+	 */
+	public String getActivity() {
+		return activity;
+	}
+
+	/**
+	 * @param activity the activity to set
+	 */
+	public void setActivity(String activity) {
+		this.activity = activity;
 	}
 
 	/**
@@ -169,17 +192,17 @@ public class ClientErrorLogObject implements Serializable {
 	}
 
 	/**
-	 * @return the currentDateTime
+	 * @return the logTime
 	 */
-	public String getCurrentDateTime() {
-		return currentDateTime;
+	public String getLogTime() {
+		return logTime;
 	}
 
 	/**
-	 * @param currentDateTime the currentDateTime to set
+	 * @param logTime the logTime to set
 	 */
-	public void setCurrentDateTime(String currentDateTime) {
-		this.currentDateTime = currentDateTime;
+	public void setLogTime(String logTime) {
+		this.logTime = logTime;
 	}
 
 	/**

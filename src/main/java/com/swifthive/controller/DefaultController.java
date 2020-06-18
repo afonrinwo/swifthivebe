@@ -3,7 +3,6 @@ package com.swifthive.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,7 +24,6 @@ import com.swifthive.model.usermenu.UserMenuObject;
 import com.swifthive.model.userrole.CreateRoleRequest;
 import com.swifthive.model.userrole.UserRoleObject;
 
-@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 @RestController
 public class DefaultController {
 
