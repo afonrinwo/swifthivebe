@@ -41,6 +41,9 @@ public  class UserFunctionObject implements Serializable {
 	@Column(name = "status", nullable = false)
 	private String status;
 	
+	@Column(name = "approvedClientId")
+	private Long approvedClientId;
+	
 	@Column(name = "approvedBy")
 	private String approvedBy;
 	
@@ -68,7 +71,7 @@ public  class UserFunctionObject implements Serializable {
 	 * @param dateApproved
 	 */
 	public UserFunctionObject(Long uniqueId, Long clientId, String functionName, String createdBy,
-			LocalDateTime dateCreated, String status, String approvedBy, LocalDateTime dateApproved) {
+			LocalDateTime dateCreated, String status, Long approvedClientId, String approvedBy, LocalDateTime dateApproved) {
 		super();
 		this.uniqueId = uniqueId;
 		this.clientId = clientId;
@@ -76,6 +79,7 @@ public  class UserFunctionObject implements Serializable {
 		this.createdBy = createdBy;
 		this.dateCreated = dateCreated;
 		this.status = status;
+		this.approvedClientId = approvedClientId;
 		this.approvedBy = approvedBy;
 		this.dateApproved = dateApproved;
 	}
@@ -174,6 +178,22 @@ public  class UserFunctionObject implements Serializable {
 	 */
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	
+
+	/**
+	 * @return the approvedClientId
+	 */
+	public Long getApprovedClientId() {
+		return approvedClientId;
+	}
+
+
+	/**
+	 * @param approvedClientId the approvedClientId to set
+	 */
+	public void setApprovedClientId(Long approvedClientId) {
+		this.approvedClientId = approvedClientId;
 	}
 
 

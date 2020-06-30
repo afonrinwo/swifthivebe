@@ -50,12 +50,15 @@ public class UserMenuMappingObject implements Serializable {
 	@Column(name = "status", nullable = false)
 	private String status;
 	
+	@Column(name = "approvedClientId")
+	private Long approvedClientId;
+	
 	@Column(name = "approvedBy")
 	private String approvedBy;
 	
 	@Column(name = "dateApproved")
 	private LocalDateTime dateApproved;
-	
+
 	/**
 	 * 
 	 */
@@ -73,12 +76,13 @@ public class UserMenuMappingObject implements Serializable {
 	 * @param createdBy
 	 * @param dateCreated
 	 * @param status
+	 * @param approvedClientId
 	 * @param approvedBy
 	 * @param dateApproved
 	 */
 	public UserMenuMappingObject(Long uniqueId, Long clientId, String functionName, String roleName,
-			String selectedMenuList, String createdBy, LocalDateTime dateCreated, String status, String approvedBy,
-			LocalDateTime dateApproved) {
+			String selectedMenuList, String createdBy, LocalDateTime dateCreated, String status, Long approvedClientId,
+			String approvedBy, LocalDateTime dateApproved) {
 		super();
 		this.uniqueId = uniqueId;
 		this.clientId = clientId;
@@ -88,6 +92,7 @@ public class UserMenuMappingObject implements Serializable {
 		this.createdBy = createdBy;
 		this.dateCreated = dateCreated;
 		this.status = status;
+		this.approvedClientId = approvedClientId;
 		this.approvedBy = approvedBy;
 		this.dateApproved = dateApproved;
 	}
@@ -205,6 +210,20 @@ public class UserMenuMappingObject implements Serializable {
 	}
 
 	/**
+	 * @return the approvedClientId
+	 */
+	public Long getApprovedClientId() {
+		return approvedClientId;
+	}
+
+	/**
+	 * @param approvedClientId the approvedClientId to set
+	 */
+	public void setApprovedClientId(Long approvedClientId) {
+		this.approvedClientId = approvedClientId;
+	}
+
+	/**
 	 * @return the approvedBy
 	 */
 	public String getApprovedBy() {
@@ -238,5 +257,6 @@ public class UserMenuMappingObject implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-
+	
+	
 }

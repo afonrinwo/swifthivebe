@@ -16,5 +16,8 @@ public interface UserFunctionRepository extends CrudRepository<UserFunctionObjec
 
 	Iterable<UserFunctionObject> findByStatus(String status);
 
-	boolean existsByFunctionName(String functionName);	
+	boolean existsByFunctionName(String functionName);
+
+	UserFunctionObject findByUniqueId(Long uniqueId);
+
 }

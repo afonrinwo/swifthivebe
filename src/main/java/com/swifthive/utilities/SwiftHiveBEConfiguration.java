@@ -14,6 +14,11 @@ import com.swifthive.model.userrole.UserRoleObject;
 @Configuration
 @EnableTransactionManagement
 public class SwiftHiveBEConfiguration {
+	
+	@Bean
+	public Util util() {
+		return new Util();
+	}
 
 	@Bean
 	public Response createFunctionResponse() {
@@ -41,8 +46,9 @@ public class SwiftHiveBEConfiguration {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**").allowedOrigins("*").exposedHeaders("OPTIONS")
-						.allowedMethods("GET", "POST", "PUT", "DELETE").allowedHeaders("content-type", "authorization")
-						.allowCredentials(true).maxAge(3600);
+						.allowedHeaders("content-type", "authorization")
+						.allowCredentials(true)
+						.maxAge(3600);
 			}
 		};
 	}

@@ -1,70 +1,47 @@
 {
-  "configuration": {
-    "name": "Default",
-    "properties": {
-      "property": [
-        {
-          "name": "swifthivebe",
-          "value": "logs"
-        },
-        {
-          "name": "archive",
-          "value": "${swifthivebe}/archive"
-        }
-      ]
-    },
-    "appenders": {
-      "Console": {
-        "name": "Console-Appender",
-        "target": "SYSTEM_OUT",
-        "PatternLayout": {
-          "pattern": "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
-        }
-      },
-      "File": {
-        "name": "File-Appender",
-        "fileName": "${swifthivebe}/logfile.log",
-        "PatternLayout": {
-          "pattern": "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
-        }
-      },
-      "RollingFile": {
-        "name": "RollingFile-Appender",
-        "fileName": "${swifthivebe}/rollingfile.log",
-        "filePattern": "${archive}/rollingfile.log.%d{yyyy-MM-dd-hh-mm}.gz",
-        "PatternLayout": {
-          "pattern": "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
-        },
-        "Policies": {
-          "SizeBasedTriggeringPolicy": {
-            "size": "1 GB"
-          }
-        },
-        "DefaultRolloverStrategy": {
-          "max": "365"
-        }
-      }
-    },
-    "loggers": {
-      "logger": {
-        "name": "com.swifthive.manager",
-        "level": "debug",
-        "additivity": "true",
-        "appender-ref": [{
-          "ref": "Console-Appender", "level":"info"
-        },
-          {
-            "ref": "File-Appender", "level":"error"
-          },
-        {
-          "ref": "RollingFile-Appender", "level":"debug"
-        }
-        ]
-      },
-      "root": {
-        "level": "debug",
-        "appender-ref": {"ref": "Console-Appender"}
-      }
-    }
-  }
+	"configuration": {
+		"name": "Default",
+		"properties": {
+			"property": {
+				"name": "swifthivebe",
+				"value": "logs"
+			}
+		},
+		"appenders": {
+			"Console": {
+				"name": "Console-Appender",
+				"target": "SYSTEM_OUT",
+				"PatternLayout": {
+					"pattern": "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+				}
+			},
+			"RollingFile": {
+				"name": "RollingFile-Appender",
+				"fileName": "${swifthivebe}/swifthivebe.log",
+				"filePattern": "${swifthivebe}/archive/swifthivebe.log.%d{yyyy-MM-dd}.gz",
+				"PatternLayout": {
+					"pattern": "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+				},
+				"Policies": {
+					"TimeBasedTriggeringPolicy": {
+						"interval": "1",
+                		"modulate": "true"
+					}
+				}
+			}
+		},
+		"loggers": {
+			"root": {
+				"level": "debug",
+				"appender-ref": [
+					{
+						"ref": "Console-Appender"
+					},
+					{
+						"ref": "RollingFile-Appender"
+					}
+				]
+			}
+		}
+	}
 }

@@ -13,14 +13,17 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.swifthive.model.EmailMessages;
+import com.swifthive.model.PendingAuthorizationRequest;
 import com.swifthive.model.Response;
-import com.swifthive.model.ResponseCode;
 import com.swifthive.model.usermenu.CreateUserMenuRequest;
 import com.swifthive.model.usermenu.UserMenuMappingRequest;
 import com.swifthive.model.usermenu.UserMenuMappingObject;
 import com.swifthive.model.usermenu.UserMenuObject;
 import com.swifthive.repository.UserMenuMappingRepository;
 import com.swifthive.repository.UserMenuRepository;
+import com.swifthive.utilities.Util;
 
 /**
  * @author emmanuel.afonrinwo
@@ -36,7 +39,7 @@ public class UserMenu {
 	private UserMenuMappingObject userMenuMappingObject;
 	private Iterable<UserMenuObject> iUserMenuObject;
 	private Iterable<UserMenuMappingObject> iUserMenuMappingObject;
-	private StringBuilder stringBuilder;
+	private Response rsp;
 
 	@Autowired
 	UserMenuRepository userMenuRepository;
@@ -45,14 +48,13 @@ public class UserMenu {
 	UserMenuMappingRepository userMenuMappingRepository;
 
 	@Autowired
-	Response response;
+	Util util;
 
 	@Autowired
-	ResponseCode responseCode;
+	EmailMessages emailMessages;
 
 	@Transactional
 	public Response processCreateMenu(@Valid CreateUserMenuRequest createUserMenuRequest) {
-
 		try {
 			// execute your business logic here, persist function information
 			userMenuObject = new UserMenuObject();
@@ -61,26 +63,20 @@ public class UserMenu {
 			userMenuObject.setCreatedBy(createUserMenuRequest.getUserId());
 			userMenuObject.setDateCreated(LocalDateTime.now());
 			userMenuObject.setStatus("0");
-			if (userMenuRepository.existsById(userMenuObject.getMenuName())) {
-				response.setUniqueId(0L);
-				response.setResponseCode(String.format("%03d", 7));
-				response.setResponseMessage(stringBuilder.append(responseCode.getResponseMessage()[7]).toString());
+			if (userMenuRepository.existsByMenuName(userMenuObject.getMenuName())) {
+				return util.responseBuilder(userMenuObject.getUniqueId(), createUserMenuRequest.getClientId(), 7);
 			} else {
 				userMenuRepository.save(userMenuObject);
-				response.setUniqueId(userMenuObject.getUniqueId());
-				response.setResponseCode(String.format("%03d", 0));
-				response.setResponseMessage(stringBuilder.append(responseCode.getResponseMessage()[0]).toString());
+				rsp = util.responseBuilder(0L, createUserMenuRequest.getClientId(), 0);
+				util.sendEmailOneRecipient(emailMessages.getNotificationSender(),
+						"emmanuel.afonrinwo@swiftsystemsng.com", emailMessages.getRequestNotificationHeading(),
+						emailMessages.getPendingNotificationMessage());
+				return rsp;
 			}
-
 		} catch (Exception ex) {
 			logger.error(ex.getMessage() + "\n" + ex.getLocalizedMessage() + "\n" + ex.getStackTrace());
-			response.setUniqueId(0L);
-			response.setResponseCode(String.format("%03d", 99));
-			response.setResponseMessage(stringBuilder.append(responseCode.getResponseMessage()[99]).toString());
+			return util.responseBuilder(0L, createUserMenuRequest.getClientId(), 99);
 		}
-
-		response.setClientId(createUserMenuRequest.getClientId());
-		return response;
 	}
 
 	public Iterable<UserMenuObject> processListUserMenu() {
@@ -104,25 +100,22 @@ public class UserMenu {
 			userMenuMappingObject.setCreatedBy(userMenuMappingRequest.getUserId());
 			userMenuMappingObject.setDateCreated(LocalDateTime.now());
 			userMenuMappingObject.setStatus("0");
-			if (userMenuMappingRepository.existsByIds(userMenuMappingObject.getFunctionName() , userMenuMappingObject.getRoleName())) {
-				response.setUniqueId(0L);
-				response.setResponseCode(String.format("%03d", 7));
-				response.setResponseMessage(stringBuilder.append(responseCode.getResponseMessage()[7]).toString());
+			if (userMenuMappingRepository.existsByFunctionNameAndRoleName(userMenuMappingObject.getFunctionName(),
+					userMenuMappingObject.getRoleName())) {
+				return util.responseBuilder(0L, userMenuMappingRequest.getClientId(), 7);
 			} else {
 				userMenuMappingRepository.save(userMenuMappingObject);
-				response.setUniqueId(userMenuMappingObject.getUniqueId());
-				response.setResponseCode(String.format("%03d", 99));
-				response.setResponseMessage(stringBuilder.append(responseCode.getResponseMessage()[0]).toString());
+				rsp = util.responseBuilder(0L, userMenuMappingObject.getClientId(), 0);
+				util.sendEmailOneRecipient(emailMessages.getNotificationSender(),
+						"emmanuel.afonrinwo@swiftsystemsng.com", emailMessages.getRequestNotificationHeading(),
+						emailMessages.getPendingNotificationMessage());
+				return rsp;
 			}
 
 		} catch (Exception ex) {
 			logger.error(ex.getMessage() + "\n" + ex.getLocalizedMessage() + "\n" + ex.getStackTrace());
-			response.setUniqueId(0L);
-			response.setResponseCode(String.format("%03d", 99));
-			response.setResponseMessage(stringBuilder.append(responseCode.getResponseMessage()[99]).toString());
+			return util.responseBuilder(0L, userMenuMappingRequest.getClientId(), 0);
 		}
-		response.setClientId(userMenuMappingRequest.getClientId());
-		return response;
 	}
 
 	public Iterable<UserMenuObject> processListUserMenuAPL(String status) {
@@ -147,6 +140,67 @@ public class UserMenu {
 		}
 
 		return iUserMenuMappingObject;
+	}
+
+	public Response processPendingAuthorization(@Valid PendingAuthorizationRequest pendingAuthorizationRequest) {
+		try {
+
+			if (pendingAuthorizationRequest.getActionCall().equals("UserMenu")) {
+
+				// check if menu information exist
+				userMenuObject = new UserMenuObject();
+				userMenuObject = userMenuRepository.findByUniqueId(pendingAuthorizationRequest.getUniqueId());
+				if (userMenuObject.getUniqueId().equals(null)) {
+					return util.responseBuilder(userMenuObject.getUniqueId(), pendingAuthorizationRequest.getClientId(),
+							30);
+				} else {
+					// persist function information
+					userMenuObject.setUniqueId(userMenuObject.getUniqueId());
+					userMenuObject.setCreatedBy(userMenuObject.getCreatedBy());
+					userMenuObject.setDateCreated(userMenuObject.getDateCreated());
+					userMenuObject.setApprovedClientId(pendingAuthorizationRequest.getClientId());
+					userMenuObject.setMenuName(pendingAuthorizationRequest.getActionValue());
+					userMenuObject.setApprovedBy(pendingAuthorizationRequest.getUserId());
+					userMenuObject.setStatus((pendingAuthorizationRequest.getStatus().equals("approved")) ? "1" : "2");
+					userMenuObject.setDateApproved(LocalDateTime.now());
+					userMenuRepository.save(userMenuObject);
+					rsp = util.responseBuilder(0L, pendingAuthorizationRequest.getClientId(), 0);
+					util.sendEmailOneRecipient(emailMessages.getNotificationSender(),
+							"emmanuel.afonrinwo@swiftsystemsng.com", emailMessages.getApprovalNotificationHeading(),
+							emailMessages.getApprovalNotificationMessage());
+					return rsp;
+				}
+			} else {
+				// check if menu information exist
+				userMenuMappingObject = new UserMenuMappingObject();
+				userMenuMappingObject = userMenuMappingRepository.findByUniqueId(pendingAuthorizationRequest.getUniqueId());
+				if (userMenuMappingObject.getUniqueId().equals(null)) {
+					return util.responseBuilder(userMenuMappingObject.getUniqueId(), pendingAuthorizationRequest.getClientId(),
+							30);
+				} else {
+					// persist function information
+					userMenuMappingObject.setUniqueId(userMenuMappingObject.getUniqueId());
+					userMenuMappingObject.setCreatedBy(userMenuMappingObject.getCreatedBy());
+					userMenuMappingObject.setDateCreated(userMenuMappingObject.getDateCreated());
+					userMenuMappingObject.setFunctionName(userMenuMappingObject.getFunctionName());
+					userMenuMappingObject.setRoleName(userMenuMappingObject.getRoleName());
+					userMenuMappingObject.setApprovedClientId(pendingAuthorizationRequest.getClientId());
+					userMenuMappingObject.setApprovedBy(pendingAuthorizationRequest.getUserId());
+					userMenuMappingObject.setStatus((pendingAuthorizationRequest.getStatus().equals("approved")) ? "1" : "2");
+					userMenuMappingObject.setDateApproved(LocalDateTime.now());
+					userMenuMappingRepository.save(userMenuMappingObject);
+					rsp = util.responseBuilder(0L, pendingAuthorizationRequest.getClientId(), 0);
+					util.sendEmailOneRecipient(emailMessages.getNotificationSender(),
+							"emmanuel.afonrinwo@swiftsystemsng.com", emailMessages.getApprovalNotificationHeading(),
+							emailMessages.getApprovalNotificationMessage());
+					return rsp;
+				}
+
+			}
+		} catch (Exception ex) {
+			logger.error(ex.getMessage() + "\n" + ex.getLocalizedMessage() + "\n" + ex.getStackTrace());
+			return util.responseBuilder(0L, pendingAuthorizationRequest.getClientId(), 99);
+		}
 	}
 
 }

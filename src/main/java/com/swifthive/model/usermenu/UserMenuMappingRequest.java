@@ -35,6 +35,7 @@ public class UserMenuMappingRequest implements Serializable {
 	@Column(name = "userId", nullable = false)
 	private String userId;
 
+	
 
 	/**
 	 * 

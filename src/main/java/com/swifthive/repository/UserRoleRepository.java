@@ -18,5 +18,9 @@ public interface UserRoleRepository extends CrudRepository<UserRoleObject, Seria
 	Iterable<UserRoleObject> findAll();
 
 	Iterable<UserRoleObject> findByStatus(String status);
+
+	boolean existsByRoleName(String roleName);
+
+	UserRoleObject findByUniqueId(Long uniqueId);
 	
 }

@@ -74,8 +74,6 @@ public class ClientLog {
 				logger.error(ex.getMessage() + "\n" + ex.getLocalizedMessage() + "\n" + ex.getStackTrace() + "\n" + clientLogRequest.getClientId() + "\n" + clientLogRequest.getUserId() + "\n" + clientLogRequest.getFunctionCalled() + "\n" + clientLogRequest.getActivity() + "\n" + clientLogRequest.getStatus() + "\n" + clientLogRequest.getMessage() + "\n" + clientLogRequest.getLogTime());
 			}
 		}
-
-		
 	}
 
 }

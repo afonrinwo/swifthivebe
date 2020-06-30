@@ -44,6 +44,9 @@ public class UserMenuObject implements Serializable {
 	@Column(name = "status", nullable = false)
 	private String status;
 	
+	@Column(name = "approvedClientId")
+	private Long approvedClientId;
+	
 	@Column(name = "approvedBy")
 	private String approvedBy;
 	
@@ -65,11 +68,12 @@ public class UserMenuObject implements Serializable {
 	 * @param createdBy
 	 * @param dateCreated
 	 * @param status
+	 * @param approvedClientId
 	 * @param approvedBy
 	 * @param dateApproved
 	 */
 	public UserMenuObject(Long uniqueId, Long clientId, String menuName, String createdBy, LocalDateTime dateCreated,
-			String status, String approvedBy, LocalDateTime dateApproved) {
+			String status, Long approvedClientId, String approvedBy, LocalDateTime dateApproved) {
 		super();
 		this.uniqueId = uniqueId;
 		this.clientId = clientId;
@@ -77,6 +81,7 @@ public class UserMenuObject implements Serializable {
 		this.createdBy = createdBy;
 		this.dateCreated = dateCreated;
 		this.status = status;
+		this.approvedClientId = approvedClientId;
 		this.approvedBy = approvedBy;
 		this.dateApproved = dateApproved;
 	}
@@ -163,6 +168,20 @@ public class UserMenuObject implements Serializable {
 	 */
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	/**
+	 * @return the approvedClientId
+	 */
+	public Long getApprovedClientId() {
+		return approvedClientId;
+	}
+
+	/**
+	 * @param approvedClientId the approvedClientId to set
+	 */
+	public void setApprovedClientId(Long approvedClientId) {
+		this.approvedClientId = approvedClientId;
 	}
 
 	/**
