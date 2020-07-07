@@ -1,4 +1,4 @@
-package com.swifthive.model.userfunction;
+package com.swifthive.model.function;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -14,7 +14,7 @@ import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "UserFunction", uniqueConstraints = @UniqueConstraint(columnNames= {"functionName"}))
-public  class UserFunctionObject implements Serializable {
+public  class FunctionObject implements Serializable {
 
 	/**
 	 * 
@@ -54,7 +54,7 @@ public  class UserFunctionObject implements Serializable {
 	/**
 	 * 
 	 */
-	public UserFunctionObject() {
+	public FunctionObject() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -70,7 +70,7 @@ public  class UserFunctionObject implements Serializable {
 	 * @param approvedBy
 	 * @param dateApproved
 	 */
-	public UserFunctionObject(Long uniqueId, Long clientId, String functionName, String createdBy,
+	public FunctionObject(Long uniqueId, Long clientId, String functionName, String createdBy,
 			LocalDateTime dateCreated, String status, Long approvedClientId, String approvedBy, LocalDateTime dateApproved) {
 		super();
 		this.uniqueId = uniqueId;

@@ -1,9 +1,9 @@
 package com.swifthive.controller;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,21 +14,28 @@ import com.swifthive.manager.ClientLog;
 import com.swifthive.manager.UserFunction;
 import com.swifthive.manager.UserRole;
 import com.swifthive.manager.UserMenu;
+import com.swifthive.manager.UserProfile;
 import com.swifthive.model.ClientLogRequest;
 import com.swifthive.model.PendingAuthorizationRequest;
 import com.swifthive.model.Response;
-import com.swifthive.model.userfunction.CreateUserFunctionRequest;
-import com.swifthive.model.userfunction.UserFunctionObject;
-import com.swifthive.model.usermenu.CreateUserMenuRequest;
-import com.swifthive.model.usermenu.UserMenuMappingObject;
-import com.swifthive.model.usermenu.UserMenuMappingRequest;
-import com.swifthive.model.usermenu.UserMenuObject;
-import com.swifthive.model.userrole.CreateRoleRequest;
-import com.swifthive.model.userrole.UserRoleObject;
+import com.swifthive.model.function.FunctionRequest;
+import com.swifthive.model.function.FunctionObject;
+import com.swifthive.model.menu.MenuRequest;
+import com.swifthive.model.menu.MapMenuObject;
+import com.swifthive.model.menu.MapMenuRequest;
+import com.swifthive.model.menu.MenuObject;
+import com.swifthive.model.profile.CreateProfileRequest;
+import com.swifthive.model.profile.ProfileObject;
+import com.swifthive.model.profile.UserLoginRequest;
+import com.swifthive.model.role.RoleRequest;
+import com.swifthive.model.role.RoleObject;
 import com.swifthive.utilities.Util;
 
 @RestController
 public class DefaultController {
+	
+	@Autowired
+	UserProfile userProfile;
 
 	@Autowired
 	UserFunction userFunction;
@@ -53,97 +60,102 @@ public class DefaultController {
 
 	@RequestMapping(value = "/clientLog", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public @ResponseBody void clientLog(HttpServletRequest request,
-			@Valid @RequestBody ClientLogRequest clientLogRequest) {
+			@Validated @RequestBody ClientLogRequest clientLogRequest) {
 		clientLog.processClientLog(clientLogRequest);
 	}
 
-	@RequestMapping(value = "/createUserFunction", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
-	public @ResponseBody Response createUserFunction(HttpServletRequest request,
-			@Valid @RequestBody CreateUserFunctionRequest createUserFunctionRequest) {
+	@RequestMapping(value = "/createFunction", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+	public @ResponseBody Response createFunction(HttpServletRequest request,
+			@Validated @RequestBody FunctionRequest functionRequest) {
 		if (request.getHeader("Authorization").equals(util
-				.accessValidation(createUserFunctionRequest.getUserId() + createUserFunctionRequest.getClientId()))) {
-			return userFunction.processCreateUserFunction(createUserFunctionRequest);
+				.accessValidation(functionRequest.getUserId() + functionRequest.getClientId()))) {
+			return userFunction.processCreateFunction(functionRequest);
 		} else {
-			return util.responseBuilder(0L, createUserFunctionRequest.getClientId(), 96);
+			return util.responseBuilder(0L, functionRequest.getClientId(), 96);
 		}
 
 	}
 
-	@RequestMapping(value = "/listUserFunction", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody Iterable<UserFunctionObject> listUserFunction() {
-		return userFunction.processListUserFunction();
+	@RequestMapping(value = "/listFunction", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody Iterable<FunctionObject> listFunction() {
+		return userFunction.processListFunction();
 	}
 
-	@RequestMapping(value = "/listUserFunctionAPL", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody Iterable<UserFunctionObject> listUserFunctionAPL() {
+	@RequestMapping(value = "/listFunctionAPL", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody Iterable<FunctionObject> listFunctionAPL() {
 		String status = "0";
-		return userFunction.processListUserFunctionAPL(status);
+		return userFunction.processListFunctionAPL(status);
 	}
 
-	@RequestMapping(value = "/createUserRole", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+	@RequestMapping(value = "/createRole", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public @ResponseBody Response createRole(HttpServletRequest request,
-			@Valid @RequestBody CreateRoleRequest createRoleRequest) {
+			@Validated @RequestBody RoleRequest roleRequest) {
 		if (request.getHeader("Authorization")
-				.equals(util.accessValidation(createRoleRequest.getUserId() + createRoleRequest.getClientId()))) {
-			return userRole.processCreateRole(createRoleRequest);
+				.equals(util.accessValidation(roleRequest.getUserId() + roleRequest.getClientId()))) {
+			return userRole.processCreateRole(roleRequest);
 		} else {
-			return util.responseBuilder(0L, createRoleRequest.getClientId(), 96);
+			return util.responseBuilder(0L, roleRequest.getClientId(), 96);
 		}
 	}
 
-	@RequestMapping(value = "/listUserRole", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody Iterable<UserRoleObject> listUserRole() {
-		return userRole.processListUserRole();
+	@RequestMapping(value = "/listRole", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody Iterable<RoleObject> listRole() {
+		return userRole.processListRole();
 	}
 
-	@RequestMapping(value = "/listUserRoleAPL", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody Iterable<UserRoleObject> listUserRoleAPL() {
+	@RequestMapping(value = "/listRoleAPL", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody Iterable<RoleObject> listRoleAPL() {
 		String status = "0";
-		return userRole.processListUserRoleAPL(status);
+		return userRole.processListRoleAPL(status);
 	}
 
-	@RequestMapping(value = "/createUserMenu", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+	@RequestMapping(value = "/createMenu", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public @ResponseBody Response createMenu(HttpServletRequest request,
-			@Valid @RequestBody CreateUserMenuRequest createUserMenuRequest) {
+			@Validated @RequestBody MenuRequest menuRequest) {
 		if (request.getHeader("Authorization").equals(
-				util.accessValidation(createUserMenuRequest.getUserId() + createUserMenuRequest.getClientId()))) {
-			return userMenu.processCreateMenu(createUserMenuRequest);
+				util.accessValidation(menuRequest.getUserId() + menuRequest.getClientId()))) {
+			return userMenu.processCreateMenu(menuRequest);
 		} else {
-			return util.responseBuilder(0L, createUserMenuRequest.getClientId(), 96);
+			return util.responseBuilder(0L, menuRequest.getClientId(), 96);
 		}
 	}
 
-	@RequestMapping(value = "/listUserMenu", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody Iterable<UserMenuObject> listUserMenu() {
-		return userMenu.processListUserMenu();
+	@RequestMapping(value = "/listMenu", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody Iterable<MenuObject> listMenu() {
+		return userMenu.processListMenu();
 	}
 
-	@RequestMapping(value = "/listUserMenuAPL", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody Iterable<UserMenuObject> listUserMenuAPL() {
+	@RequestMapping(value = "/listMenuAPL", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody Iterable<MenuObject> listMenuAPL() {
 		String status = "0";
-		return userMenu.processListUserMenuAPL(status);
+		return userMenu.processListMenuAPL(status);
 	}
 
-	@RequestMapping(value = "/menuMapping", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
-	public @ResponseBody Response menuMapping(HttpServletRequest request,
-			@Valid @RequestBody UserMenuMappingRequest userMenuMappingRequest) {
+	@RequestMapping(value = "/mapMenu", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+	public @ResponseBody Response mapMenu(HttpServletRequest request,
+			@Validated @RequestBody MapMenuRequest mapMenuRequest) {
 		if (request.getHeader("Authorization").equals(
-				util.accessValidation(userMenuMappingRequest.getUserId() + userMenuMappingRequest.getClientId()))) {
-			return userMenu.processMenuMapping(userMenuMappingRequest);
+				util.accessValidation(mapMenuRequest.getUserId() + mapMenuRequest.getClientId()))) {
+			return userMenu.processMapMenu(mapMenuRequest);
 		} else {
-			return util.responseBuilder(0L, userMenuMappingRequest.getClientId(), 96);
+			return util.responseBuilder(0L, mapMenuRequest.getClientId(), 96);
 		}
 	}
 
-	@RequestMapping(value = "/listMenuMappingAPL", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody Iterable<UserMenuMappingObject> listMenuMappingAPL() {
+	@RequestMapping(value = "/listMapMenu", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody Iterable<MapMenuObject> listMapMenu() {
+		return userMenu.processListMapMenu();
+	}
+	
+	@RequestMapping(value = "/listMapMenuAPL", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody Iterable<MapMenuObject> listMenuMappingAPL() {
 		String status = "0";
-		return userMenu.processMenuMappingAPL(status);
+		return userMenu.processMapMenuAPL(status);
 	}
 
 	@RequestMapping(value = "/pendingAuthorization", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public @ResponseBody Response pendingAuthorization(HttpServletRequest request,
-			@Valid @RequestBody PendingAuthorizationRequest pendingAuthorizationRequest) {
+			@Validated @RequestBody PendingAuthorizationRequest pendingAuthorizationRequest) {
 		if (request.getHeader("Authorization").equals(util.accessValidation(
 				pendingAuthorizationRequest.getUserId() + pendingAuthorizationRequest.getClientId()))) {
 			switch (pendingAuthorizationRequest.getActionCall()) {
@@ -155,6 +167,8 @@ public class DefaultController {
 				return userMenu.processPendingAuthorization(pendingAuthorizationRequest);
 			case "MapMenu":
 				return userMenu.processPendingAuthorization(pendingAuthorizationRequest);
+			case "UserProfile":
+				return userProfile.processPendingAuthorization(pendingAuthorizationRequest);
 			default:
 				return util.responseBuilder(0L, pendingAuthorizationRequest.getClientId(), 95);
 			}
@@ -162,5 +176,38 @@ public class DefaultController {
 			return util.responseBuilder(0L, pendingAuthorizationRequest.getClientId(), 96);
 		}
 
+	}
+	
+	@RequestMapping(value = "/createProfile", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+	public @ResponseBody Response createProfile(HttpServletRequest request,
+			@Validated @RequestBody CreateProfileRequest createProfileRequest) {
+		if (request.getHeader("Authorization").equals(
+				util.accessValidation(createProfileRequest.getUserId() + createProfileRequest.getClientId()))) {
+			return userProfile.processCreateUserProfile(createProfileRequest);
+		} else {
+			return util.responseBuilder(0L, createProfileRequest.getClientId(), 96);
+		}
+	}
+	
+	@RequestMapping(value = "listUserProfile", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody Iterable<ProfileObject> listProfile() {
+		return userProfile.processUserProfile();
+	}
+	
+	@RequestMapping(value = "/listUserProfileAPL", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody Iterable<ProfileObject> listUserProfileAPL() {
+		String status = "0";
+		return userProfile.processUserProfileAPL(status);
+	}
+	
+	@RequestMapping(value = "/userLogin", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+	public @ResponseBody Response userLogin(HttpServletRequest request,
+			@Validated @RequestBody UserLoginRequest userLoginRequest) {
+		if (request.getHeader("Authorization").equals(
+				util.accessValidation(userLoginRequest.getUserName() + userLoginRequest.getClientId()))) {
+			return userProfile.processUserLogin(userLoginRequest);
+		} else {
+			return util.responseBuilder(0L, userLoginRequest.getClientId(), 96);
+		}
 	}
 }

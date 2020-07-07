@@ -8,18 +8,18 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.swifthive.model.usermenu.UserMenuMappingObject;
+import com.swifthive.model.menu.MapMenuObject;
 
 @Repository
 @EnableTransactionManagement
 @Transactional
-public interface UserMenuMappingRepository extends CrudRepository<UserMenuMappingObject, Serializable> {
+public interface MapMenuRepository extends CrudRepository<MapMenuObject, Serializable> {
 
-	Iterable<UserMenuMappingObject> findByStatus(String status);
+	Iterable<MapMenuObject> findByStatus(String status);
 
 	boolean existsByFunctionNameAndRoleName(String functionName, String roleName);
 
-	UserMenuMappingObject findByUniqueId(Long uniqueId);
+	MapMenuObject findByUniqueId(Long uniqueId);
 
 		
 }

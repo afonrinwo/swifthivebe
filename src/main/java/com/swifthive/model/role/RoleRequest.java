@@ -1,9 +1,9 @@
-package com.swifthive.model.userrole;
+package com.swifthive.model.role;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 
-public class CreateRoleRequest {
+public class RoleRequest {
 	
 	@Id
 	@Column(name = "clientId", nullable = false)
@@ -18,7 +18,7 @@ public class CreateRoleRequest {
 	/**
 	 * 
 	 */
-	public CreateRoleRequest() {
+	public RoleRequest() {
 		super();
 	}
 
@@ -27,7 +27,7 @@ public class CreateRoleRequest {
 	 * @param functionName
 	 * @param userId
 	 */
-	public CreateRoleRequest(Long clientId, String roleName, String userId) {
+	public RoleRequest(Long clientId, String roleName, String userId) {
 		super();
 		this.clientId = clientId;
 		this.roleName = roleName;

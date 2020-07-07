@@ -1,9 +1,9 @@
-package com.swifthive.model.userfunction;
+package com.swifthive.model.function;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 
-public class CreateUserFunctionRequest {
+public class FunctionRequest {
 
 	@Id
 	@Column(name = "clientId", nullable = false)
@@ -20,7 +20,7 @@ public class CreateUserFunctionRequest {
 	/**
 	 * 
 	 */
-	public CreateUserFunctionRequest() {
+	public FunctionRequest() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -32,7 +32,7 @@ public class CreateUserFunctionRequest {
 	 * @param functionName
 	 * @param userId
 	 */
-	public CreateUserFunctionRequest(Long clientId, String functionName, String userId) {
+	public FunctionRequest(Long clientId, String functionName, String userId) {
 		super();
 		this.clientId = clientId;
 		this.functionName = functionName;

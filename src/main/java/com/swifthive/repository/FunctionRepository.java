@@ -6,18 +6,18 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.swifthive.model.userfunction.*;
+import com.swifthive.model.function.*;
 
 @Repository
 @EnableTransactionManagement
-public interface UserFunctionRepository extends CrudRepository<UserFunctionObject, Serializable> {
+public interface FunctionRepository extends CrudRepository<FunctionObject, Serializable> {
 	
-	Iterable<UserFunctionObject> findAll();
+	Iterable<FunctionObject> findAll();
 
-	Iterable<UserFunctionObject> findByStatus(String status);
+	Iterable<FunctionObject> findByStatus(String status);
 
 	boolean existsByFunctionName(String functionName);
 
-	UserFunctionObject findByUniqueId(Long uniqueId);
+	FunctionObject findByUniqueId(Long uniqueId);
 
 }

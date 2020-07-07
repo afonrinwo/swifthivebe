@@ -1,4 +1,7 @@
-package com.swifthive.model.role;
+/**
+ * 
+ */
+package com.swifthive.model.profile;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -11,24 +14,50 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+/**
+ * @author emmanuel.afonrinwo
+ *
+ */
 @Entity
-@Table(name = "UserRole", uniqueConstraints = @UniqueConstraint(columnNames= {"roleName"}))
-public class RoleObject implements Serializable{
+@Table(name = "UserProfile", uniqueConstraints={@UniqueConstraint(columnNames={"userName", "email", "mobileNumber", "merchantId"})})
+public class ProfileObject implements Serializable {
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -95930250254700549L;
-
+	private static final long serialVersionUID = -5690891055617498863L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "uniqueId", nullable = false)
 	private Long uniqueId;
-
+	
 	@Column(name = "clientId", nullable = false)
 	private Long clientId;
 	
+	@Column(name = "userName", nullable = false)
+	private String userName;
+	
+	@Column(name = "firstName", nullable = false)
+	private String firstName;
+	
+	@Column(name = "lastName", nullable = false)
+	private String lastName;
+	
+	@Column(name = "email", nullable = false)
+	private String email;
+	
+	@Column(name = "mobileNumber", nullable = false)
+	private String mobileNumber;
+	
+	@Column(name = "functionName", nullable = false)
+	private String functionName;
+	
 	@Column(name = "roleName", nullable = false)
 	private String roleName;
+
+	@Column(name = "merchantId", nullable = false)
+	private String merchantId;
 	
 	@Column(name = "createdBy", nullable = false)
 	private String createdBy;
@@ -51,7 +80,7 @@ public class RoleObject implements Serializable{
 	/**
 	 * 
 	 */
-	public RoleObject() {
+	public ProfileObject() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -59,7 +88,14 @@ public class RoleObject implements Serializable{
 	/**
 	 * @param uniqueId
 	 * @param clientId
+	 * @param userName
+	 * @param firstName
+	 * @param lastName
+	 * @param email
+	 * @param mobileNumber
+	 * @param functionName
 	 * @param roleName
+	 * @param merchantId
 	 * @param createdBy
 	 * @param dateCreated
 	 * @param status
@@ -67,12 +103,21 @@ public class RoleObject implements Serializable{
 	 * @param approvedBy
 	 * @param dateApproved
 	 */
-	public RoleObject(Long uniqueId, Long clientId, String roleName, String createdBy, LocalDateTime dateCreated,
-			String status, Long approvedClientId, String approvedBy, LocalDateTime dateApproved) {
+	public ProfileObject(Long uniqueId, Long clientId, String userName, String firstName, String lastName, String email,
+			String mobileNumber, String functionName, String roleName, String merchantId, String createdBy,
+			LocalDateTime dateCreated, String status, Long approvedClientId, String approvedBy,
+			LocalDateTime dateApproved) {
 		super();
 		this.uniqueId = uniqueId;
 		this.clientId = clientId;
+		this.userName = userName;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.mobileNumber = mobileNumber;
+		this.functionName = functionName;
 		this.roleName = roleName;
+		this.merchantId = merchantId;
 		this.createdBy = createdBy;
 		this.dateCreated = dateCreated;
 		this.status = status;
@@ -110,6 +155,90 @@ public class RoleObject implements Serializable{
 	}
 
 	/**
+	 * @return the userName
+	 */
+	public String getUserName() {
+		return userName;
+	}
+
+	/**
+	 * @param userName the userName to set
+	 */
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	/**
+	 * @return the firstName
+	 */
+	public String getFirstName() {
+		return firstName;
+	}
+
+	/**
+	 * @param firstName the firstName to set
+	 */
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	/**
+	 * @return the lastName
+	 */
+	public String getLastName() {
+		return lastName;
+	}
+
+	/**
+	 * @param lastName the lastName to set
+	 */
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	/**
+	 * @return the email
+	 */
+	public String getEmail() {
+		return email;
+	}
+
+	/**
+	 * @param email the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	/**
+	 * @return the mobileNumber
+	 */
+	public String getMobileNumber() {
+		return mobileNumber;
+	}
+
+	/**
+	 * @param mobileNumber the mobileNumber to set
+	 */
+	public void setMobileNumber(String mobileNumber) {
+		this.mobileNumber = mobileNumber;
+	}
+
+	/**
+	 * @return the functionName
+	 */
+	public String getFunctionName() {
+		return functionName;
+	}
+
+	/**
+	 * @param functionName the functionName to set
+	 */
+	public void setFunctionName(String functionName) {
+		this.functionName = functionName;
+	}
+
+	/**
 	 * @return the roleName
 	 */
 	public String getRoleName() {
@@ -121,6 +250,20 @@ public class RoleObject implements Serializable{
 	 */
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
+	}
+
+	/**
+	 * @return the merchantId
+	 */
+	public String getMerchantId() {
+		return merchantId;
+	}
+
+	/**
+	 * @param merchantId the merchantId to set
+	 */
+	public void setMerchantId(String merchantId) {
+		this.merchantId = merchantId;
 	}
 
 	/**
@@ -214,5 +357,4 @@ public class RoleObject implements Serializable{
 		return serialVersionUID;
 	}
 
-	
 }

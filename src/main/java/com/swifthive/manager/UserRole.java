@@ -4,32 +4,37 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import javax.transaction.Transactional;
-import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import com.swifthive.model.EmailMessages;
 import com.swifthive.model.PendingAuthorizationRequest;
 import com.swifthive.model.Response;
-import com.swifthive.model.userrole.CreateRoleRequest;
-import com.swifthive.model.userrole.UserRoleObject;
-import com.swifthive.repository.UserRoleRepository;
+import com.swifthive.model.role.RoleRequest;
+import com.swifthive.model.role.RoleObject;
+import com.swifthive.repository.RoleRepository;
 import com.swifthive.utilities.Util;
 
+
+/**
+ * @author emmanuel.afonrinwo
+ *
+ */
 @Service
 @Transactional
 public class UserRole {
 
 	private static final Logger logger = LogManager.getLogger(UserRole.class);
-	private UserRoleObject userRoleObject;
-	private Iterable<UserRoleObject> iUserRoleObject;
+	private RoleObject roleObject;
+	private Iterable<RoleObject> iUserRoleObject;
 	private Response rsp;
 
 	@Autowired
-	UserRoleRepository userRoleRepository;
+	RoleRepository roleRepository;
 
 	@Autowired
 	Util util;
@@ -38,35 +43,36 @@ public class UserRole {
 	EmailMessages emailMessages;
 
 	@Transactional
-	public Response processCreateRole(@Valid CreateRoleRequest createRoleRequest) {
+	public Response processCreateRole(@Validated RoleRequest roleRequest) {
 		try {
-			// persist function information
-			userRoleObject = new UserRoleObject();
-			userRoleObject.setClientId(createRoleRequest.getClientId());
-			userRoleObject.setRoleName(createRoleRequest.getRoleName());
-			userRoleObject.setCreatedBy(createRoleRequest.getUserId());
-			userRoleObject.setDateCreated(LocalDateTime.now());
-			userRoleObject.setStatus("0");
-			if (userRoleRepository.existsByRoleName(userRoleObject.getRoleName())) {
-				return util.responseBuilder(0L, createRoleRequest.getClientId(), 7);
+
+			if (roleRepository.existsByRoleName(roleRequest.getRoleName())) {
+				return util.responseBuilder(0L, roleRequest.getClientId(), 7);
 			} else {
-				userRoleRepository.save(userRoleObject);
-				rsp = util.responseBuilder(userRoleObject.getUniqueId(), userRoleObject.getClientId(), 0);
+				// persist function information
+				roleObject = new RoleObject();
+				roleObject.setClientId(roleRequest.getClientId());
+				roleObject.setRoleName(roleRequest.getRoleName());
+				roleObject.setCreatedBy(roleRequest.getUserId());
+				roleObject.setDateCreated(LocalDateTime.now());
+				roleObject.setStatus("0");
+				roleRepository.save(roleObject);
+				rsp = util.responseBuilder(roleObject.getUniqueId(), roleObject.getClientId(), 0);
 				util.sendEmailOneRecipient(emailMessages.getNotificationSender(),
-						"emmanuel.afonrinwo@swiftsystemsng.com", emailMessages.getRequestNotificationHeading(),
+						"emmanuel.afonrinwo@swiftsystemsng.com", emailMessages.getPendingNotificationHeading(),
 						emailMessages.getPendingNotificationMessage());
 				return rsp;
 			}
 
 		} catch (Exception ex) {
 			logger.error(ex.getMessage() + "\n" + ex.getLocalizedMessage() + "\n" + ex.getStackTrace());
-			return util.responseBuilder(0L, createRoleRequest.getClientId(), 99);
+			return util.responseBuilder(0L, roleRequest.getClientId(), 99);
 		}
 	}
 
-	public Iterable<UserRoleObject> processListUserRole() {
+	public Iterable<RoleObject> processListRole() {
 		try {
-			iUserRoleObject = userRoleRepository.findAll();
+			iUserRoleObject = roleRepository.findAll();
 		} catch (Exception ex) {
 			iUserRoleObject = new ArrayList<>();
 			iUserRoleObject.forEach(null);
@@ -74,10 +80,10 @@ public class UserRole {
 		return iUserRoleObject;
 	}
 
-	public Iterable<UserRoleObject> processListUserRoleAPL(String status) {
+	public Iterable<RoleObject> processListRoleAPL(String status) {
 		try {
 			iUserRoleObject = new ArrayList<>();
-			iUserRoleObject = userRoleRepository.findByStatus(status);
+			iUserRoleObject = roleRepository.findByStatus(status);
 		} catch (Exception ex) {
 			iUserRoleObject = new ArrayList<>();
 			iUserRoleObject.forEach(null);
@@ -86,25 +92,25 @@ public class UserRole {
 		return iUserRoleObject;
 	}
 
-	public Response processPendingAuthorization(@Valid PendingAuthorizationRequest pendingAuthorizationRequest) {
+	public Response processPendingAuthorization(@Validated PendingAuthorizationRequest pendingAuthorizationRequest) {
 		try {
 			// check if role information exist
-			userRoleObject = new UserRoleObject();
-			userRoleObject = userRoleRepository.findByUniqueId(pendingAuthorizationRequest.getUniqueId());
-			if (userRoleObject.getUniqueId().equals(null)) {
-				return util.responseBuilder(userRoleObject.getUniqueId(), pendingAuthorizationRequest.getClientId(),
+			roleObject = new RoleObject();
+			roleObject = roleRepository.findByUniqueId(pendingAuthorizationRequest.getUniqueId());
+			if (roleObject.getUniqueId().equals(null)) {
+				return util.responseBuilder(roleObject.getUniqueId(), pendingAuthorizationRequest.getClientId(),
 						30);
 			} else {
 				// persist function information
-				userRoleObject.setUniqueId(userRoleObject.getUniqueId());
-				userRoleObject.setCreatedBy(userRoleObject.getCreatedBy());
-				userRoleObject.setDateCreated(userRoleObject.getDateCreated());
-				userRoleObject.setApprovedClientId(pendingAuthorizationRequest.getClientId());
-				userRoleObject.setRoleName(pendingAuthorizationRequest.getActionValue());
-				userRoleObject.setApprovedBy(pendingAuthorizationRequest.getUserId());
-				userRoleObject.setStatus((pendingAuthorizationRequest.getStatus().equals("approved")) ? "1" : "2");
-				userRoleObject.setDateApproved(LocalDateTime.now());
-				userRoleRepository.save(userRoleObject);
+				roleObject.setUniqueId(roleObject.getUniqueId());
+				roleObject.setCreatedBy(roleObject.getCreatedBy());
+				roleObject.setDateCreated(roleObject.getDateCreated());
+				roleObject.setApprovedClientId(pendingAuthorizationRequest.getClientId());
+				roleObject.setRoleName(pendingAuthorizationRequest.getActionValue());
+				roleObject.setApprovedBy(pendingAuthorizationRequest.getUserId());
+				roleObject.setStatus((pendingAuthorizationRequest.getStatus().equals("approved")) ? "1" : "2");
+				roleObject.setDateApproved(LocalDateTime.now());
+				roleRepository.save(roleObject);
 				rsp = util.responseBuilder(0L, pendingAuthorizationRequest.getClientId(), 0);
 				util.sendEmailOneRecipient(emailMessages.getNotificationSender(),
 						"emmanuel.afonrinwo@swiftsystemsng.com", emailMessages.getApprovalNotificationHeading(),

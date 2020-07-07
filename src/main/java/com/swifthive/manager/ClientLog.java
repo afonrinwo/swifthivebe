@@ -1,12 +1,12 @@
 package com.swifthive.manager;
 
 import javax.transaction.Transactional;
-import javax.validation.Valid;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
+
 import com.swifthive.model.ClientAuditLogObject;
 import com.swifthive.model.ClientErrorLogObject;
 import com.swifthive.model.ClientLogRequest;
@@ -28,7 +28,7 @@ public class ClientLog {
 	@Autowired
 	ClientAuditLogRepository clientAuditLogRepository;
 
-	public void processClientLog(@Valid ClientLogRequest clientLogRequest) {
+	public void processClientLog(@Validated ClientLogRequest clientLogRequest) {
 
 		if("AUDIT".equals(clientLogRequest.getLogType().toUpperCase())) {
 			try {

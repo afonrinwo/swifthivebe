@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.swifthive.model.usermenu;
+package com.swifthive.model.menu;
 
 import java.io.Serializable;
 
@@ -12,7 +12,7 @@ import javax.persistence.Id;
  * @author emmanuel.afonrinwo
  *
  */
-public class UserMenuMappingRequest implements Serializable {
+public class MapMenuRequest implements Serializable {
 	
 	/**
 	 * 
@@ -40,7 +40,7 @@ public class UserMenuMappingRequest implements Serializable {
 	/**
 	 * 
 	 */
-	public UserMenuMappingRequest() {
+	public MapMenuRequest() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -53,7 +53,7 @@ public class UserMenuMappingRequest implements Serializable {
 	 * @param selectedMenuList
 	 * @param userId
 	 */
-	public UserMenuMappingRequest(Long clientId, String functionName, String roleName, String selectedMenuList,
+	public MapMenuRequest(Long clientId, String functionName, String roleName, String selectedMenuList,
 			String userId) {
 		super();
 		this.clientId = clientId;

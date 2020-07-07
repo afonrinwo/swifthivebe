@@ -5,4 +5,4 @@
  * @author emmanuel.afonrinwo
  *
  */
-package com.swifthive.model.usermenu;
+package com.swifthive.model.menu;

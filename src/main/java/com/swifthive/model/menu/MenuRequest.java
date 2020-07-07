@@ -1,9 +1,9 @@
-package com.swifthive.model.usermenu;
+package com.swifthive.model.menu;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 
-public class CreateUserMenuRequest {
+public class MenuRequest {
 	
 	@Id
 	@Column(name = "clientId", nullable = false)
@@ -18,7 +18,7 @@ public class CreateUserMenuRequest {
 	/**
 	 * 
 	 */
-	public CreateUserMenuRequest() {
+	public MenuRequest() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -28,7 +28,7 @@ public class CreateUserMenuRequest {
 	 * @param menuName
 	 * @param userId
 	 */
-	public CreateUserMenuRequest(Long clientId, String menuName, String userId) {
+	public MenuRequest(Long clientId, String menuName, String userId) {
 		super();
 		this.clientId = clientId;
 		this.menuName = menuName;

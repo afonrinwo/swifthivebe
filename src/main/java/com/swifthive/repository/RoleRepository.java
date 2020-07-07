@@ -8,19 +8,19 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.swifthive.model.userrole.UserRoleObject;
+import com.swifthive.model.role.RoleObject;
 
 @Repository
 @EnableTransactionManagement
 @Transactional
-public interface UserRoleRepository extends CrudRepository<UserRoleObject, Serializable> {
+public interface RoleRepository extends CrudRepository<RoleObject, Serializable> {
 	
-	Iterable<UserRoleObject> findAll();
+	Iterable<RoleObject> findAll();
 
-	Iterable<UserRoleObject> findByStatus(String status);
+	Iterable<RoleObject> findByStatus(String status);
 
 	boolean existsByRoleName(String roleName);
 
-	UserRoleObject findByUniqueId(Long uniqueId);
+	RoleObject findByUniqueId(Long uniqueId);
 	
 }

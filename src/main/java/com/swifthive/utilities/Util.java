@@ -107,7 +107,7 @@ public class Util {
 
 	}
 
-	public String encryptString(String a, Long b) {
+	public String encryptString(String key, String clientId) {
 		String hashtext = null;
 
 		try {
@@ -117,7 +117,7 @@ public class Util {
 			// digest() method is called
 			// to calculate message digest of the input string
 			// returned as array of byte
-			byte[] messageDigest = md.digest(a.concat(String.valueOf(b)).getBytes());
+			byte[] messageDigest = md.digest(key.concat(String.valueOf(clientId)).getBytes());
 
 			// Convert byte array into signum representation
 			BigInteger no = new BigInteger(1, messageDigest);
@@ -137,7 +137,38 @@ public class Util {
 		}
 		return hashtext;
 	}
+	
 
+	public String encryptString(String password) {
+		String hashtext = null;
+
+		try {
+			// getInstance() method is called with algorithm SHA-512
+			MessageDigest md = MessageDigest.getInstance("SHA-512");
+
+			// digest() method is called
+			// to calculate message digest of the input string
+			// returned as array of byte
+			byte[] messageDigest = md.digest(password.getBytes());
+
+			// Convert byte array into signum representation
+			BigInteger no = new BigInteger(1, messageDigest);
+
+			// Convert message digest into hex value
+			hashtext = no.toString(16);
+
+			// Add preceding 0s to make it 32 bit
+			while (hashtext.length() < 32) {
+				hashtext = "0" + hashtext;
+			}
+
+			// For specifying wrong message digest algorithms
+		} catch (Exception ex) {
+			logger.error(ex.getMessage() + "\n" + ex.getLocalizedMessage() + "\n" + ex.getStackTrace());
+			hashtext = "0";
+		}
+		return hashtext;
+	}
 	// Base64 Basic Decoding
 	public String base64Decode(String value) {
 		return new String(Base64.getDecoder().decode(value));

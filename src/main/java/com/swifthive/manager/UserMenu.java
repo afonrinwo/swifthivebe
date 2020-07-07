@@ -7,22 +7,22 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import javax.transaction.Transactional;
-import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import com.swifthive.model.EmailMessages;
 import com.swifthive.model.PendingAuthorizationRequest;
 import com.swifthive.model.Response;
-import com.swifthive.model.usermenu.CreateUserMenuRequest;
-import com.swifthive.model.usermenu.UserMenuMappingRequest;
-import com.swifthive.model.usermenu.UserMenuMappingObject;
-import com.swifthive.model.usermenu.UserMenuObject;
-import com.swifthive.repository.UserMenuMappingRepository;
-import com.swifthive.repository.UserMenuRepository;
+import com.swifthive.model.menu.MenuRequest;
+import com.swifthive.model.menu.MapMenuObject;
+import com.swifthive.model.menu.MapMenuRequest;
+import com.swifthive.model.menu.MenuObject;
+import com.swifthive.repository.MapMenuRepository;
+import com.swifthive.repository.MenuRepository;
 import com.swifthive.utilities.Util;
 
 /**
@@ -35,17 +35,17 @@ public class UserMenu {
 
 	private static final Logger logger = LogManager.getLogger(UserMenu.class);
 
-	private UserMenuObject userMenuObject;
-	private UserMenuMappingObject userMenuMappingObject;
-	private Iterable<UserMenuObject> iUserMenuObject;
-	private Iterable<UserMenuMappingObject> iUserMenuMappingObject;
+	private MenuObject menuObject;
+	private MapMenuObject mapMenuObject;
+	private Iterable<MenuObject> iUserMenuObject;
+	private Iterable<MapMenuObject> iMapMenuObject;
 	private Response rsp;
 
 	@Autowired
-	UserMenuRepository userMenuRepository;
+	MenuRepository menuRepository;
 
 	@Autowired
-	UserMenuMappingRepository userMenuMappingRepository;
+	MapMenuRepository mapMenuRepository;
 
 	@Autowired
 	Util util;
@@ -54,74 +54,46 @@ public class UserMenu {
 	EmailMessages emailMessages;
 
 	@Transactional
-	public Response processCreateMenu(@Valid CreateUserMenuRequest createUserMenuRequest) {
+	public Response processCreateMenu(@Validated MenuRequest menuRequest) {
 		try {
-			// execute your business logic here, persist function information
-			userMenuObject = new UserMenuObject();
-			userMenuObject.setClientId(createUserMenuRequest.getClientId());
-			userMenuObject.setMenuName(createUserMenuRequest.getMenuName());
-			userMenuObject.setCreatedBy(createUserMenuRequest.getUserId());
-			userMenuObject.setDateCreated(LocalDateTime.now());
-			userMenuObject.setStatus("0");
-			if (userMenuRepository.existsByMenuName(userMenuObject.getMenuName())) {
-				return util.responseBuilder(userMenuObject.getUniqueId(), createUserMenuRequest.getClientId(), 7);
+			// check if function information exist
+			if (menuRepository.existsByMenuName(menuRequest.getMenuName())) {
+				return util.responseBuilder(menuObject.getUniqueId(), menuRequest.getClientId(), 7);
 			} else {
-				userMenuRepository.save(userMenuObject);
-				rsp = util.responseBuilder(0L, createUserMenuRequest.getClientId(), 0);
+				// execute your business logic here, persist function information
+				menuObject = new MenuObject();
+				menuObject.setClientId(menuRequest.getClientId());
+				menuObject.setMenuName(menuRequest.getMenuName());
+				menuObject.setCreatedBy(menuRequest.getUserId());
+				menuObject.setDateCreated(LocalDateTime.now());
+				menuObject.setStatus("0");
+				menuRepository.save(menuObject);
+				rsp = util.responseBuilder(0L, menuRequest.getClientId(), 0);
 				util.sendEmailOneRecipient(emailMessages.getNotificationSender(),
-						"emmanuel.afonrinwo@swiftsystemsng.com", emailMessages.getRequestNotificationHeading(),
+						"emmanuel.afonrinwo@swiftsystemsng.com", emailMessages.getPendingNotificationHeading(),
 						emailMessages.getPendingNotificationMessage());
 				return rsp;
 			}
 		} catch (Exception ex) {
 			logger.error(ex.getMessage() + "\n" + ex.getLocalizedMessage() + "\n" + ex.getStackTrace());
-			return util.responseBuilder(0L, createUserMenuRequest.getClientId(), 99);
+			return util.responseBuilder(0L, menuRequest.getClientId(), 99);
 		}
 	}
 
-	public Iterable<UserMenuObject> processListUserMenu() {
+	public Iterable<MenuObject> processListMenu() {
 		try {
-			iUserMenuObject = userMenuRepository.findAll();
+			iUserMenuObject = menuRepository.findAll();
 		} catch (Exception ex) {
 			iUserMenuObject = new ArrayList<>();
 			iUserMenuObject.forEach(null);
 		}
 		return iUserMenuObject;
 	}
-
-	public Response processMenuMapping(@Valid UserMenuMappingRequest userMenuMappingRequest) {
-		try {
-			// persist function information
-			userMenuMappingObject = new UserMenuMappingObject();
-			userMenuMappingObject.setClientId(userMenuMappingRequest.getClientId());
-			userMenuMappingObject.setFunctionName(userMenuMappingRequest.getFunctionName());
-			userMenuMappingObject.setRoleName(userMenuMappingRequest.getRoleName());
-			userMenuMappingObject.setSelectedMenuList(userMenuMappingRequest.getSelectedMenuList());
-			userMenuMappingObject.setCreatedBy(userMenuMappingRequest.getUserId());
-			userMenuMappingObject.setDateCreated(LocalDateTime.now());
-			userMenuMappingObject.setStatus("0");
-			if (userMenuMappingRepository.existsByFunctionNameAndRoleName(userMenuMappingObject.getFunctionName(),
-					userMenuMappingObject.getRoleName())) {
-				return util.responseBuilder(0L, userMenuMappingRequest.getClientId(), 7);
-			} else {
-				userMenuMappingRepository.save(userMenuMappingObject);
-				rsp = util.responseBuilder(0L, userMenuMappingObject.getClientId(), 0);
-				util.sendEmailOneRecipient(emailMessages.getNotificationSender(),
-						"emmanuel.afonrinwo@swiftsystemsng.com", emailMessages.getRequestNotificationHeading(),
-						emailMessages.getPendingNotificationMessage());
-				return rsp;
-			}
-
-		} catch (Exception ex) {
-			logger.error(ex.getMessage() + "\n" + ex.getLocalizedMessage() + "\n" + ex.getStackTrace());
-			return util.responseBuilder(0L, userMenuMappingRequest.getClientId(), 0);
-		}
-	}
-
-	public Iterable<UserMenuObject> processListUserMenuAPL(String status) {
+	
+	public Iterable<MenuObject> processListMenuAPL(String status) {
 		try {
 			iUserMenuObject = new ArrayList<>();
-			iUserMenuObject = userMenuRepository.findByStatus(status);
+			iUserMenuObject = menuRepository.findByStatus(status);
 		} catch (Exception ex) {
 			iUserMenuObject = new ArrayList<>();
 			iUserMenuObject.forEach(null);
@@ -130,40 +102,81 @@ public class UserMenu {
 		return iUserMenuObject;
 	}
 
-	public Iterable<UserMenuMappingObject> processMenuMappingAPL(String status) {
+	public Response processMapMenu(@Validated MapMenuRequest mapMenuRequest) {
 		try {
-			iUserMenuMappingObject = new ArrayList<>();
-			iUserMenuMappingObject = userMenuMappingRepository.findByStatus(status);
-		} catch (Exception ex) {
-			iUserMenuMappingObject = new ArrayList<>();
-			iUserMenuMappingObject.forEach(null);
-		}
 
-		return iUserMenuMappingObject;
+			if (mapMenuRepository.existsByFunctionNameAndRoleName(mapMenuRequest.getFunctionName(),
+					mapMenuObject.getRoleName())) {
+				return util.responseBuilder(0L, mapMenuRequest.getClientId(), 7);
+			} else {
+				// persist function information
+				mapMenuObject = new MapMenuObject();
+				mapMenuObject.setClientId(mapMenuRequest.getClientId());
+				mapMenuObject.setFunctionName(mapMenuRequest.getFunctionName());
+				mapMenuObject.setRoleName(mapMenuRequest.getRoleName());
+				mapMenuObject.setSelectedMenuList(mapMenuRequest.getSelectedMenuList());
+				mapMenuObject.setCreatedBy(mapMenuRequest.getUserId());
+				mapMenuObject.setDateCreated(LocalDateTime.now());
+				mapMenuObject.setStatus("0");
+				mapMenuRepository.save(mapMenuObject);
+				rsp = util.responseBuilder(0L, mapMenuObject.getClientId(), 0);
+				util.sendEmailOneRecipient(emailMessages.getNotificationSender(),
+						"emmanuel.afonrinwo@swiftsystemsng.com", emailMessages.getPendingNotificationHeading(),
+						emailMessages.getPendingNotificationMessage());
+				return rsp;
+			}
+
+		} catch (Exception ex) {
+			logger.error(ex.getMessage() + "\n" + ex.getLocalizedMessage() + "\n" + ex.getStackTrace());
+			return util.responseBuilder(0L, mapMenuRequest.getClientId(), 0);
+		}
+	}
+	
+	public Iterable<MapMenuObject> processListMapMenu() {
+		try {
+			iMapMenuObject = new ArrayList<>();
+			iMapMenuObject = mapMenuRepository.findAll();
+		} catch (Exception ex) {
+			iMapMenuObject = new ArrayList<>();
+			iMapMenuObject.forEach(null);
+		}
+		return iMapMenuObject;
 	}
 
-	public Response processPendingAuthorization(@Valid PendingAuthorizationRequest pendingAuthorizationRequest) {
+	public Iterable<MapMenuObject> processMapMenuAPL(String status) {
+		try {
+			iMapMenuObject = new ArrayList<>();
+			iMapMenuObject = mapMenuRepository.findByStatus(status);
+		} catch (Exception ex) {
+			iMapMenuObject = new ArrayList<>();
+			iMapMenuObject.forEach(null);
+		}
+
+		return iMapMenuObject;
+	}
+
+	public Response processPendingAuthorization(@Validated PendingAuthorizationRequest pendingAuthorizationRequest) {
 		try {
 
 			if (pendingAuthorizationRequest.getActionCall().equals("UserMenu")) {
 
 				// check if menu information exist
-				userMenuObject = new UserMenuObject();
-				userMenuObject = userMenuRepository.findByUniqueId(pendingAuthorizationRequest.getUniqueId());
-				if (userMenuObject.getUniqueId().equals(null)) {
-					return util.responseBuilder(userMenuObject.getUniqueId(), pendingAuthorizationRequest.getClientId(),
+				menuObject = new MenuObject();
+				menuObject = menuRepository.findByUniqueId(pendingAuthorizationRequest.getUniqueId());
+				if (menuObject.getUniqueId().equals(null)) {
+					return util.responseBuilder(menuObject.getUniqueId(), pendingAuthorizationRequest.getClientId(),
 							30);
 				} else {
 					// persist function information
-					userMenuObject.setUniqueId(userMenuObject.getUniqueId());
-					userMenuObject.setCreatedBy(userMenuObject.getCreatedBy());
-					userMenuObject.setDateCreated(userMenuObject.getDateCreated());
-					userMenuObject.setApprovedClientId(pendingAuthorizationRequest.getClientId());
-					userMenuObject.setMenuName(pendingAuthorizationRequest.getActionValue());
-					userMenuObject.setApprovedBy(pendingAuthorizationRequest.getUserId());
-					userMenuObject.setStatus((pendingAuthorizationRequest.getStatus().equals("approved")) ? "1" : "2");
-					userMenuObject.setDateApproved(LocalDateTime.now());
-					userMenuRepository.save(userMenuObject);
+					menuObject.setUniqueId(menuObject.getUniqueId());
+					menuObject.setCreatedBy(menuObject.getCreatedBy());
+					menuObject.setDateCreated(menuObject.getDateCreated());
+					menuObject.setApprovedClientId(pendingAuthorizationRequest.getClientId());
+					menuObject.setMenuName(pendingAuthorizationRequest.getActionValue());
+					menuObject.setApprovedBy(pendingAuthorizationRequest.getUserId());
+					menuObject.setStatus((pendingAuthorizationRequest.getStatus().equals("approved")) ? "1" : "2");
+					menuObject.setDateApproved(LocalDateTime.now());
+					menuRepository.save(menuObject);
 					rsp = util.responseBuilder(0L, pendingAuthorizationRequest.getClientId(), 0);
 					util.sendEmailOneRecipient(emailMessages.getNotificationSender(),
 							"emmanuel.afonrinwo@swiftsystemsng.com", emailMessages.getApprovalNotificationHeading(),
@@ -172,23 +185,25 @@ public class UserMenu {
 				}
 			} else {
 				// check if menu information exist
-				userMenuMappingObject = new UserMenuMappingObject();
-				userMenuMappingObject = userMenuMappingRepository.findByUniqueId(pendingAuthorizationRequest.getUniqueId());
-				if (userMenuMappingObject.getUniqueId().equals(null)) {
-					return util.responseBuilder(userMenuMappingObject.getUniqueId(), pendingAuthorizationRequest.getClientId(),
-							30);
+				mapMenuObject = new MapMenuObject();
+				mapMenuObject = mapMenuRepository
+						.findByUniqueId(pendingAuthorizationRequest.getUniqueId());
+				if (mapMenuObject.getUniqueId().equals(null)) {
+					return util.responseBuilder(mapMenuObject.getUniqueId(),
+							pendingAuthorizationRequest.getClientId(), 30);
 				} else {
 					// persist function information
-					userMenuMappingObject.setUniqueId(userMenuMappingObject.getUniqueId());
-					userMenuMappingObject.setCreatedBy(userMenuMappingObject.getCreatedBy());
-					userMenuMappingObject.setDateCreated(userMenuMappingObject.getDateCreated());
-					userMenuMappingObject.setFunctionName(userMenuMappingObject.getFunctionName());
-					userMenuMappingObject.setRoleName(userMenuMappingObject.getRoleName());
-					userMenuMappingObject.setApprovedClientId(pendingAuthorizationRequest.getClientId());
-					userMenuMappingObject.setApprovedBy(pendingAuthorizationRequest.getUserId());
-					userMenuMappingObject.setStatus((pendingAuthorizationRequest.getStatus().equals("approved")) ? "1" : "2");
-					userMenuMappingObject.setDateApproved(LocalDateTime.now());
-					userMenuMappingRepository.save(userMenuMappingObject);
+					mapMenuObject.setUniqueId(mapMenuObject.getUniqueId());
+					mapMenuObject.setCreatedBy(mapMenuObject.getCreatedBy());
+					mapMenuObject.setDateCreated(mapMenuObject.getDateCreated());
+					mapMenuObject.setFunctionName(mapMenuObject.getFunctionName());
+					mapMenuObject.setRoleName(mapMenuObject.getRoleName());
+					mapMenuObject.setApprovedClientId(pendingAuthorizationRequest.getClientId());
+					mapMenuObject.setApprovedBy(pendingAuthorizationRequest.getUserId());
+					mapMenuObject
+							.setStatus((pendingAuthorizationRequest.getStatus().equals("approved")) ? "1" : "2");
+					mapMenuObject.setDateApproved(LocalDateTime.now());
+					mapMenuRepository.save(mapMenuObject);
 					rsp = util.responseBuilder(0L, pendingAuthorizationRequest.getClientId(), 0);
 					util.sendEmailOneRecipient(emailMessages.getNotificationSender(),
 							"emmanuel.afonrinwo@swiftsystemsng.com", emailMessages.getApprovalNotificationHeading(),

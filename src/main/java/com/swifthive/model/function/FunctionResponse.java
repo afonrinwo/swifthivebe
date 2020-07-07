@@ -1,8 +1,8 @@
-package com.swifthive.model.userfunction;
+package com.swifthive.model.function;
 
 import javax.persistence.Column;
 
-public class UserFunctionResponse {
+public class FunctionResponse {
 	
 	@Column(name = "uniqueId", nullable = false)
 	private Long uniqueId;
@@ -22,14 +22,14 @@ public class UserFunctionResponse {
 	 * @param responseCode
 	 * @param responseMessage
 	 */
-	public UserFunctionResponse(Long uniqueId, Long clientId, String responseCode, String responseMessage) {
+	public FunctionResponse(Long uniqueId, Long clientId, String responseCode, String responseMessage) {
 		this.uniqueId = uniqueId;
 		this.clientId = clientId;
 		this.responseCode = responseCode;
 		this.responseMessage = responseMessage;
 	}
 
-	public UserFunctionResponse() {
+	public FunctionResponse() {
 		// TODO Auto-generated constructor stub
 	}
 

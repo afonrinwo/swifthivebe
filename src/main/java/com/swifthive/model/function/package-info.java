@@ -1,1 +1,1 @@
-package com.swifthive.model.userfunction;
+package com.swifthive.model.function;

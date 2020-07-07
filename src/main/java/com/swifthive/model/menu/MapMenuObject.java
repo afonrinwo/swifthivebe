@@ -1,4 +1,4 @@
-package com.swifthive.model.usermenu;
+package com.swifthive.model.menu;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -16,8 +16,8 @@ import javax.persistence.UniqueConstraint;
  *
  */
 @Entity
-@Table(name = "UserMenuMapping", uniqueConstraints = @UniqueConstraint(columnNames= {"functionName", "roleName"}))
-public class UserMenuMappingObject implements Serializable {
+@Table(name = "MapMenu", uniqueConstraints = @UniqueConstraint(columnNames= {"functionName", "roleName"}))
+public class MapMenuObject implements Serializable {
 
 	/**
 	 * 
@@ -62,7 +62,7 @@ public class UserMenuMappingObject implements Serializable {
 	/**
 	 * 
 	 */
-	public UserMenuMappingObject() {
+	public MapMenuObject() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -80,7 +80,7 @@ public class UserMenuMappingObject implements Serializable {
 	 * @param approvedBy
 	 * @param dateApproved
 	 */
-	public UserMenuMappingObject(Long uniqueId, Long clientId, String functionName, String roleName,
+	public MapMenuObject(Long uniqueId, Long clientId, String functionName, String roleName,
 			String selectedMenuList, String createdBy, LocalDateTime dateCreated, String status, Long approvedClientId,
 			String approvedBy, LocalDateTime dateApproved) {
 		super();

@@ -3,4 +3,4 @@
  * @author emmanuel.afonrinwo
  *
  */
-package com.swifthive.model.userrole;
+package com.swifthive.model.role;
