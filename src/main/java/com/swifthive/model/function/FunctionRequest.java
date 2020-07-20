@@ -9,12 +9,15 @@ public class FunctionRequest {
 	@Column(name = "clientId", nullable = false)
 	private Long clientId;
 	
-	@Column(name = "functionName", nullable = false)
-	private String functionName;
+	@Column(name = "merchantId", nullable = false)
+	private String merchantId;
 	
 	@Column(name = "userId", nullable = false)
 	private String userId;
 	
+	@Column(name = "functionName", nullable = false)
+	private String functionName;
+		
 
 		
 	/**
@@ -26,62 +29,52 @@ public class FunctionRequest {
 	}
 
 
-
-	/**
-	 * @param clientId
-	 * @param functionName
-	 * @param userId
-	 */
-	public FunctionRequest(Long clientId, String functionName, String userId) {
+	public FunctionRequest(Long clientId, String merchantId, String userId, String functionName) {
 		super();
 		this.clientId = clientId;
-		this.functionName = functionName;
+		this.merchantId = merchantId;
 		this.userId = userId;
+		this.functionName = functionName;
 	}
-	
-	
 
-	/**
-	 * @return the clientId
-	 */
+
 	public Long getClientId() {
 		return clientId;
 	}
 
-	/**
-	 * @param clientRequestId the clientRequestId to set
-	 */
+
 	public void setClientId(Long clientId) {
 		this.clientId = clientId;
 	}
 
-	/**
-	 * @return the functionName
-	 */
-	public String getFunctionName() {
-		return functionName;
+
+	public String getMerchantId() {
+		return merchantId;
 	}
 
-	/**
-	 * @param functionName the functionName to set
-	 */
-	public void setFunctionName(String functionName) {
-		this.functionName = functionName;
+
+	public void setMerchantId(String merchantId) {
+		this.merchantId = merchantId;
 	}
 
-	/**
-	 * @return the userId
-	 */
+
 	public String getUserId() {
 		return userId;
 	}
 
-	/**
-	 * @param userId the userId to set
-	 */
+
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 
-	
+
+	public String getFunctionName() {
+		return functionName;
+	}
+
+
+	public void setFunctionName(String functionName) {
+		this.functionName = functionName;
+	}
+
 }

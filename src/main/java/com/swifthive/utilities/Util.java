@@ -107,7 +107,7 @@ public class Util {
 
 	}
 
-	public String encryptString(String key, String clientId) {
+	public String encryptString(String key, String userName) {
 		String hashtext = null;
 
 		try {
@@ -117,7 +117,7 @@ public class Util {
 			// digest() method is called
 			// to calculate message digest of the input string
 			// returned as array of byte
-			byte[] messageDigest = md.digest(key.concat(String.valueOf(clientId)).getBytes());
+			byte[] messageDigest = md.digest(key.concat(userName).getBytes());
 
 			// Convert byte array into signum representation
 			BigInteger no = new BigInteger(1, messageDigest);

@@ -16,6 +16,9 @@ public class UserLoginRequest {
 	@Column(name = "clientId", nullable = false)
 	private Long clientId;
 	
+	@Column(name = "merchantId", nullable = false)
+	private String merchantId;
+	
 	@Column(name = "userName", nullable = false)
 	private String userName;
 	
@@ -32,12 +35,14 @@ public class UserLoginRequest {
 
 	/**
 	 * @param clientId
+	 * @param merchantId
 	 * @param userName
 	 * @param password
 	 */
-	public UserLoginRequest(Long clientId, String userName, String password) {
+	public UserLoginRequest(Long clientId, String merchantId, String userName, String password) {
 		super();
 		this.clientId = clientId;
+		this.merchantId = merchantId;
 		this.userName = userName;
 		this.password = password;
 	}
@@ -54,6 +59,20 @@ public class UserLoginRequest {
 	 */
 	public void setClientId(Long clientId) {
 		this.clientId = clientId;
+	}
+
+	/**
+	 * @return the merchantId
+	 */
+	public String getMerchantId() {
+		return merchantId;
+	}
+
+	/**
+	 * @param merchantId the merchantId to set
+	 */
+	public void setMerchantId(String merchantId) {
+		this.merchantId = merchantId;
 	}
 
 	/**

@@ -62,6 +62,7 @@ public class UserMenu {
 			} else {
 				// execute your business logic here, persist function information
 				menuObject = new MenuObject();
+				menuObject.setMerchantId(menuRequest.getMerchantId());
 				menuObject.setClientId(menuRequest.getClientId());
 				menuObject.setMenuName(menuRequest.getMenuName());
 				menuObject.setCreatedBy(menuRequest.getUserId());
@@ -89,7 +90,7 @@ public class UserMenu {
 		}
 		return iUserMenuObject;
 	}
-	
+
 	public Iterable<MenuObject> processListMenuAPL(String status) {
 		try {
 			iUserMenuObject = new ArrayList<>();
@@ -104,18 +105,19 @@ public class UserMenu {
 
 	public Response processMapMenu(@Validated MapMenuRequest mapMenuRequest) {
 		try {
-
+			// check if function and role information exist
 			if (mapMenuRepository.existsByFunctionNameAndRoleName(mapMenuRequest.getFunctionName(),
-					mapMenuObject.getRoleName())) {
+					mapMenuRequest.getRoleName())) {
 				return util.responseBuilder(0L, mapMenuRequest.getClientId(), 7);
 			} else {
 				// persist function information
 				mapMenuObject = new MapMenuObject();
+				mapMenuObject.setMerchantId(mapMenuRequest.getMerchantId());
 				mapMenuObject.setClientId(mapMenuRequest.getClientId());
 				mapMenuObject.setFunctionName(mapMenuRequest.getFunctionName());
 				mapMenuObject.setRoleName(mapMenuRequest.getRoleName());
 				mapMenuObject.setSelectedMenuList(mapMenuRequest.getSelectedMenuList());
-				mapMenuObject.setCreatedBy(mapMenuRequest.getUserId());
+				mapMenuObject.setCreatedBy(mapMenuRequest.getUserName());
 				mapMenuObject.setDateCreated(LocalDateTime.now());
 				mapMenuObject.setStatus("0");
 				mapMenuRepository.save(mapMenuObject);
@@ -131,7 +133,7 @@ public class UserMenu {
 			return util.responseBuilder(0L, mapMenuRequest.getClientId(), 0);
 		}
 	}
-	
+
 	public Iterable<MapMenuObject> processListMapMenu() {
 		try {
 			iMapMenuObject = new ArrayList<>();
@@ -173,7 +175,7 @@ public class UserMenu {
 					menuObject.setDateCreated(menuObject.getDateCreated());
 					menuObject.setApprovedClientId(pendingAuthorizationRequest.getClientId());
 					menuObject.setMenuName(pendingAuthorizationRequest.getActionValue());
-					menuObject.setApprovedBy(pendingAuthorizationRequest.getUserId());
+					menuObject.setApprovedBy(pendingAuthorizationRequest.getUserName());
 					menuObject.setStatus((pendingAuthorizationRequest.getStatus().equals("approved")) ? "1" : "2");
 					menuObject.setDateApproved(LocalDateTime.now());
 					menuRepository.save(menuObject);
@@ -186,11 +188,10 @@ public class UserMenu {
 			} else {
 				// check if menu information exist
 				mapMenuObject = new MapMenuObject();
-				mapMenuObject = mapMenuRepository
-						.findByUniqueId(pendingAuthorizationRequest.getUniqueId());
+				mapMenuObject = mapMenuRepository.findByUniqueId(pendingAuthorizationRequest.getUniqueId());
 				if (mapMenuObject.getUniqueId().equals(null)) {
-					return util.responseBuilder(mapMenuObject.getUniqueId(),
-							pendingAuthorizationRequest.getClientId(), 30);
+					return util.responseBuilder(mapMenuObject.getUniqueId(), pendingAuthorizationRequest.getClientId(),
+							30);
 				} else {
 					// persist function information
 					mapMenuObject.setUniqueId(mapMenuObject.getUniqueId());
@@ -199,9 +200,8 @@ public class UserMenu {
 					mapMenuObject.setFunctionName(mapMenuObject.getFunctionName());
 					mapMenuObject.setRoleName(mapMenuObject.getRoleName());
 					mapMenuObject.setApprovedClientId(pendingAuthorizationRequest.getClientId());
-					mapMenuObject.setApprovedBy(pendingAuthorizationRequest.getUserId());
-					mapMenuObject
-							.setStatus((pendingAuthorizationRequest.getStatus().equals("approved")) ? "1" : "2");
+					mapMenuObject.setApprovedBy(pendingAuthorizationRequest.getUserName());
+					mapMenuObject.setStatus((pendingAuthorizationRequest.getStatus().equals("approved")) ? "1" : "2");
 					mapMenuObject.setDateApproved(LocalDateTime.now());
 					mapMenuRepository.save(mapMenuObject);
 					rsp = util.responseBuilder(0L, pendingAuthorizationRequest.getClientId(), 0);
@@ -217,5 +217,4 @@ public class UserMenu {
 			return util.responseBuilder(0L, pendingAuthorizationRequest.getClientId(), 99);
 		}
 	}
-
 }

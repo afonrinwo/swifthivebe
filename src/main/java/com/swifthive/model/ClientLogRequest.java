@@ -18,6 +18,9 @@ public class ClientLogRequest {
 	@Column(name = "clientId", nullable = false)
 	private Long clientId;
 	
+	@Column(name = "merchantId", nullable = false)
+	private String merchantId;
+	
 	@Column(name = "userId", nullable = false)
 	private String userId;
 	
@@ -47,18 +50,20 @@ public class ClientLogRequest {
 	/**
 	 * @param logType
 	 * @param clientId
+	 * @param merchantId
 	 * @param userId
-	 * @param fuctionCalled
+	 * @param functionCalled
 	 * @param activity
 	 * @param status
 	 * @param message
 	 * @param logTime
 	 */
-	public ClientLogRequest(String logType, Long clientId, String userId, String functionCalled, String activity,
-			String status, String message, String logTime) {
+	public ClientLogRequest(String logType, Long clientId, String merchantId, String userId, String functionCalled,
+			String activity, String status, String message, String logTime) {
 		super();
 		this.logType = logType;
 		this.clientId = clientId;
+		this.merchantId = merchantId;
 		this.userId = userId;
 		this.functionCalled = functionCalled;
 		this.activity = activity;
@@ -96,6 +101,20 @@ public class ClientLogRequest {
 	}
 
 	/**
+	 * @return the merchantId
+	 */
+	public String getMerchantId() {
+		return merchantId;
+	}
+
+	/**
+	 * @param merchantId the merchantId to set
+	 */
+	public void setMerchantId(String merchantId) {
+		this.merchantId = merchantId;
+	}
+
+	/**
 	 * @return the userId
 	 */
 	public String getUserId() {
@@ -110,14 +129,14 @@ public class ClientLogRequest {
 	}
 
 	/**
-	 * @return the fuctionCalled
+	 * @return the functionCalled
 	 */
 	public String getFunctionCalled() {
 		return functionCalled;
 	}
 
 	/**
-	 * @param fuctionCalled the fuctionCalled to set
+	 * @param functionCalled the functionCalled to set
 	 */
 	public void setFunctionCalled(String functionCalled) {
 		this.functionCalled = functionCalled;

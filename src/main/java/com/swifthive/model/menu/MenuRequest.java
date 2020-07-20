@@ -9,11 +9,15 @@ public class MenuRequest {
 	@Column(name = "clientId", nullable = false)
 	private Long clientId;
 	
-	@Column(name = "menuName", nullable = false)
-	private String menuName;
+	@Column(name = "merchantId", nullable = false)
+	private String merchantId;
 	
 	@Column(name = "userId", nullable = false)
 	private String userId;
+	
+	@Column(name = "menuName", nullable = false)
+	private String menuName;
+	
 
 	/**
 	 * 
@@ -23,60 +27,53 @@ public class MenuRequest {
 		// TODO Auto-generated constructor stub
 	}
 
-	/**
-	 * @param clientId
-	 * @param menuName
-	 * @param userId
-	 */
-	public MenuRequest(Long clientId, String menuName, String userId) {
+
+	public MenuRequest(Long clientId, String merchantId, String userId, String menuName) {
 		super();
 		this.clientId = clientId;
-		this.menuName = menuName;
+		this.merchantId = merchantId;
 		this.userId = userId;
+		this.menuName = menuName;
 	}
 
-	/**
-	 * @return the clientId
-	 */
+
 	public Long getClientId() {
 		return clientId;
 	}
 
-	/**
-	 * @param clientId the clientId to set
-	 */
+
 	public void setClientId(Long clientId) {
 		this.clientId = clientId;
 	}
 
-	/**
-	 * @return the menuName
-	 */
-	public String getMenuName() {
-		return menuName;
+
+	public String getMerchantId() {
+		return merchantId;
 	}
 
-	/**
-	 * @param menuName the menuName to set
-	 */
-	public void setMenuName(String menuName) {
-		this.menuName = menuName;
+
+	public void setMerchantId(String merchantId) {
+		this.merchantId = merchantId;
 	}
 
-	/**
-	 * @return the userId
-	 */
+
 	public String getUserId() {
 		return userId;
 	}
 
-	/**
-	 * @param userId the userId to set
-	 */
+
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	
-	
+
+
+	public String getMenuName() {
+		return menuName;
+	}
+
+
+	public void setMenuName(String menuName) {
+		this.menuName = menuName;
+	}
 
 }

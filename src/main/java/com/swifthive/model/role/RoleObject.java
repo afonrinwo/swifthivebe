@@ -27,6 +27,9 @@ public class RoleObject implements Serializable{
 	@Column(name = "clientId", nullable = false)
 	private Long clientId;
 	
+	@Column(name = "merchantId", nullable = false)
+	private String merchantId;
+	
 	@Column(name = "roleName", nullable = false)
 	private String roleName;
 	
@@ -59,6 +62,7 @@ public class RoleObject implements Serializable{
 	/**
 	 * @param uniqueId
 	 * @param clientId
+	 * @param merchantId
 	 * @param roleName
 	 * @param createdBy
 	 * @param dateCreated
@@ -67,11 +71,13 @@ public class RoleObject implements Serializable{
 	 * @param approvedBy
 	 * @param dateApproved
 	 */
-	public RoleObject(Long uniqueId, Long clientId, String roleName, String createdBy, LocalDateTime dateCreated,
-			String status, Long approvedClientId, String approvedBy, LocalDateTime dateApproved) {
+	public RoleObject(Long uniqueId, Long clientId, String merchantId, String roleName, String createdBy,
+			LocalDateTime dateCreated, String status, Long approvedClientId, String approvedBy,
+			LocalDateTime dateApproved) {
 		super();
 		this.uniqueId = uniqueId;
 		this.clientId = clientId;
+		this.merchantId = merchantId;
 		this.roleName = roleName;
 		this.createdBy = createdBy;
 		this.dateCreated = dateCreated;
@@ -107,6 +113,20 @@ public class RoleObject implements Serializable{
 	 */
 	public void setClientId(Long clientId) {
 		this.clientId = clientId;
+	}
+
+	/**
+	 * @return the merchantId
+	 */
+	public String getMerchantId() {
+		return merchantId;
+	}
+
+	/**
+	 * @param merchantId the merchantId to set
+	 */
+	public void setMerchantId(String merchantId) {
+		this.merchantId = merchantId;
 	}
 
 	/**
@@ -214,5 +234,4 @@ public class RoleObject implements Serializable{
 		return serialVersionUID;
 	}
 
-	
 }

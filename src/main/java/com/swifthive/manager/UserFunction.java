@@ -45,6 +45,7 @@ public class UserFunction {
 			} else {
 				// persist function information
 				functionObject = new FunctionObject();
+				functionObject.setMerchantId(functionRequest.getMerchantId());			
 				functionObject.setClientId(functionRequest.getClientId());
 				functionObject.setFunctionName(functionRequest.getFunctionName());
 				functionObject.setCreatedBy(functionRequest.getUserId());
@@ -104,7 +105,7 @@ public class UserFunction {
 				functionObject.setDateCreated(functionObject.getDateCreated());
 				functionObject.setApprovedClientId(pendingAuthorizationRequest.getClientId());
 				functionObject.setFunctionName(pendingAuthorizationRequest.getActionValue());
-				functionObject.setApprovedBy(pendingAuthorizationRequest.getUserId());
+				functionObject.setApprovedBy(pendingAuthorizationRequest.getUserName());
 				functionObject.setStatus((pendingAuthorizationRequest.getStatus().equals("approved")) ? "1" : "2");
 				functionObject.setDateApproved(LocalDateTime.now());
 				functionRepository.save(functionObject);

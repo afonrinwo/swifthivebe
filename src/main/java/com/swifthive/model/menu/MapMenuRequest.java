@@ -32,9 +32,11 @@ public class MapMenuRequest implements Serializable {
 	@Column(name = "selectedMenuList", nullable = false)
 	private String selectedMenuList;
 	
-	@Column(name = "userId", nullable = false)
-	private String userId;
+	@Column(name = "userName", nullable = false)
+	private String userName;
 
+	@Column(name = "merchantId", nullable = false)
+	private String merchantId;
 	
 
 	/**
@@ -51,106 +53,83 @@ public class MapMenuRequest implements Serializable {
 	 * @param functionName
 	 * @param roleName
 	 * @param selectedMenuList
-	 * @param userId
+	 * @param userName
+	 * @param merchantId
 	 */
-	public MapMenuRequest(Long clientId, String functionName, String roleName, String selectedMenuList,
-			String userId) {
+	public MapMenuRequest(Long clientId, String functionName, String roleName, String selectedMenuList, String userName,
+			String merchantId) {
 		super();
 		this.clientId = clientId;
 		this.functionName = functionName;
 		this.roleName = roleName;
 		this.selectedMenuList = selectedMenuList;
-		this.userId = userId;
+		this.userName = userName;
+		this.merchantId = merchantId;
 	}
 
 
-	/**
-	 * @return the clientId
-	 */
 	public Long getClientId() {
 		return clientId;
 	}
 
 
-	/**
-	 * @param clientId the clientId to set
-	 */
 	public void setClientId(Long clientId) {
 		this.clientId = clientId;
 	}
 
 
-	/**
-	 * @return the functionName
-	 */
 	public String getFunctionName() {
 		return functionName;
 	}
 
 
-	/**
-	 * @param functionName the functionName to set
-	 */
 	public void setFunctionName(String functionName) {
 		this.functionName = functionName;
 	}
 
 
-	/**
-	 * @return the roleName
-	 */
 	public String getRoleName() {
 		return roleName;
 	}
 
 
-	/**
-	 * @param roleName the roleName to set
-	 */
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
 	}
 
 
-	/**
-	 * @return the selectedMenuList
-	 */
 	public String getSelectedMenuList() {
 		return selectedMenuList;
 	}
 
 
-	/**
-	 * @param selectedMenuList the selectedMenuList to set
-	 */
 	public void setSelectedMenuList(String selectedMenuList) {
 		this.selectedMenuList = selectedMenuList;
 	}
 
 
-	/**
-	 * @return the userId
-	 */
-	public String getUserId() {
-		return userId;
+	public String getUserName() {
+		return userName;
 	}
 
 
-	/**
-	 * @param userId the userId to set
-	 */
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 
-	/**
-	 * @return the serialversionuid
-	 */
+	public String getMerchantId() {
+		return merchantId;
+	}
+
+
+	public void setMerchantId(String merchantId) {
+		this.merchantId = merchantId;
+	}
+
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
 
-	
-	
 }

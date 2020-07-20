@@ -32,6 +32,9 @@ public class MapMenuObject implements Serializable {
 	@Column(name = "clientId", nullable = false)
 	private Long clientId;
 	
+	@Column(name = "merchantId", nullable = false)
+	private String merchantId;
+	
 	@Column(name = "functionName", nullable = false)
 	private String functionName;
 	
@@ -70,6 +73,7 @@ public class MapMenuObject implements Serializable {
 	/**
 	 * @param uniqueId
 	 * @param clientId
+	 * @param merchantId
 	 * @param functionName
 	 * @param roleName
 	 * @param selectedMenuList
@@ -80,12 +84,13 @@ public class MapMenuObject implements Serializable {
 	 * @param approvedBy
 	 * @param dateApproved
 	 */
-	public MapMenuObject(Long uniqueId, Long clientId, String functionName, String roleName,
+	public MapMenuObject(Long uniqueId, Long clientId, String merchantId, String functionName, String roleName,
 			String selectedMenuList, String createdBy, LocalDateTime dateCreated, String status, Long approvedClientId,
 			String approvedBy, LocalDateTime dateApproved) {
 		super();
 		this.uniqueId = uniqueId;
 		this.clientId = clientId;
+		this.merchantId = merchantId;
 		this.functionName = functionName;
 		this.roleName = roleName;
 		this.selectedMenuList = selectedMenuList;
@@ -123,6 +128,20 @@ public class MapMenuObject implements Serializable {
 	 */
 	public void setClientId(Long clientId) {
 		this.clientId = clientId;
+	}
+
+	/**
+	 * @return the merchantId
+	 */
+	public String getMerchantId() {
+		return merchantId;
+	}
+
+	/**
+	 * @param merchantId the merchantId to set
+	 */
+	public void setMerchantId(String merchantId) {
+		this.merchantId = merchantId;
 	}
 
 	/**
@@ -257,6 +276,6 @@ public class MapMenuObject implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	
+
 	
 }

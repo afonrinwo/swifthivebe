@@ -35,6 +35,7 @@ public class ClientLog {
 				// persist function information
 				clientAuditLogObject = new ClientAuditLogObject();
 				clientAuditLogObject.setClientId(clientLogRequest.getClientId());
+				clientAuditLogObject.setMerchantId(clientLogRequest.getMerchantId());
 				clientAuditLogObject.setUserId(clientLogRequest.getUserId());
 				clientAuditLogObject.setFunctionCalled(clientLogRequest.getFunctionCalled());
 				clientAuditLogObject.setActivity(clientLogRequest.getActivity());
@@ -51,6 +52,7 @@ public class ClientLog {
 				// persist audit log function information 
 				clientAuditLogObject = new ClientAuditLogObject();
 				clientAuditLogObject.setClientId(clientLogRequest.getClientId());
+				clientAuditLogObject.setMerchantId(clientLogRequest.getMerchantId());
 				clientAuditLogObject.setUserId(clientLogRequest.getUserId());
 				clientAuditLogObject.setFunctionCalled(clientLogRequest.getFunctionCalled());
 				clientAuditLogObject.setActivity(clientLogRequest.getActivity());
@@ -62,6 +64,7 @@ public class ClientLog {
 				// persist error log function information 
 				clientErrorLogObject = new ClientErrorLogObject();
 				clientErrorLogObject.setClientId(clientLogRequest.getClientId());
+				clientErrorLogObject.setMerchantId(clientLogRequest.getMerchantId());
 				clientErrorLogObject.setUserId(clientLogRequest.getUserId());
 				clientErrorLogObject.setFunctionCalled(clientLogRequest.getFunctionCalled());
 				clientErrorLogObject.setActivity(clientLogRequest.getActivity());

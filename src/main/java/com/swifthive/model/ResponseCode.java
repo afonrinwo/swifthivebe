@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @ConfigurationProperties
-@PropertySource("file:F:\\Spring Tool Workspace\\swifthivebe\\responseCode.properties")
+@PropertySource("file:D:\\Workspace-spring-tool-suite\\swifthivebe\\responseCode.properties")
 public class ResponseCode {
 
 	private String[] responseMessage;

@@ -19,7 +19,7 @@ import com.swifthive.model.profile.ProfileKeyObject;
 @EnableTransactionManagement
 public interface ProfileKeyRepository extends CrudRepository<ProfileKeyObject, Serializable> {
 
-	ProfileKeyObject findByUserName(String userName);
+	ProfileKeyObject findByMerchantIdAndUserName(String merchantId, String userName);
 
 
 }

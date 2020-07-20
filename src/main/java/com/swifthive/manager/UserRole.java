@@ -51,6 +51,7 @@ public class UserRole {
 			} else {
 				// persist function information
 				roleObject = new RoleObject();
+				roleObject.setMerchantId(roleRequest.getMerchantId());
 				roleObject.setClientId(roleRequest.getClientId());
 				roleObject.setRoleName(roleRequest.getRoleName());
 				roleObject.setCreatedBy(roleRequest.getUserId());
@@ -107,7 +108,7 @@ public class UserRole {
 				roleObject.setDateCreated(roleObject.getDateCreated());
 				roleObject.setApprovedClientId(pendingAuthorizationRequest.getClientId());
 				roleObject.setRoleName(pendingAuthorizationRequest.getActionValue());
-				roleObject.setApprovedBy(pendingAuthorizationRequest.getUserId());
+				roleObject.setApprovedBy(pendingAuthorizationRequest.getUserName());
 				roleObject.setStatus((pendingAuthorizationRequest.getStatus().equals("approved")) ? "1" : "2");
 				roleObject.setDateApproved(LocalDateTime.now());
 				roleRepository.save(roleObject);

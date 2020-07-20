@@ -21,5 +21,4 @@ public interface MapMenuRepository extends CrudRepository<MapMenuObject, Seriali
 
 	MapMenuObject findByUniqueId(Long uniqueId);
 
-		
 }

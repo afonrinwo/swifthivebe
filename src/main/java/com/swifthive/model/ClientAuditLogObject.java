@@ -35,6 +35,9 @@ public class ClientAuditLogObject implements Serializable {
 	@Column(name = "clientId", nullable = false)
 	private Long clientId;
 	
+	@Column(name = "merchantId", nullable = false)
+	private String merchantId;
+	
 	@Column(name = "userId", nullable = false)
 	private String userId;
 	
@@ -64,23 +67,24 @@ public class ClientAuditLogObject implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-
 	/**
 	 * @param uniqueId
 	 * @param clientId
+	 * @param merchantId
 	 * @param userId
-	 * @param fuctionCalled
+	 * @param functionCalled
 	 * @param activity
 	 * @param status
 	 * @param message
 	 * @param logTime
 	 * @param timeStamp
 	 */
-	public ClientAuditLogObject(Long uniqueId, Long clientId, String userId, String functionCalled, String activity,
-			String status, String message, String logTime, Date timeStamp) {
+	public ClientAuditLogObject(Long uniqueId, Long clientId, String merchantId, String userId, String functionCalled,
+			String activity, String status, String message, String logTime, Date timeStamp) {
 		super();
 		this.uniqueId = uniqueId;
 		this.clientId = clientId;
+		this.merchantId = merchantId;
 		this.userId = userId;
 		this.functionCalled = functionCalled;
 		this.activity = activity;
@@ -89,7 +93,6 @@ public class ClientAuditLogObject implements Serializable {
 		this.logTime = logTime;
 		this.timeStamp = timeStamp;
 	}
-
 
 	/**
 	 * @return the uniqueId
@@ -120,6 +123,20 @@ public class ClientAuditLogObject implements Serializable {
 	}
 
 	/**
+	 * @return the merchantId
+	 */
+	public String getMerchantId() {
+		return merchantId;
+	}
+
+	/**
+	 * @param merchantId the merchantId to set
+	 */
+	public void setMerchantId(String merchantId) {
+		this.merchantId = merchantId;
+	}
+
+	/**
 	 * @return the userId
 	 */
 	public String getUserId() {
@@ -134,17 +151,31 @@ public class ClientAuditLogObject implements Serializable {
 	}
 
 	/**
-	 * @return the fuctionCalled
+	 * @return the functionCalled
 	 */
 	public String getFunctionCalled() {
 		return functionCalled;
 	}
 
 	/**
-	 * @param fuctionCalled the fuctionCalled to set
+	 * @param functionCalled the functionCalled to set
 	 */
 	public void setFunctionCalled(String functionCalled) {
 		this.functionCalled = functionCalled;
+	}
+
+	/**
+	 * @return the activity
+	 */
+	public String getActivity() {
+		return activity;
+	}
+
+	/**
+	 * @param activity the activity to set
+	 */
+	public void setActivity(String activity) {
+		this.activity = activity;
 	}
 
 	/**
@@ -178,15 +209,15 @@ public class ClientAuditLogObject implements Serializable {
 	/**
 	 * @return the logTime
 	 */
-	public String getCurrentDateTime() {
+	public String getLogTime() {
 		return logTime;
 	}
 
 	/**
 	 * @param logTime the logTime to set
 	 */
-	public void setCurrentDateTime(String currentDateTime) {
-		this.logTime = currentDateTime;
+	public void setLogTime(String logTime) {
+		this.logTime = logTime;
 	}
 
 	/**
@@ -210,37 +241,4 @@ public class ClientAuditLogObject implements Serializable {
 		return serialVersionUID;
 	}
 
-
-	/**
-	 * @return the activity
-	 */
-	public String getActivity() {
-		return activity;
-	}
-
-
-	/**
-	 * @param activity the activity to set
-	 */
-	public void setActivity(String activity) {
-		this.activity = activity;
-	}
-
-
-	/**
-	 * @return the logTime
-	 */
-	public String getLogTime() {
-		return logTime;
-	}
-
-
-	/**
-	 * @param logTime the logTime to set
-	 */
-	public void setLogTime(String logTime) {
-		this.logTime = logTime;
-	}
-
-	
 }

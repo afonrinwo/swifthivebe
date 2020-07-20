@@ -35,6 +35,9 @@ public class ClientErrorLogObject implements Serializable {
 	@Column(name = "clientId", nullable = false)
 	private Long clientId;
 	
+	@Column(name = "merchantId", nullable = false)
+	private String merchantId;
+	
 	@Column(name = "userId", nullable = false)
 	private String userId;
 	
@@ -64,24 +67,24 @@ public class ClientErrorLogObject implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-	
-
 	/**
 	 * @param uniqueId
 	 * @param clientId
+	 * @param merchantId
 	 * @param userId
-	 * @param fuctionCalled
+	 * @param functionCalled
 	 * @param activity
 	 * @param status
 	 * @param message
 	 * @param logTime
 	 * @param timeStamp
 	 */
-	public ClientErrorLogObject(Long uniqueId, Long clientId, String userId, String functionCalled, String activity,
-			String status, String message, String logTime, Date timeStamp) {
+	public ClientErrorLogObject(Long uniqueId, Long clientId, String merchantId, String userId, String functionCalled,
+			String activity, String status, String message, String logTime, Date timeStamp) {
 		super();
 		this.uniqueId = uniqueId;
 		this.clientId = clientId;
+		this.merchantId = merchantId;
 		this.userId = userId;
 		this.functionCalled = functionCalled;
 		this.activity = activity;
@@ -90,8 +93,6 @@ public class ClientErrorLogObject implements Serializable {
 		this.logTime = logTime;
 		this.timeStamp = timeStamp;
 	}
-
-
 
 	/**
 	 * @return the uniqueId
@@ -122,6 +123,20 @@ public class ClientErrorLogObject implements Serializable {
 	}
 
 	/**
+	 * @return the merchantId
+	 */
+	public String getMerchantId() {
+		return merchantId;
+	}
+
+	/**
+	 * @param merchantId the merchantId to set
+	 */
+	public void setMerchantId(String merchantId) {
+		this.merchantId = merchantId;
+	}
+
+	/**
 	 * @return the userId
 	 */
 	public String getUserId() {
@@ -136,14 +151,14 @@ public class ClientErrorLogObject implements Serializable {
 	}
 
 	/**
-	 * @return the fuctionCalled
+	 * @return the functionCalled
 	 */
 	public String getFunctionCalled() {
 		return functionCalled;
 	}
 
 	/**
-	 * @param fuctionCalled the fuctionCalled to set
+	 * @param functionCalled the functionCalled to set
 	 */
 	public void setFunctionCalled(String functionCalled) {
 		this.functionCalled = functionCalled;
@@ -226,5 +241,4 @@ public class ClientErrorLogObject implements Serializable {
 		return serialVersionUID;
 	}
 
-	
 }

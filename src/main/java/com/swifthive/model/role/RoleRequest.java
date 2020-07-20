@@ -9,11 +9,17 @@ public class RoleRequest {
 	@Column(name = "clientId", nullable = false)
 	private Long clientId;
 	
-	@Column(name = "roleName", nullable = false)
-	private String roleName;
+	
+	@Column(name = "merchantId", nullable = false)
+	private String merchantId;
+	
 	
 	@Column(name = "userId", nullable = false)
 	private String userId;
+	
+	@Column(name = "roleName", nullable = false)
+	private String roleName;
+
 
 	/**
 	 * 
@@ -22,58 +28,54 @@ public class RoleRequest {
 		super();
 	}
 
-	/**
-	 * @param clientId
-	 * @param functionName
-	 * @param userId
-	 */
-	public RoleRequest(Long clientId, String roleName, String userId) {
+
+	public RoleRequest(Long clientId, String merchantId, String userId, String roleName) {
 		super();
 		this.clientId = clientId;
-		this.roleName = roleName;
+		this.merchantId = merchantId;
 		this.userId = userId;
+		this.roleName = roleName;
 	}
 
-	/**
-	 * @return the clientId
-	 */
+
 	public Long getClientId() {
 		return clientId;
 	}
 
-	/**
-	 * @param clientId the clientId to set
-	 */
+
 	public void setClientId(Long clientId) {
 		this.clientId = clientId;
 	}
 
-	/**
-	 * @return the roleName
-	 */
-	public String getRoleName() {
-		return roleName;
+
+	public String getMerchantId() {
+		return merchantId;
 	}
 
-	/**
-	 * @param roleName the roleName to set
-	 */
-	public void setRoleName(String roleName) {
-		this.roleName = roleName;
+
+	public void setMerchantId(String merchantId) {
+		this.merchantId = merchantId;
 	}
 
-	/**
-	 * @return the userId
-	 */
+
 	public String getUserId() {
 		return userId;
 	}
 
-	/**
-	 * @param userId the userId to set
-	 */
+
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 
+
+	public String getRoleName() {
+		return roleName;
+	}
+
+
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
+
+	
 }

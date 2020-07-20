@@ -3,6 +3,8 @@
  */
 package com.swifthive.model.profile;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -35,6 +37,12 @@ public class ProfileKeyObject {
 
 	@Column(name = "offSet", nullable = false)
 	private String offSet;
+	
+	@Column(name = "passwordCount", nullable = false)
+	private int passwordCount;
+	
+	@Column(name = "lastPasswordChangeDate")
+	private LocalDateTime lastPasswordChangeDate;
 
 	/**
 	 * 
@@ -51,9 +59,11 @@ public class ProfileKeyObject {
 	 * @param email
 	 * @param mobileNumber
 	 * @param offSet
+	 * @param passwordCount
+	 * @param lastPasswordChange
 	 */
 	public ProfileKeyObject(Long uniqueId, String merchantId, String userName, String email, String mobileNumber,
-			String offSet) {
+			String offSet, int passwordCount, LocalDateTime lastPasswordChangeDate) {
 		super();
 		this.uniqueId = uniqueId;
 		this.merchantId = merchantId;
@@ -61,6 +71,8 @@ public class ProfileKeyObject {
 		this.email = email;
 		this.mobileNumber = mobileNumber;
 		this.offSet = offSet;
+		this.passwordCount = passwordCount;
+		this.lastPasswordChangeDate = lastPasswordChangeDate;
 	}
 
 	/**
@@ -145,6 +157,34 @@ public class ProfileKeyObject {
 	 */
 	public void setOffSet(String offSet) {
 		this.offSet = offSet;
+	}
+
+	/**
+	 * @return the pinStatus
+	 */
+	public int getPasswordCount() {
+		return passwordCount;
+	}
+
+	/**
+	 * @param pinStatus the pinStatus to set
+	 */
+	public void setPasswordCount(int passwordCount) {
+		this.passwordCount = passwordCount;
+	}
+
+	/**
+	 * @return the pinChangeDate
+	 */
+	public LocalDateTime getLastPasswordChangeDate() {
+		return lastPasswordChangeDate;
+	}
+
+	/**
+	 * @param pinChangeDate the pinChangeDate to set
+	 */
+	public void setLastPasswordChangeDate(LocalDateTime lastPasswordChangeDate) {
+		this.lastPasswordChangeDate = lastPasswordChangeDate;
 	}
 
 }
