@@ -60,8 +60,7 @@ public class ListFunctionController {
 
 	@RequestMapping(value = "/listFunctionAPL", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody Iterable<FunctionObject> listFunctionAPL() {
-		String status = "0";
-		return userFunction.processListFunctionAPL(status);
+		return userFunction.processListFunctionAPL(0);
 	}
 
 	@RequestMapping(value = "/viewRole", method = RequestMethod.GET, produces = "application/json")
@@ -71,8 +70,7 @@ public class ListFunctionController {
 
 	@RequestMapping(value = "/listRoleAPL", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody Iterable<RoleObject> listRoleAPL() {
-		String status = "0";
-		return userRole.processListRoleAPL(status);
+		return userRole.processListRoleAPL(0);
 	}
 
 	@RequestMapping(value = "/viewMenu", method = RequestMethod.GET, produces = "application/json")
@@ -82,8 +80,7 @@ public class ListFunctionController {
 
 	@RequestMapping(value = "/listMenuAPL", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody Iterable<MenuObject> listMenuAPL() {
-		String status = "0";
-		return userMenu.processListMenuAPL(status);
+		return userMenu.processListMenuAPL(0);
 	}
 
 	@RequestMapping(value = "/viewMapMenu", method = RequestMethod.GET, produces = "application/json")
@@ -94,8 +91,7 @@ public class ListFunctionController {
 	
 	@RequestMapping(value = "/listMapMenuAPL", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody Iterable<MapMenuObject> listMenuMappingAPL() {
-		String status = "0";
-		return userMenu.processMapMenuAPL(status);
+		return userMenu.processMapMenuAPL(0);
 	}
 	
 	
@@ -106,8 +102,7 @@ public class ListFunctionController {
 	
 	@RequestMapping(value = "/listUserProfileAPL", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody Iterable<ProfileObject> listUserProfileAPL() {
-		String status = "0";
-		return userProfile.processUserProfileAPL(status);
+		return userProfile.processUserProfileAPL(0);
 	}
 	
 	@RequestMapping(value = "/navAccessRight", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")

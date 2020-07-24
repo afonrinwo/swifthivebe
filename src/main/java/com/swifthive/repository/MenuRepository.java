@@ -16,7 +16,7 @@ public interface MenuRepository extends CrudRepository<MenuObject, Serializable>
 	
 	Iterable<MenuObject> findAll();
 
-	Iterable<MenuObject> findByStatus(String status);
+	Iterable<MenuObject> findByStatus(int i);
 
 	boolean existsByMenuName(String menuName);
 

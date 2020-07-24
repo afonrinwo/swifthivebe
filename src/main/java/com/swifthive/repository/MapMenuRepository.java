@@ -15,7 +15,7 @@ import com.swifthive.model.menu.MapMenuObject;
 @Transactional
 public interface MapMenuRepository extends CrudRepository<MapMenuObject, Serializable> {
 
-	Iterable<MapMenuObject> findByStatus(String status);
+	Iterable<MapMenuObject> findByStatus(int i);
 
 	MapMenuObject findByUniqueId(Long uniqueId);
 
@@ -23,6 +23,6 @@ public interface MapMenuRepository extends CrudRepository<MapMenuObject, Seriali
 
 	MapMenuObject findByMerchantIdAndFunctionNameAndRoleName(String merchantId, String functionName, String roleName);
 
-	MapMenuObject existsByMerchantIdAndFunctionNameAndRoleName(String merchantId, String functionName, String roleName);
+	boolean existsByMerchantIdAndFunctionNameAndRoleName(String merchantId, String functionName, String roleName);
 
 }

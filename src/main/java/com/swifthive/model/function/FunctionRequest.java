@@ -12,8 +12,8 @@ public class FunctionRequest {
 	@Column(name = "merchantId", nullable = false)
 	private String merchantId;
 	
-	@Column(name = "userId", nullable = false)
-	private String userId;
+	@Column(name = "userName", nullable = false)
+	private String userName;
 	
 	@Column(name = "functionName", nullable = false)
 	private String functionName;
@@ -29,11 +29,11 @@ public class FunctionRequest {
 	}
 
 
-	public FunctionRequest(Long clientId, String merchantId, String userId, String functionName) {
+	public FunctionRequest(Long clientId, String merchantId, String userName, String functionName) {
 		super();
 		this.clientId = clientId;
 		this.merchantId = merchantId;
-		this.userId = userId;
+		this.userName = userName;
 		this.functionName = functionName;
 	}
 
@@ -58,13 +58,13 @@ public class FunctionRequest {
 	}
 
 
-	public String getUserId() {
-		return userId;
+	public String getUserName() {
+		return userName;
 	}
 
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 

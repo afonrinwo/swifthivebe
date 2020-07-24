@@ -54,7 +54,7 @@ public class UserFunction {
 				functionObject.setMerchantId(functionRequest.getMerchantId());			
 				functionObject.setClientId(functionRequest.getClientId());
 				functionObject.setFunctionName(functionRequest.getFunctionName());
-				functionObject.setCreatedBy(functionRequest.getUserId());
+				functionObject.setCreatedBy(functionRequest.getUserName());
 				functionObject.setStatus(0);
 				functionObject.setDateCreated(LocalDateTime.now());
 				functionRepository.save(functionObject);
@@ -84,7 +84,7 @@ public class UserFunction {
 		return iUserFunctionObject;
 	}
 
-	public Iterable<FunctionObject> processListFunctionAPL(String status) {
+	public Iterable<FunctionObject> processListFunctionAPL(int status) {
 		try {
 			iUserFunctionObject = new ArrayList<>();
 			iUserFunctionObject = functionRepository.findByStatus(status);

@@ -132,10 +132,10 @@ public class UserProfile {
 		}
 	}
 
-	public Iterable<ProfileObject> processUserProfileAPL(String status) {
+	public Iterable<ProfileObject> processUserProfileAPL(int i) {
 		try {
 			iProfileObject = new ArrayList<>();
-			iProfileObject = profileRepository.findByStatus(status);
+			iProfileObject = profileRepository.findByStatus(i);
 		} catch (Exception ex) {
 			iProfileObject = new ArrayList<>();
 			iProfileObject.forEach(null);

@@ -21,7 +21,7 @@ public interface ProfileRepository extends CrudRepository<ProfileObject, Seriali
 
 	boolean existsByUserName(String userName);
 
-	Iterable<ProfileObject> findByStatus(String status);
+	Iterable<ProfileObject> findByStatus(int i);
 
 	ProfileObject findByUniqueId(Long uniqueId);
 

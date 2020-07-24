@@ -94,10 +94,10 @@ public class UserRole {
 		return iUserRoleObject;
 	}
 
-	public Iterable<RoleObject> processListRoleAPL(String status) {
+	public Iterable<RoleObject> processListRoleAPL(int i) {
 		try {
 			iUserRoleObject = new ArrayList<>();
-			iUserRoleObject = roleRepository.findByStatus(status);
+			iUserRoleObject = roleRepository.findByStatus(i);
 		} catch (Exception ex) {
 			iUserRoleObject = new ArrayList<>();
 			iUserRoleObject.forEach(null);

@@ -17,7 +17,7 @@ public interface RoleRepository extends CrudRepository<RoleObject, Serializable>
 	
 	Iterable<RoleObject> findAll();
 
-	Iterable<RoleObject> findByStatus(String status);
+	Iterable<RoleObject> findByStatus(int i);
 
 	boolean existsByRoleName(String roleName);
 

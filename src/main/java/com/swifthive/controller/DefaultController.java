@@ -73,7 +73,7 @@ public class DefaultController {
 	public @ResponseBody Response createFunction(HttpServletRequest request,
 			@Validated @RequestBody FunctionRequest functionRequest) {
 		if (request.getHeader("Authorization").equals(util
-				.accessValidation(functionRequest.getUserId() + functionRequest.getClientId()))) {
+				.accessValidation(functionRequest.getUserName() + functionRequest.getClientId()))) {
 			return userFunction.processCreateFunction(functionRequest);
 		} else {
 			return util.responseBuilder(0L, functionRequest.getClientId(), 96);

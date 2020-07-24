@@ -107,10 +107,10 @@ public class UserMenu {
 		return iUserMenuObject;
 	}
 
-	public Iterable<MenuObject> processListMenuAPL(String status) {
+	public Iterable<MenuObject> processListMenuAPL(int i) {
 		try {
 			iUserMenuObject = new ArrayList<>();
-			iUserMenuObject = menuRepository.findByStatus(status);
+			iUserMenuObject = menuRepository.findByStatus(i);
 		} catch (Exception ex) {
 			iUserMenuObject = new ArrayList<>();
 			iUserMenuObject.forEach(null);
@@ -126,7 +126,7 @@ public class UserMenu {
 			case "update":
 				// get existing record
 				mapMenuObject = new MapMenuObject();
-				mapMenuObject = mapMenuRepository.existsByMerchantIdAndFunctionNameAndRoleName(
+				mapMenuObject = mapMenuRepository.findByMerchantIdAndFunctionNameAndRoleName(
 						mapMenuRequest.getMerchantId(), mapMenuRequest.getFunctionName(), mapMenuRequest.getRoleName());
 				// persist function information
 				mapMenuObject.setMerchantId(mapMenuObject.getMerchantId());
@@ -148,9 +148,8 @@ public class UserMenu {
 
 			default:
 				// check if function and role information exist
-				mapMenuObject = mapMenuRepository.existsByMerchantIdAndFunctionNameAndRoleName(
-						mapMenuRequest.getMerchantId(), mapMenuRequest.getFunctionName(), mapMenuRequest.getRoleName());
-				if (null != mapMenuObject.getUniqueId()) {
+				if (mapMenuRepository.existsByMerchantIdAndFunctionNameAndRoleName(
+						mapMenuRequest.getMerchantId(), mapMenuRequest.getFunctionName(), mapMenuRequest.getRoleName())) {
 					return util.responseBuilder(0L, mapMenuRequest.getClientId(), 7);
 				} else {
 					// persist function information
@@ -193,10 +192,10 @@ public class UserMenu {
 		return iMapMenuObject;
 	}
 
-	public Iterable<MapMenuObject> processMapMenuAPL(String status) {
+	public Iterable<MapMenuObject> processMapMenuAPL(int i) {
 		try {
 			iMapMenuObject = new ArrayList<>();
-			iMapMenuObject = mapMenuRepository.findByStatus(status);
+			iMapMenuObject = mapMenuRepository.findByStatus(i);
 		} catch (Exception ex) {
 			iMapMenuObject = new ArrayList<>();
 			iMapMenuObject.forEach(null);

@@ -14,7 +14,7 @@ public interface FunctionRepository extends CrudRepository<FunctionObject, Seria
 	
 	Iterable<FunctionObject> findAll();
 
-	Iterable<FunctionObject> findByStatus(String status);
+	Iterable<FunctionObject> findByStatus(int status);
 
 	boolean existsByFunctionName(String functionName);
 
