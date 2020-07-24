@@ -5,6 +5,7 @@ package com.swifthive.manager;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.transaction.Transactional;
 
@@ -19,12 +20,17 @@ import com.swifthive.model.EmailMessages;
 import com.swifthive.model.PendingAuthorizationRequest;
 import com.swifthive.model.Response;
 import com.swifthive.model.ResponseCode;
+import com.swifthive.model.menu.MapMenuObject;
+import com.swifthive.model.menu.MenuObject;
 import com.swifthive.model.profile.CreateProfileRequest;
+import com.swifthive.model.profile.NavAccessRightRequest;
 import com.swifthive.model.profile.PasswordChangeRequest;
 import com.swifthive.model.profile.ProfileKeyObject;
 import com.swifthive.model.profile.ProfileObject;
 import com.swifthive.model.profile.UserLoginRequest;
 import com.swifthive.model.profile.UserLoginResponse;
+import com.swifthive.repository.MapMenuRepository;
+import com.swifthive.repository.MenuRepository;
 import com.swifthive.repository.ProfileKeyRepository;
 import com.swifthive.repository.ProfileRepository;
 import com.swifthive.utilities.Util;
@@ -40,7 +46,9 @@ public class UserProfile {
 	private static final Logger logger = LogManager.getLogger(UserFunction.class);
 	private ProfileObject profileObject;
 	private ProfileKeyObject profileKeyObject;
+	private MapMenuObject mapMenuObject;
 	private Iterable<ProfileObject> iProfileObject;
+	private Iterable<MenuObject> iMenuObject;
 	private Response rsp;
 	private UserLoginResponse userLoginResponse;
 	private StringBuilder stringBuilder;
@@ -50,6 +58,12 @@ public class UserProfile {
 
 	@Autowired
 	ProfileKeyRepository profileKeyRepository;
+
+	@Autowired
+	MapMenuRepository mapMenuRepository;
+
+	@Autowired
+	MenuRepository menuRepository;
 
 	@Autowired
 	Util util;
@@ -78,7 +92,7 @@ public class UserProfile {
 				profileObject.setMobileNumber(createProfileRequest.getMobileNumber());
 				profileObject.setRoleName(createProfileRequest.getRoleName());
 				profileObject.setMerchantId(createProfileRequest.getMerchantId());
-				profileObject.setStatus("0");
+				profileObject.setStatus(0);
 				profileObject.setUserName(createProfileRequest.getUserName());
 				profileObject.setDateCreated(LocalDateTime.now());
 				profileRepository.save(profileObject);
@@ -94,15 +108,22 @@ public class UserProfile {
 				profileKeyObject.setMobileNumber(createProfileRequest.getMobileNumber());
 				profileKeyObject.setEmail(createProfileRequest.getEmail());
 				String rKey = RandomStringUtils.randomAlphanumeric(6);
-				profileKeyObject.setOffSet(util.encryptString(util.encryptString(util.accessValidation(rKey)),createProfileRequest.getUserName()));
+				profileKeyObject.setOffSet(util.encryptString(util.encryptString(util.accessValidation(rKey)),
+						createProfileRequest.getUserName()));
 				profileKeyObject.setUserName(createProfileRequest.getUserName());
 				profileKeyObject.setPasswordCount(0);
 				profileKeyRepository.save(profileKeyObject);
 
 				rsp = util.responseBuilder(0L, profileObject.getUniqueId(), 0);
-				util.sendEmailOneRecipient(emailMessages.getNotificationSender(), profileKeyObject.getEmail(),
+				
+				util.sendEmailOneRecipient(emailMessages.getNotificationSender(), profileObject.getEmail(),
 						emailMessages.getUserCreationHeading(), String.format(emailMessages.getUserCreationMessage(),
 								createProfileRequest.getUserName(), rKey));
+				
+				profileObject = new ProfileObject();
+				profileObject = profileRepository.findByUserName(profileObject.getCreatedBy());
+				util.sendEmailOneRecipient(emailMessages.getNotificationSender(), profileObject.getEmail(),
+						emailMessages.getPendingNotificationHeading(), String.format(emailMessages.getPendingNotificationMessage()));
 				return rsp;
 			}
 		} catch (Exception ex) {
@@ -138,13 +159,22 @@ public class UserProfile {
 				profileObject.setApprovedClientId(pendingAuthorizationRequest.getClientId());
 				profileObject.setFunctionName(pendingAuthorizationRequest.getActionValue());
 				profileObject.setApprovedBy(pendingAuthorizationRequest.getUserName());
-				profileObject.setStatus((pendingAuthorizationRequest.getStatus().equals("approved")) ? "1" : "2");
+				profileObject.setStatus((pendingAuthorizationRequest.getStatus().equals("approved")) ? 1 : 2);
 				profileObject.setDateApproved(LocalDateTime.now());
 				profileRepository.save(profileObject);
 				rsp = util.responseBuilder(0L, pendingAuthorizationRequest.getClientId(), 0);
+				
+				
+				util.sendEmailOneRecipient(emailMessages.getNotificationSender(), profileObject.getEmail(),
+						emailMessages.getApprovalNotificationHeading(), String.format(emailMessages.getApprovalNotificationMessage()));
+				
+				profileObject = new ProfileObject();
+				profileObject = profileRepository.findByUserName(profileKeyObject.getEmail());
 				util.sendEmailOneRecipient(emailMessages.getNotificationSender(),
-						"emmanuel.afonrinwo@swiftsystemsng.com", emailMessages.getApprovalNotificationHeading(),
-						emailMessages.getApprovalNotificationMessage());
+						profileObject.getEmail(), emailMessages.getUserCreationApprovalHeading(),
+						emailMessages.getUserCreationApprovalMessage());
+
+				
 				return rsp;
 			}
 
@@ -172,16 +202,15 @@ public class UserProfile {
 			profileObject = profileRepository.findByMerchantIdAndUserName(userLoginRequest.getMerchantId(),
 					userLoginRequest.getUserName());
 			switch (profileObject.getStatus()) {
-			case "0":
+			case 0:
 				userLoginResponse = new UserLoginResponse();
 				userLoginResponse.setClientId(profileObject.getClientId());
 				userLoginResponse.setMerchantId(profileObject.getMerchantId());
 				userLoginResponse.setUserName(profileObject.getUserName());
 				userLoginResponse.setResponseCode(String.format("%03d", 31));
-				userLoginResponse
-						.setResponseMessage(stringBuilder.append(responseCode.getResponseMessage()[31]).toString());
+				userLoginResponse.setResponseMessage(stringBuilder.append(responseCode.getResponseMessage()[31]).toString());
 				return userLoginResponse;
-			case "1":
+			case 1:
 				profileKeyObject = new ProfileKeyObject();
 				profileKeyObject = profileKeyRepository.findByMerchantIdAndUserName(userLoginRequest.getMerchantId(),
 						userLoginRequest.getUserName());
@@ -262,7 +291,8 @@ public class UserProfile {
 			profileKeyObject = new ProfileKeyObject();
 			profileKeyObject = profileKeyRepository.findByMerchantIdAndUserName(passwordChangeRequest.getMerchantId(),
 					passwordChangeRequest.getUserName());
-			if (profileKeyObject.getOffSet().equals(util.encryptString(passwordChangeRequest.getOldPassword(), passwordChangeRequest.getUserName()))) {
+			if (profileKeyObject.getOffSet().equals(
+					util.encryptString(passwordChangeRequest.getOldPassword(), passwordChangeRequest.getUserName()))) {
 				profileKeyObject.setEmail(profileKeyObject.getEmail());
 				profileKeyObject.setMerchantId(profileKeyObject.getMerchantId());
 				profileKeyObject.setMobileNumber(profileKeyObject.getMobileNumber());
@@ -286,6 +316,34 @@ public class UserProfile {
 			return util.responseBuilder(0L, passwordChangeRequest.getClientId(), 99);
 		}
 
+	}
+
+	public Iterable<MenuObject> processNavAccessRight(NavAccessRightRequest navAccessRightRequest) {
+
+		try {
+			// select user from profile
+			profileObject = new ProfileObject();
+			profileObject = profileRepository.findByMerchantIdAndUserName(navAccessRightRequest.getMerchantId(),
+					navAccessRightRequest.getUserName());
+
+			// get user function ans role
+			mapMenuObject = new MapMenuObject();
+			mapMenuObject = mapMenuRepository.findByMerchantIdAndRoleName(profileObject.getMerchantId(),
+					profileObject.getRoleName());
+
+			// use selected menu to get other details
+			int[] iIds = Arrays.stream(mapMenuObject.getSelectedMenuList().split("\\|")).mapToInt(Integer::parseInt)
+					.toArray();
+			long[] lIds = Arrays.stream(iIds).asLongStream().toArray();
+			iMenuObject = new ArrayList<>();
+			iMenuObject = menuRepository.findAllByUniqueIdIn(lIds);
+
+		} catch (Exception ex) {
+			iMenuObject = new ArrayList<>();
+			iMenuObject.forEach(null);
+		}
+
+		return iMenuObject;
 	}
 
 }

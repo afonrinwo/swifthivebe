@@ -36,7 +36,7 @@ public class ClientLog {
 				clientAuditLogObject = new ClientAuditLogObject();
 				clientAuditLogObject.setClientId(clientLogRequest.getClientId());
 				clientAuditLogObject.setMerchantId(clientLogRequest.getMerchantId());
-				clientAuditLogObject.setUserId(clientLogRequest.getUserId());
+				clientAuditLogObject.setUserName(clientLogRequest.getUserName());
 				clientAuditLogObject.setFunctionCalled(clientLogRequest.getFunctionCalled());
 				clientAuditLogObject.setActivity(clientLogRequest.getActivity());
 				clientAuditLogObject.setStatus(clientLogRequest.getStatus());
@@ -44,7 +44,7 @@ public class ClientLog {
 				clientAuditLogObject.setLogTime(clientLogRequest.getLogTime());
 				clientAuditLogRepository.save(clientAuditLogObject);
 			} catch (Exception ex) {
-				logger.error(ex.getMessage() + "\n" + ex.getLocalizedMessage() + "\n" + ex.getStackTrace() + "\n" + clientLogRequest.getClientId() + "\n" + clientLogRequest.getUserId() + "\n" + clientLogRequest.getFunctionCalled() + "\n" + clientLogRequest.getActivity() + "\n" + clientLogRequest.getStatus() + "\n" + clientLogRequest.getMessage() + "\n" + clientLogRequest.getLogTime());
+				logger.error(ex.getMessage() + "\n" + ex.getLocalizedMessage() + "\n" + ex.getStackTrace() + "\n" + clientLogRequest.getClientId() + "\n" + clientLogRequest.getUserName() + "\n" + clientLogRequest.getFunctionCalled() + "\n" + clientLogRequest.getActivity() + "\n" + clientLogRequest.getStatus() + "\n" + clientLogRequest.getMessage() + "\n" + clientLogRequest.getLogTime());
 			}
 		} else {
 			
@@ -53,7 +53,7 @@ public class ClientLog {
 				clientAuditLogObject = new ClientAuditLogObject();
 				clientAuditLogObject.setClientId(clientLogRequest.getClientId());
 				clientAuditLogObject.setMerchantId(clientLogRequest.getMerchantId());
-				clientAuditLogObject.setUserId(clientLogRequest.getUserId());
+				clientAuditLogObject.setUserName(clientLogRequest.getUserName());
 				clientAuditLogObject.setFunctionCalled(clientLogRequest.getFunctionCalled());
 				clientAuditLogObject.setActivity(clientLogRequest.getActivity());
 				clientAuditLogObject.setStatus(clientLogRequest.getStatus());
@@ -65,7 +65,7 @@ public class ClientLog {
 				clientErrorLogObject = new ClientErrorLogObject();
 				clientErrorLogObject.setClientId(clientLogRequest.getClientId());
 				clientErrorLogObject.setMerchantId(clientLogRequest.getMerchantId());
-				clientErrorLogObject.setUserId(clientLogRequest.getUserId());
+				clientErrorLogObject.setUserName(clientLogRequest.getUserName());
 				clientErrorLogObject.setFunctionCalled(clientLogRequest.getFunctionCalled());
 				clientErrorLogObject.setActivity(clientLogRequest.getActivity());
 				clientErrorLogObject.setStatus(clientLogRequest.getStatus());
@@ -74,7 +74,7 @@ public class ClientLog {
 				clientErrorLogRepository.save(clientErrorLogObject);
 
 			} catch (Exception ex) {
-				logger.error(ex.getMessage() + "\n" + ex.getLocalizedMessage() + "\n" + ex.getStackTrace() + "\n" + clientLogRequest.getClientId() + "\n" + clientLogRequest.getUserId() + "\n" + clientLogRequest.getFunctionCalled() + "\n" + clientLogRequest.getActivity() + "\n" + clientLogRequest.getStatus() + "\n" + clientLogRequest.getMessage() + "\n" + clientLogRequest.getLogTime());
+				logger.error(ex.getMessage() + "\n" + ex.getLocalizedMessage() + "\n" + ex.getStackTrace() + "\n" + clientLogRequest.getClientId() + "\n" + clientLogRequest.getUserName() + "\n" + clientLogRequest.getFunctionCalled() + "\n" + clientLogRequest.getActivity() + "\n" + clientLogRequest.getStatus() + "\n" + clientLogRequest.getMessage() + "\n" + clientLogRequest.getLogTime());
 			}
 		}
 	}

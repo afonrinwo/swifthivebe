@@ -21,8 +21,8 @@ public class ClientLogRequest {
 	@Column(name = "merchantId", nullable = false)
 	private String merchantId;
 	
-	@Column(name = "userId", nullable = false)
-	private String userId;
+	@Column(name = "userName", nullable = false)
+	private String userName;
 	
 	@Column(name = "functionCalled", nullable = false)
 	private String functionCalled;
@@ -58,13 +58,13 @@ public class ClientLogRequest {
 	 * @param message
 	 * @param logTime
 	 */
-	public ClientLogRequest(String logType, Long clientId, String merchantId, String userId, String functionCalled,
+	public ClientLogRequest(String logType, Long clientId, String merchantId, String userName, String functionCalled,
 			String activity, String status, String message, String logTime) {
 		super();
 		this.logType = logType;
 		this.clientId = clientId;
 		this.merchantId = merchantId;
-		this.userId = userId;
+		this.userName = userName;
 		this.functionCalled = functionCalled;
 		this.activity = activity;
 		this.status = status;
@@ -117,15 +117,15 @@ public class ClientLogRequest {
 	/**
 	 * @return the userId
 	 */
-	public String getUserId() {
-		return userId;
+	public String getUserName() {
+		return userName;
 	}
 
 	/**
 	 * @param userId the userId to set
 	 */
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	/**

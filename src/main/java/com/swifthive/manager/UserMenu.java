@@ -5,6 +5,7 @@ package com.swifthive.manager;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.transaction.Transactional;
 
@@ -18,11 +19,14 @@ import com.swifthive.model.EmailMessages;
 import com.swifthive.model.PendingAuthorizationRequest;
 import com.swifthive.model.Response;
 import com.swifthive.model.menu.MenuRequest;
+import com.swifthive.model.profile.ProfileObject;
+import com.swifthive.model.menu.ListMapMenuRequest;
 import com.swifthive.model.menu.MapMenuObject;
 import com.swifthive.model.menu.MapMenuRequest;
 import com.swifthive.model.menu.MenuObject;
 import com.swifthive.repository.MapMenuRepository;
 import com.swifthive.repository.MenuRepository;
+import com.swifthive.repository.ProfileRepository;
 import com.swifthive.utilities.Util;
 
 /**
@@ -37,6 +41,8 @@ public class UserMenu {
 
 	private MenuObject menuObject;
 	private MapMenuObject mapMenuObject;
+	private ProfileObject profileObject;
+	private Iterable<MenuObject> iMenuObject;
 	private Iterable<MenuObject> iUserMenuObject;
 	private Iterable<MapMenuObject> iMapMenuObject;
 	private Response rsp;
@@ -46,6 +52,9 @@ public class UserMenu {
 
 	@Autowired
 	MapMenuRepository mapMenuRepository;
+
+	@Autowired
+	ProfileRepository profileRepository;
 
 	@Autowired
 	Util util;
@@ -62,17 +71,24 @@ public class UserMenu {
 			} else {
 				// execute your business logic here, persist function information
 				menuObject = new MenuObject();
-				menuObject.setMerchantId(menuRequest.getMerchantId());
 				menuObject.setClientId(menuRequest.getClientId());
-				menuObject.setMenuName(menuRequest.getMenuName());
-				menuObject.setCreatedBy(menuRequest.getUserId());
+				menuObject.setCreatedBy(menuRequest.getUserName());
 				menuObject.setDateCreated(LocalDateTime.now());
-				menuObject.setStatus("0");
+				menuObject.setMenuCategory(menuRequest.getMenuCategory());
+				menuObject.setMenuComponent(menuRequest.getMenuComponent());
+				menuObject.setMenuName(menuRequest.getMenuName());
+				menuObject.setMenuPath(menuRequest.getMenuPath());
+				menuObject.setMerchantId(menuRequest.getMerchantId());
+				menuObject.setNavIcon(menuRequest.getNavIcon());
+				menuObject.setNavItem(menuRequest.getNavItem());
+				menuObject.setStatus(0);
 				menuRepository.save(menuObject);
 				rsp = util.responseBuilder(0L, menuRequest.getClientId(), 0);
-				util.sendEmailOneRecipient(emailMessages.getNotificationSender(),
-						"emmanuel.afonrinwo@swiftsystemsng.com", emailMessages.getPendingNotificationHeading(),
-						emailMessages.getPendingNotificationMessage());
+
+				profileObject = new ProfileObject();
+				profileObject = profileRepository.findByUserName(menuObject.getCreatedBy());
+				util.sendEmailOneRecipient(emailMessages.getNotificationSender(), profileObject.getEmail(),
+						emailMessages.getPendingNotificationHeading(), emailMessages.getPendingNotificationMessage());
 				return rsp;
 			}
 		} catch (Exception ex) {
@@ -105,30 +121,62 @@ public class UserMenu {
 
 	public Response processMapMenu(@Validated MapMenuRequest mapMenuRequest) {
 		try {
-			// check if function and role information exist
-			if (mapMenuRepository.existsByFunctionNameAndRoleName(mapMenuRequest.getFunctionName(),
-					mapMenuRequest.getRoleName())) {
-				return util.responseBuilder(0L, mapMenuRequest.getClientId(), 7);
-			} else {
-				// persist function information
+
+			switch (mapMenuRequest.getAction()) {
+			case "update":
+				// get existing record
 				mapMenuObject = new MapMenuObject();
-				mapMenuObject.setMerchantId(mapMenuRequest.getMerchantId());
+				mapMenuObject = mapMenuRepository.existsByMerchantIdAndFunctionNameAndRoleName(
+						mapMenuRequest.getMerchantId(), mapMenuRequest.getFunctionName(), mapMenuRequest.getRoleName());
+				// persist function information
+				mapMenuObject.setMerchantId(mapMenuObject.getMerchantId());
 				mapMenuObject.setClientId(mapMenuRequest.getClientId());
-				mapMenuObject.setFunctionName(mapMenuRequest.getFunctionName());
-				mapMenuObject.setRoleName(mapMenuRequest.getRoleName());
+				mapMenuObject.setFunctionName(mapMenuObject.getFunctionName());
+				mapMenuObject.setRoleName(mapMenuObject.getRoleName());
 				mapMenuObject.setSelectedMenuList(mapMenuRequest.getSelectedMenuList());
 				mapMenuObject.setCreatedBy(mapMenuRequest.getUserName());
 				mapMenuObject.setDateCreated(LocalDateTime.now());
-				mapMenuObject.setStatus("0");
+				mapMenuObject.setStatus(mapMenuObject.getStatus() + 1);
 				mapMenuRepository.save(mapMenuObject);
 				rsp = util.responseBuilder(0L, mapMenuObject.getClientId(), 0);
-				util.sendEmailOneRecipient(emailMessages.getNotificationSender(),
-						"emmanuel.afonrinwo@swiftsystemsng.com", emailMessages.getPendingNotificationHeading(),
-						emailMessages.getPendingNotificationMessage());
-				return rsp;
-			}
 
-		} catch (Exception ex) {
+				profileObject = new ProfileObject();
+				profileObject = profileRepository.findByUserName(menuObject.getCreatedBy());
+				util.sendEmailOneRecipient(emailMessages.getNotificationSender(), profileObject.getEmail(),
+						emailMessages.getPendingNotificationHeading(), emailMessages.getPendingNotificationMessage());
+				return rsp;
+
+			default:
+				// check if function and role information exist
+				mapMenuObject = mapMenuRepository.existsByMerchantIdAndFunctionNameAndRoleName(
+						mapMenuRequest.getMerchantId(), mapMenuRequest.getFunctionName(), mapMenuRequest.getRoleName());
+				if (null != mapMenuObject.getUniqueId()) {
+					return util.responseBuilder(0L, mapMenuRequest.getClientId(), 7);
+				} else {
+					// persist function information
+					mapMenuObject = new MapMenuObject();
+					mapMenuObject.setMerchantId(mapMenuRequest.getMerchantId());
+					mapMenuObject.setClientId(mapMenuRequest.getClientId());
+					mapMenuObject.setFunctionName(mapMenuRequest.getFunctionName());
+					mapMenuObject.setRoleName(mapMenuRequest.getRoleName());
+					mapMenuObject.setSelectedMenuList(mapMenuRequest.getSelectedMenuList());
+					mapMenuObject.setCreatedBy(mapMenuRequest.getUserName());
+					mapMenuObject.setDateCreated(LocalDateTime.now());
+					mapMenuObject.setStatus(0);
+					mapMenuRepository.save(mapMenuObject);
+					rsp = util.responseBuilder(0L, mapMenuObject.getClientId(), 0);
+
+					profileObject = new ProfileObject();
+					profileObject = profileRepository.findByUserName(menuObject.getCreatedBy());
+					util.sendEmailOneRecipient(emailMessages.getNotificationSender(), profileObject.getEmail(),
+							emailMessages.getPendingNotificationHeading(),
+							emailMessages.getPendingNotificationMessage());
+					return rsp;
+				}
+			}
+		} catch (
+
+		Exception ex) {
 			logger.error(ex.getMessage() + "\n" + ex.getLocalizedMessage() + "\n" + ex.getStackTrace());
 			return util.responseBuilder(0L, mapMenuRequest.getClientId(), 0);
 		}
@@ -176,12 +224,15 @@ public class UserMenu {
 					menuObject.setApprovedClientId(pendingAuthorizationRequest.getClientId());
 					menuObject.setMenuName(pendingAuthorizationRequest.getActionValue());
 					menuObject.setApprovedBy(pendingAuthorizationRequest.getUserName());
-					menuObject.setStatus((pendingAuthorizationRequest.getStatus().equals("approved")) ? "1" : "2");
+					menuObject.setStatus((pendingAuthorizationRequest.getStatus().equals("approved")) ? 1 : 2);
 					menuObject.setDateApproved(LocalDateTime.now());
 					menuRepository.save(menuObject);
 					rsp = util.responseBuilder(0L, pendingAuthorizationRequest.getClientId(), 0);
-					util.sendEmailOneRecipient(emailMessages.getNotificationSender(),
-							"emmanuel.afonrinwo@swiftsystemsng.com", emailMessages.getApprovalNotificationHeading(),
+
+					profileObject = new ProfileObject();
+					profileObject = profileRepository.findByUserName(menuObject.getCreatedBy());
+					util.sendEmailOneRecipient(emailMessages.getNotificationSender(), profileObject.getEmail(),
+							emailMessages.getApprovalNotificationHeading(),
 							emailMessages.getApprovalNotificationMessage());
 					return rsp;
 				}
@@ -201,12 +252,15 @@ public class UserMenu {
 					mapMenuObject.setRoleName(mapMenuObject.getRoleName());
 					mapMenuObject.setApprovedClientId(pendingAuthorizationRequest.getClientId());
 					mapMenuObject.setApprovedBy(pendingAuthorizationRequest.getUserName());
-					mapMenuObject.setStatus((pendingAuthorizationRequest.getStatus().equals("approved")) ? "1" : "2");
+					mapMenuObject.setStatus((pendingAuthorizationRequest.getStatus().equals("approved")) ? 1 : 2);
 					mapMenuObject.setDateApproved(LocalDateTime.now());
 					mapMenuRepository.save(mapMenuObject);
 					rsp = util.responseBuilder(0L, pendingAuthorizationRequest.getClientId(), 0);
-					util.sendEmailOneRecipient(emailMessages.getNotificationSender(),
-							"emmanuel.afonrinwo@swiftsystemsng.com", emailMessages.getApprovalNotificationHeading(),
+
+					profileObject = new ProfileObject();
+					profileObject = profileRepository.findByUserName(mapMenuObject.getCreatedBy());
+					util.sendEmailOneRecipient(emailMessages.getNotificationSender(), profileObject.getEmail(),
+							emailMessages.getApprovalNotificationHeading(),
 							emailMessages.getApprovalNotificationMessage());
 					return rsp;
 				}
@@ -217,4 +271,29 @@ public class UserMenu {
 			return util.responseBuilder(0L, pendingAuthorizationRequest.getClientId(), 99);
 		}
 	}
+
+	public Iterable<MenuObject> processListMapMenu(ListMapMenuRequest listMapMenuRequest) {
+		try {
+
+			// get user function and role
+			mapMenuObject = new MapMenuObject();
+			mapMenuObject = mapMenuRepository.findByMerchantIdAndFunctionNameAndRoleName(
+					listMapMenuRequest.getMerchantId(), listMapMenuRequest.getFunctionName(),
+					listMapMenuRequest.getRoleName());
+
+			// use selected menu to get other details
+			int[] iIds = Arrays.stream(mapMenuObject.getSelectedMenuList().split("\\|")).mapToInt(Integer::parseInt)
+					.toArray();
+			long[] lIds = Arrays.stream(iIds).asLongStream().toArray();
+			iMenuObject = new ArrayList<>();
+			iMenuObject = menuRepository.findAllByUniqueIdIn(lIds);
+
+		} catch (Exception ex) {
+			iMenuObject = new ArrayList<>();
+			iMenuObject.forEach(null);
+		}
+
+		return iMenuObject;
+	}
+
 }

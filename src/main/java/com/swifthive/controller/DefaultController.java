@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.swifthive.manager.ClientLog;
-import com.swifthive.manager.NavigationParam;
 import com.swifthive.manager.UserFunction;
 import com.swifthive.manager.UserRole;
 import com.swifthive.manager.UserMenu;
@@ -22,7 +21,6 @@ import com.swifthive.model.Response;
 import com.swifthive.model.ResponseCode;
 import com.swifthive.model.function.FunctionRequest;
 import com.swifthive.model.menu.MenuRequest;
-import com.swifthive.model.menu.NavigationParamRequest;
 import com.swifthive.model.menu.MapMenuRequest;
 import com.swifthive.model.profile.CreateProfileRequest;
 import com.swifthive.model.profile.PasswordChangeRequest;
@@ -37,8 +35,6 @@ public class DefaultController {
 	private UserLoginResponse userLoginResponse;
 	private StringBuilder stringBuilder;
 	
-	@Autowired
-	NavigationParam navigationParam;
 	
 	@Autowired
 	UserProfile userProfile;
@@ -100,7 +96,7 @@ public class DefaultController {
 	public @ResponseBody Response createMenu(HttpServletRequest request,
 			@Validated @RequestBody MenuRequest menuRequest) {
 		if (request.getHeader("Authorization").equals(
-				util.accessValidation(menuRequest.getUserId() + menuRequest.getClientId()))) {
+				util.accessValidation(menuRequest.getUserName() + menuRequest.getClientId()))) {
 			return userMenu.processCreateMenu(menuRequest);
 		} else {
 			return util.responseBuilder(0L, menuRequest.getClientId(), 96);
@@ -117,17 +113,6 @@ public class DefaultController {
 			return util.responseBuilder(0L, mapMenuRequest.getClientId(), 96);
 		}
 	}
-	
-	@RequestMapping(value = "createNavigationParam", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
-	public @ResponseBody Response createNavigationParam(HttpServletRequest request,
-			@Validated @RequestBody NavigationParamRequest navigationParamRequest ) {
-		if (request.getHeader("Authorization").equals(
-				util.accessValidation(navigationParamRequest.getUserName() + navigationParamRequest.getClientId()))) {
-			return navigationParam.processcreateNavigationParam(navigationParamRequest);
-		} else {
-			return util.responseBuilder(0L, navigationParamRequest.getClientId(), 96);
-		}
-	} 
 
 	@RequestMapping(value = "/pendingAuthorization", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public @ResponseBody Response pendingAuthorization(HttpServletRequest request,
@@ -145,8 +130,6 @@ public class DefaultController {
 				return userMenu.processPendingAuthorization(pendingAuthorizationRequest);
 			case "UserProfile":
 				return userProfile.processPendingAuthorization(pendingAuthorizationRequest);
-			case "NavigationParam":
-				return navigationParam.processPendingAuthorization(pendingAuthorizationRequest);
 			default:
 				return util.responseBuilder(0L, pendingAuthorizationRequest.getClientId(), 95);
 			}

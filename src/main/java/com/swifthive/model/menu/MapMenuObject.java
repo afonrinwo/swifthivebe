@@ -51,7 +51,7 @@ public class MapMenuObject implements Serializable {
 	private LocalDateTime dateCreated;
 	
 	@Column(name = "status", nullable = false)
-	private String status;
+	private int status;
 	
 	@Column(name = "approvedClientId")
 	private Long approvedClientId;
@@ -85,7 +85,7 @@ public class MapMenuObject implements Serializable {
 	 * @param dateApproved
 	 */
 	public MapMenuObject(Long uniqueId, Long clientId, String merchantId, String functionName, String roleName,
-			String selectedMenuList, String createdBy, LocalDateTime dateCreated, String status, Long approvedClientId,
+			String selectedMenuList, String createdBy, LocalDateTime dateCreated, int status, Long approvedClientId,
 			String approvedBy, LocalDateTime dateApproved) {
 		super();
 		this.uniqueId = uniqueId;
@@ -217,14 +217,14 @@ public class MapMenuObject implements Serializable {
 	/**
 	 * @return the status
 	 */
-	public String getStatus() {
+	public int getStatus() {
 		return status;
 	}
 
 	/**
 	 * @param status the status to set
 	 */
-	public void setStatus(String status) {
+	public void setStatus(int status) {
 		this.status = status;
 	}
 

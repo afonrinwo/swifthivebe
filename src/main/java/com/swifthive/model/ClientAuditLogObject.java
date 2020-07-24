@@ -38,8 +38,8 @@ public class ClientAuditLogObject implements Serializable {
 	@Column(name = "merchantId", nullable = false)
 	private String merchantId;
 	
-	@Column(name = "userId", nullable = false)
-	private String userId;
+	@Column(name = "userName", nullable = false)
+	private String userName;
 	
 	@Column(name = "functionCalled", nullable = false)
 	private String functionCalled;
@@ -79,13 +79,13 @@ public class ClientAuditLogObject implements Serializable {
 	 * @param logTime
 	 * @param timeStamp
 	 */
-	public ClientAuditLogObject(Long uniqueId, Long clientId, String merchantId, String userId, String functionCalled,
+	public ClientAuditLogObject(Long uniqueId, Long clientId, String merchantId, String userName, String functionCalled,
 			String activity, String status, String message, String logTime, Date timeStamp) {
 		super();
 		this.uniqueId = uniqueId;
 		this.clientId = clientId;
 		this.merchantId = merchantId;
-		this.userId = userId;
+		this.userName = userName;
 		this.functionCalled = functionCalled;
 		this.activity = activity;
 		this.status = status;
@@ -139,15 +139,15 @@ public class ClientAuditLogObject implements Serializable {
 	/**
 	 * @return the userId
 	 */
-	public String getUserId() {
-		return userId;
+	public String getUserName() {
+		return userName;
 	}
 
 	/**
 	 * @param userId the userId to set
 	 */
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	/**

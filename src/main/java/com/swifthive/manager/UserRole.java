@@ -14,8 +14,11 @@ import org.springframework.validation.annotation.Validated;
 import com.swifthive.model.EmailMessages;
 import com.swifthive.model.PendingAuthorizationRequest;
 import com.swifthive.model.Response;
+import com.swifthive.model.profile.ProfileObject;
 import com.swifthive.model.role.RoleRequest;
 import com.swifthive.model.role.RoleObject;
+import com.swifthive.repository.ProfileKeyRepository;
+import com.swifthive.repository.ProfileRepository;
 import com.swifthive.repository.RoleRepository;
 import com.swifthive.utilities.Util;
 
@@ -30,8 +33,15 @@ public class UserRole {
 
 	private static final Logger logger = LogManager.getLogger(UserRole.class);
 	private RoleObject roleObject;
+	private ProfileObject profileObject;
 	private Iterable<RoleObject> iUserRoleObject;
 	private Response rsp;
+	
+	@Autowired
+	ProfileRepository profileRepository;
+
+	@Autowired
+	ProfileKeyRepository profileKeyRepository;
 
 	@Autowired
 	RoleRepository roleRepository;
@@ -56,11 +66,14 @@ public class UserRole {
 				roleObject.setRoleName(roleRequest.getRoleName());
 				roleObject.setCreatedBy(roleRequest.getUserId());
 				roleObject.setDateCreated(LocalDateTime.now());
-				roleObject.setStatus("0");
+				roleObject.setStatus(0);
 				roleRepository.save(roleObject);
 				rsp = util.responseBuilder(roleObject.getUniqueId(), roleObject.getClientId(), 0);
+				
+				profileObject = new ProfileObject();
+				profileObject = profileRepository.findByUserName(roleObject.getCreatedBy());
 				util.sendEmailOneRecipient(emailMessages.getNotificationSender(),
-						"emmanuel.afonrinwo@swiftsystemsng.com", emailMessages.getPendingNotificationHeading(),
+						profileObject.getEmail(), emailMessages.getPendingNotificationHeading(),
 						emailMessages.getPendingNotificationMessage());
 				return rsp;
 			}
@@ -109,12 +122,15 @@ public class UserRole {
 				roleObject.setApprovedClientId(pendingAuthorizationRequest.getClientId());
 				roleObject.setRoleName(pendingAuthorizationRequest.getActionValue());
 				roleObject.setApprovedBy(pendingAuthorizationRequest.getUserName());
-				roleObject.setStatus((pendingAuthorizationRequest.getStatus().equals("approved")) ? "1" : "2");
+				roleObject.setStatus((pendingAuthorizationRequest.getStatus().equals("approved")) ? 1 : 2);
 				roleObject.setDateApproved(LocalDateTime.now());
 				roleRepository.save(roleObject);
 				rsp = util.responseBuilder(0L, pendingAuthorizationRequest.getClientId(), 0);
+				
+				profileObject = new ProfileObject();
+				profileObject = profileRepository.findByUserName(roleObject.getCreatedBy());
 				util.sendEmailOneRecipient(emailMessages.getNotificationSender(),
-						"emmanuel.afonrinwo@swiftsystemsng.com", emailMessages.getApprovalNotificationHeading(),
+						profileObject.getEmail(), emailMessages.getApprovalNotificationHeading(),
 						emailMessages.getApprovalNotificationMessage());
 				return rsp;
 			}

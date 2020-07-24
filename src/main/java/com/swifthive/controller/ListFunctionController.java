@@ -1,22 +1,28 @@
 package com.swifthive.controller;
 
+import java.util.ArrayList;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.swifthive.manager.ClientLog;
-import com.swifthive.manager.NavigationParam;
 import com.swifthive.manager.UserFunction;
 import com.swifthive.manager.UserRole;
 import com.swifthive.manager.UserMenu;
 import com.swifthive.manager.UserProfile;
 import com.swifthive.model.ResponseCode;
 import com.swifthive.model.function.FunctionObject;
-import com.swifthive.model.menu.NavigationParamObject;
+import com.swifthive.model.menu.ListMapMenuRequest;
 import com.swifthive.model.menu.MapMenuObject;
 import com.swifthive.model.menu.MenuObject;
+import com.swifthive.model.profile.NavAccessRightRequest;
 import com.swifthive.model.profile.ProfileObject;
 import com.swifthive.model.role.RoleObject;
 import com.swifthive.utilities.Util;
@@ -24,8 +30,7 @@ import com.swifthive.utilities.Util;
 @RestController
 public class ListFunctionController {
 	
-	@Autowired
-	NavigationParam navigationParam;
+	private Iterable<MenuObject> iMenuObject;
 	
 	@Autowired
 	UserProfile userProfile;
@@ -48,8 +53,8 @@ public class ListFunctionController {
 	@Autowired
 	ResponseCode responseCode;
 
-	@RequestMapping(value = "/listFunction", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody Iterable<FunctionObject> listFunction() {
+	@RequestMapping(value = "/viewFunction", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody Iterable<FunctionObject> viewFunction() {
 		return userFunction.processListFunction();
 	}
 
@@ -59,8 +64,8 @@ public class ListFunctionController {
 		return userFunction.processListFunctionAPL(status);
 	}
 
-	@RequestMapping(value = "/listRole", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody Iterable<RoleObject> listRole() {
+	@RequestMapping(value = "/viewRole", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody Iterable<RoleObject> viewRole() {
 		return userRole.processListRole();
 	}
 
@@ -70,8 +75,8 @@ public class ListFunctionController {
 		return userRole.processListRoleAPL(status);
 	}
 
-	@RequestMapping(value = "/listMenu", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody Iterable<MenuObject> listMenu() {
+	@RequestMapping(value = "/viewMenu", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody Iterable<MenuObject> viewMenu() {
 		return userMenu.processListMenu();
 	}
 
@@ -81,10 +86,11 @@ public class ListFunctionController {
 		return userMenu.processListMenuAPL(status);
 	}
 
-	@RequestMapping(value = "/listMapMenu", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody Iterable<MapMenuObject> listMapMenu() {
+	@RequestMapping(value = "/viewMapMenu", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody Iterable<MapMenuObject> viewMapMenu() {
 		return userMenu.processListMapMenu();
 	}
+	
 	
 	@RequestMapping(value = "/listMapMenuAPL", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody Iterable<MapMenuObject> listMenuMappingAPL() {
@@ -92,14 +98,9 @@ public class ListFunctionController {
 		return userMenu.processMapMenuAPL(status);
 	}
 	
-	@RequestMapping(value = "/listNavigationParamAPL", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody Iterable<NavigationParamObject> listNavigationParamAPL() {
-		String status = "0";
-		return navigationParam.processNavigationParamAPL(status);
-	}
 	
-	@RequestMapping(value = "listUserProfile", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody Iterable<ProfileObject> listProfile() {
+	@RequestMapping(value = "viewUserProfile", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody Iterable<ProfileObject> viewUserProfile() {
 		return userProfile.processUserProfile();
 	}
 	
@@ -109,4 +110,29 @@ public class ListFunctionController {
 		return userProfile.processUserProfileAPL(status);
 	}
 	
+	@RequestMapping(value = "/navAccessRight", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+	public @ResponseBody Iterable<MenuObject> navAccessRight(HttpServletRequest request,
+			@Validated @RequestBody NavAccessRightRequest navAccessRightRequest) {
+		if (request.getHeader("Authorization").equals(
+				util.accessValidation(navAccessRightRequest.getUserName() + navAccessRightRequest.getClientId()))) {
+			return userProfile.processNavAccessRight(navAccessRightRequest);
+		} else {
+			iMenuObject = new ArrayList<>();
+			iMenuObject.forEach(null);
+			return iMenuObject;
+		}
+	}
+	
+	@RequestMapping(value = "/listMapMenu", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+	public @ResponseBody Iterable<MenuObject> listMapMenu(HttpServletRequest request,
+			@Validated @RequestBody ListMapMenuRequest listMapMenuRequest) {
+		if (request.getHeader("Authorization").equals(
+				util.accessValidation(listMapMenuRequest.getUserName() + listMapMenuRequest.getClientId()))) {
+			return userMenu.processListMapMenu(listMapMenuRequest);
+		} else {
+			iMenuObject = new ArrayList<>();
+			iMenuObject.forEach(null);
+			return iMenuObject;
+		}
+	}
 }

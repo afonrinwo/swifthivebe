@@ -14,8 +14,10 @@ import com.swifthive.model.EmailMessages;
 import com.swifthive.model.PendingAuthorizationRequest;
 import com.swifthive.model.Response;
 import com.swifthive.model.function.FunctionRequest;
+import com.swifthive.model.profile.ProfileObject;
 import com.swifthive.model.function.FunctionObject;
 import com.swifthive.repository.FunctionRepository;
+import com.swifthive.repository.ProfileRepository;
 import com.swifthive.utilities.Util;
 
 @Service
@@ -24,11 +26,15 @@ public class UserFunction {
 
 	private static final Logger logger = LogManager.getLogger(UserFunction.class);
 	private FunctionObject functionObject;
+	private ProfileObject profileObject;
 	private Iterable<FunctionObject> iUserFunctionObject;
 	private Response rsp;
 
 	@Autowired
 	FunctionRepository functionRepository;
+	
+	@Autowired
+	ProfileRepository profileRepository;
 
 	@Autowired
 	Util util;
@@ -49,10 +55,11 @@ public class UserFunction {
 				functionObject.setClientId(functionRequest.getClientId());
 				functionObject.setFunctionName(functionRequest.getFunctionName());
 				functionObject.setCreatedBy(functionRequest.getUserId());
-				functionObject.setStatus("0");
+				functionObject.setStatus(0);
 				functionObject.setDateCreated(LocalDateTime.now());
 				functionRepository.save(functionObject);
 				rsp = util.responseBuilder(0L, functionObject.getUniqueId(), 0);
+				
 				util.sendEmailOneRecipient(emailMessages.getNotificationSender(),
 						"emmanuel.afonrinwo@swiftsystemsng.com", emailMessages.getPendingNotificationHeading(),
 						emailMessages.getPendingNotificationMessage());
@@ -106,12 +113,15 @@ public class UserFunction {
 				functionObject.setApprovedClientId(pendingAuthorizationRequest.getClientId());
 				functionObject.setFunctionName(pendingAuthorizationRequest.getActionValue());
 				functionObject.setApprovedBy(pendingAuthorizationRequest.getUserName());
-				functionObject.setStatus((pendingAuthorizationRequest.getStatus().equals("approved")) ? "1" : "2");
+				functionObject.setStatus((pendingAuthorizationRequest.getStatus().equals("approved")) ? 1 : 2);
 				functionObject.setDateApproved(LocalDateTime.now());
 				functionRepository.save(functionObject);
 				rsp = util.responseBuilder(0L, pendingAuthorizationRequest.getClientId(), 0);
+				
+				profileObject = new ProfileObject();
+				profileObject = profileRepository.findByUserName(functionObject.getCreatedBy());
 				util.sendEmailOneRecipient(emailMessages.getNotificationSender(),
-						"emmanuel.afonrinwo@swiftsystemsng.com", emailMessages.getApprovalNotificationHeading(),
+						profileObject.getEmail(), emailMessages.getApprovalNotificationHeading(),
 						emailMessages.getApprovalNotificationMessage());
 				return rsp;
 			}

@@ -38,7 +38,7 @@ public class UserLoginResponse {
 	private String merchantId;
 	
 	@Column(name = "status", nullable = false)
-	private String status;
+	private int status;
 	
 	@Column(name = "responseCode", nullable = false)
 	private String responseCode;
@@ -71,7 +71,7 @@ public class UserLoginResponse {
 	 * @param userName
 	 */
 	public UserLoginResponse(Long uniqueId, Long clientId, String firstName, String lastName, String functionName,
-			String roleName, String merchantId, String status, String responseCode, String responseMessage,
+			String roleName, String merchantId, int status, String responseCode, String responseMessage,
 			String userName) {
 		super();
 		this.uniqueId = uniqueId;
@@ -188,14 +188,14 @@ public class UserLoginResponse {
 	/**
 	 * @return the status
 	 */
-	public String getStatus() {
+	public int getStatus() {
 		return status;
 	}
 
 	/**
 	 * @param status the status to set
 	 */
-	public void setStatus(String status) {
+	public void setStatus(int status) {
 		this.status = status;
 	}
 

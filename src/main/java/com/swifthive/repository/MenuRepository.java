@@ -1,7 +1,6 @@
 package com.swifthive.repository;
 
 import java.io.Serializable;
-
 import javax.transaction.Transactional;
 
 import org.springframework.data.repository.CrudRepository;
@@ -22,5 +21,7 @@ public interface MenuRepository extends CrudRepository<MenuObject, Serializable>
 	boolean existsByMenuName(String menuName);
 
 	MenuObject findByUniqueId(Long uniqueId);
+
+	Iterable<MenuObject> findAllByUniqueIdIn(long[] lIds);
 	
 }

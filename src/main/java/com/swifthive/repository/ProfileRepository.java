@@ -27,4 +27,6 @@ public interface ProfileRepository extends CrudRepository<ProfileObject, Seriali
 
 	ProfileObject findByMerchantIdAndUserName(String merchantId, String userName);
 
+	ProfileObject findByUserName(String createdBy);
+
 }

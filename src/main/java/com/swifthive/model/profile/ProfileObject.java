@@ -66,7 +66,7 @@ public class ProfileObject implements Serializable {
 	private LocalDateTime dateCreated;
 	
 	@Column(name = "status", nullable = false)
-	private String status;
+	private int status;
 	
 	@Column(name = "approvedClientId")
 	private Long approvedClientId;
@@ -105,7 +105,7 @@ public class ProfileObject implements Serializable {
 	 */
 	public ProfileObject(Long uniqueId, Long clientId, String userName, String firstName, String lastName, String email,
 			String mobileNumber, String functionName, String roleName, String merchantId, String createdBy,
-			LocalDateTime dateCreated, String status, Long approvedClientId, String approvedBy,
+			LocalDateTime dateCreated, int status, Long approvedClientId, String approvedBy,
 			LocalDateTime dateApproved) {
 		super();
 		this.uniqueId = uniqueId;
@@ -297,14 +297,14 @@ public class ProfileObject implements Serializable {
 	/**
 	 * @return the status
 	 */
-	public String getStatus() {
+	public int getStatus() {
 		return status;
 	}
 
 	/**
 	 * @param status the status to set
 	 */
-	public void setStatus(String status) {
+	public void setStatus(int status) {
 		this.status = status;
 	}
 

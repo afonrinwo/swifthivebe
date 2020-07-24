@@ -9,7 +9,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.swifthive.model.Response;
 import com.swifthive.model.function.FunctionObject;
 import com.swifthive.model.menu.MenuObject;
-import com.swifthive.model.menu.NavigationParamObject;
 import com.swifthive.model.profile.ProfileKeyObject;
 import com.swifthive.model.profile.ProfileObject;
 import com.swifthive.model.role.RoleObject;
@@ -51,11 +50,6 @@ public class SwiftHiveBEConfiguration {
 	@Bean
 	public ProfileKeyObject profileKeyObject() {
 		return new ProfileKeyObject();
-	}
-	
-	@Bean
-	public NavigationParamObject navigationParamObject() {
-		return new NavigationParamObject();
 	}
 	
 	@Bean

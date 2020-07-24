@@ -17,8 +17,12 @@ public interface MapMenuRepository extends CrudRepository<MapMenuObject, Seriali
 
 	Iterable<MapMenuObject> findByStatus(String status);
 
-	boolean existsByFunctionNameAndRoleName(String functionName, String roleName);
-
 	MapMenuObject findByUniqueId(Long uniqueId);
+
+	MapMenuObject findByMerchantIdAndRoleName(String merchantId, String roleName);
+
+	MapMenuObject findByMerchantIdAndFunctionNameAndRoleName(String merchantId, String functionName, String roleName);
+
+	MapMenuObject existsByMerchantIdAndFunctionNameAndRoleName(String merchantId, String functionName, String roleName);
 
 }

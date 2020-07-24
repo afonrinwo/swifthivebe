@@ -42,7 +42,7 @@ public  class FunctionObject implements Serializable {
 	private LocalDateTime dateCreated;
 	
 	@Column(name = "status", nullable = false)
-	private String status;
+	private int status;
 	
 	@Column(name = "approvedClientId")
 	private Long approvedClientId;
@@ -76,7 +76,7 @@ public  class FunctionObject implements Serializable {
 	 * @param dateApproved
 	 */
 	public FunctionObject(Long uniqueId, Long clientId, String merchantId, String functionName, String createdBy,
-			LocalDateTime dateCreated, String status, Long approvedClientId, String approvedBy,
+			LocalDateTime dateCreated, int status, Long approvedClientId, String approvedBy,
 			LocalDateTime dateApproved) {
 		super();
 		this.uniqueId = uniqueId;
@@ -191,7 +191,7 @@ public  class FunctionObject implements Serializable {
 	/**
 	 * @return the status
 	 */
-	public String getStatus() {
+	public int getStatus() {
 		return status;
 	}
 
@@ -199,7 +199,7 @@ public  class FunctionObject implements Serializable {
 	/**
 	 * @param status the status to set
 	 */
-	public void setStatus(String status) {
+	public void setStatus(int status) {
 		this.status = status;
 	}
 
