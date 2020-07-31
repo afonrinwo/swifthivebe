@@ -10,7 +10,7 @@ import javax.persistence.Id;
  * @author emmanuel.afonrinwo
  *
  */
-public class CreateProfileRequest {
+public class ProfileRequest {
 	
 	@Id
 	@Column(name = "clientId", nullable = false)
@@ -46,7 +46,7 @@ public class CreateProfileRequest {
 	/**
 	 * 
 	 */
-	public CreateProfileRequest() {
+	public ProfileRequest() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -63,7 +63,7 @@ public class CreateProfileRequest {
 	 * @param roleName
 	 * @param merchantId
 	 */
-	public CreateProfileRequest(Long clientId, String userId, String userName, String firstName, String lastName,
+	public ProfileRequest(Long clientId, String userId, String userName, String firstName, String lastName,
 			String email, String mobileNumber, String functionName, String roleName, String merchantId) {
 		super();
 		this.clientId = clientId;

@@ -25,4 +25,8 @@ public interface MapMenuRepository extends CrudRepository<MapMenuObject, Seriali
 
 	boolean existsByMerchantIdAndFunctionNameAndRoleName(String merchantId, String functionName, String roleName);
 
+	Iterable<MapMenuObject> findByMerchantId(String merchantId);
+
+	Iterable<MapMenuObject> findByMerchantIdAndStatus(String merchantId, int status);
+
 }

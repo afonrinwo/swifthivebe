@@ -15,22 +15,22 @@ public class MenuRequest {
 	@Column(name = "userName", nullable = false)
 	private String userName;
 	
-	@Column(name = "menuCategory", nullable = false)
+	@Column(name = "menuCategory")
 	private String menuCategory;
 	
-	@Column(name = "menuName", nullable = false)
+	@Column(name = "menuName")
 	private String menuName;
 	
-	@Column(name = "menuPath", nullable = false)
+	@Column(name = "menuPath")
 	private String menuPath;
 
-	@Column(name = "menuComponent", nullable = false)
+	@Column(name = "menuComponent")
 	private String menuComponent;
 	
-	@Column(name = "navItem", nullable = false)
+	@Column(name = "navItem")
 	private String navItem;
 	
-	@Column(name = "navIcon", nullable = false)
+	@Column(name = "navIcon")
 	private String navIcon;
 	
 

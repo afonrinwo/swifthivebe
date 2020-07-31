@@ -20,4 +20,8 @@ public interface FunctionRepository extends CrudRepository<FunctionObject, Seria
 
 	FunctionObject findByUniqueId(Long uniqueId);
 
+	Iterable<FunctionObject> findByMerchantId(String merchantId);
+
+	Iterable<FunctionObject> findByMerchantIdAndStatus(String merchantId, int status);
+
 }

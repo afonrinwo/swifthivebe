@@ -22,7 +22,7 @@ import com.swifthive.model.Response;
 import com.swifthive.model.ResponseCode;
 import com.swifthive.model.menu.MapMenuObject;
 import com.swifthive.model.menu.MenuObject;
-import com.swifthive.model.profile.CreateProfileRequest;
+import com.swifthive.model.profile.ProfileRequest;
 import com.swifthive.model.profile.NavAccessRightRequest;
 import com.swifthive.model.profile.PasswordChangeRequest;
 import com.swifthive.model.profile.ProfileKeyObject;
@@ -74,7 +74,7 @@ public class UserProfile {
 	@Autowired
 	ResponseCode responseCode;
 
-	public Response processCreateUserProfile(@Validated CreateProfileRequest createProfileRequest) {
+	public Response processCreateUserProfile(@Validated ProfileRequest createProfileRequest) {
 		try {
 			// check if function information exist
 			if (profileRepository.existsByUserName(createProfileRequest.getUserName())) {
@@ -132,10 +132,10 @@ public class UserProfile {
 		}
 	}
 
-	public Iterable<ProfileObject> processUserProfileAPL(int i) {
+	public Iterable<ProfileObject> processUserProfileAPL(String merchantId, int status) {
 		try {
 			iProfileObject = new ArrayList<>();
-			iProfileObject = profileRepository.findByStatus(i);
+			iProfileObject = profileRepository.findByMerchantIdAndStatus(merchantId, status);
 		} catch (Exception ex) {
 			iProfileObject = new ArrayList<>();
 			iProfileObject.forEach(null);
@@ -184,10 +184,10 @@ public class UserProfile {
 		}
 	}
 
-	public Iterable<ProfileObject> processUserProfile() {
+	public Iterable<ProfileObject> processUserProfile(String merchantId) {
 		try {
 			iProfileObject = new ArrayList<>();
-			iProfileObject = profileRepository.findAll();
+			iProfileObject = profileRepository.findByMerchantId(merchantId);
 		} catch (Exception ex) {
 			iProfileObject = new ArrayList<>();
 			iProfileObject.forEach(null);

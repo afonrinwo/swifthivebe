@@ -22,5 +22,9 @@ public interface RoleRepository extends CrudRepository<RoleObject, Serializable>
 	boolean existsByRoleName(String roleName);
 
 	RoleObject findByUniqueId(Long uniqueId);
+
+	Iterable<RoleObject> findByMerchantId(String merchantId);
+
+	Iterable<RoleObject> findByMerchantIdAndStatus(String merchantId, int status);
 	
 }

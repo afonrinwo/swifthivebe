@@ -23,22 +23,22 @@ public class MapMenuRequest implements Serializable {
 	@Column(name = "clientId", nullable = false)
 	private Long clientId;
 	
-	@Column(name = "functionName", nullable = false)
-	private String functionName;
-	
-	@Column(name = "roleName", nullable = false)
-	private String roleName;
-	
-	@Column(name = "selectedMenuList", nullable = false)
-	private String selectedMenuList;
-	
-	@Column(name = "userName", nullable = false)
-	private String userName;
-
 	@Column(name = "merchantId", nullable = false)
 	private String merchantId;
 	
-	@Column(name = "action", nullable = false)
+	@Column(name = "userName", nullable = false)
+	private String userName;
+	
+	@Column(name = "functionName")
+	private String functionName;
+	
+	@Column(name = "roleName")
+	private String roleName;
+	
+	@Column(name = "selectedMenuList")
+	private String selectedMenuList;
+	
+	@Column(name = "action")
 	private String action;
 	
 

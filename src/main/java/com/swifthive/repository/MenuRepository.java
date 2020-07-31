@@ -23,5 +23,9 @@ public interface MenuRepository extends CrudRepository<MenuObject, Serializable>
 	MenuObject findByUniqueId(Long uniqueId);
 
 	Iterable<MenuObject> findAllByUniqueIdIn(long[] lIds);
+
+	Iterable<MenuObject> findByMerchantId(String merchantId);
+
+	Iterable<MenuObject> findByMerchantIdAndStatus(String merchantId, int status);
 	
 }

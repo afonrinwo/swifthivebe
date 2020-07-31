@@ -14,10 +14,10 @@ public class RoleRequest {
 	private String merchantId;
 	
 	
-	@Column(name = "userId", nullable = false)
-	private String userId;
+	@Column(name = "userName", nullable = false)
+	private String userName;
 	
-	@Column(name = "roleName", nullable = false)
+	@Column(name = "roleName")
 	private String roleName;
 
 
@@ -29,11 +29,11 @@ public class RoleRequest {
 	}
 
 
-	public RoleRequest(Long clientId, String merchantId, String userId, String roleName) {
+	public RoleRequest(Long clientId, String merchantId, String userName, String roleName) {
 		super();
 		this.clientId = clientId;
 		this.merchantId = merchantId;
-		this.userId = userId;
+		this.userName = userName;
 		this.roleName = roleName;
 	}
 
@@ -58,13 +58,13 @@ public class RoleRequest {
 	}
 
 
-	public String getUserId() {
-		return userId;
+	public String getUserName() {
+		return userName;
 	}
 
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 

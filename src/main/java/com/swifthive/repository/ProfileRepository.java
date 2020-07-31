@@ -29,4 +29,8 @@ public interface ProfileRepository extends CrudRepository<ProfileObject, Seriali
 
 	ProfileObject findByUserName(String createdBy);
 
+	Iterable<ProfileObject> findByMerchantId(String merchantId);
+
+	Iterable<ProfileObject> findByMerchantIdAndStatus(String merchantId, int status);
+
 }

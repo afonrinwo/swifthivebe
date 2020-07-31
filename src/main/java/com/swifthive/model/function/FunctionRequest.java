@@ -15,7 +15,7 @@ public class FunctionRequest {
 	@Column(name = "userName", nullable = false)
 	private String userName;
 	
-	@Column(name = "functionName", nullable = false)
+	@Column(name = "functionName")
 	private String functionName;
 		
 

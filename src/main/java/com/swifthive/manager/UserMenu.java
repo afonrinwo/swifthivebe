@@ -97,9 +97,9 @@ public class UserMenu {
 		}
 	}
 
-	public Iterable<MenuObject> processListMenu() {
+	public Iterable<MenuObject> processListMenu(String merchantId) {
 		try {
-			iUserMenuObject = menuRepository.findAll();
+			iUserMenuObject = menuRepository.findByMerchantId(merchantId);
 		} catch (Exception ex) {
 			iUserMenuObject = new ArrayList<>();
 			iUserMenuObject.forEach(null);
@@ -107,10 +107,10 @@ public class UserMenu {
 		return iUserMenuObject;
 	}
 
-	public Iterable<MenuObject> processListMenuAPL(int i) {
+	public Iterable<MenuObject> processListMenuAPL(String merchantId, int status) {
 		try {
 			iUserMenuObject = new ArrayList<>();
-			iUserMenuObject = menuRepository.findByStatus(i);
+			iUserMenuObject = menuRepository.findByMerchantIdAndStatus(merchantId, status);
 		} catch (Exception ex) {
 			iUserMenuObject = new ArrayList<>();
 			iUserMenuObject.forEach(null);
@@ -181,10 +181,10 @@ public class UserMenu {
 		}
 	}
 
-	public Iterable<MapMenuObject> processListMapMenu() {
+	public Iterable<MapMenuObject> processListMapMenu(String merchantId) {
 		try {
 			iMapMenuObject = new ArrayList<>();
-			iMapMenuObject = mapMenuRepository.findAll();
+			iMapMenuObject = mapMenuRepository.findByMerchantId(merchantId);
 		} catch (Exception ex) {
 			iMapMenuObject = new ArrayList<>();
 			iMapMenuObject.forEach(null);
@@ -192,10 +192,10 @@ public class UserMenu {
 		return iMapMenuObject;
 	}
 
-	public Iterable<MapMenuObject> processMapMenuAPL(int i) {
+	public Iterable<MapMenuObject> processMapMenuAPL(String merchantId, int status) {
 		try {
 			iMapMenuObject = new ArrayList<>();
-			iMapMenuObject = mapMenuRepository.findByStatus(i);
+			iMapMenuObject = mapMenuRepository.findByMerchantIdAndStatus(merchantId, status);
 		} catch (Exception ex) {
 			iMapMenuObject = new ArrayList<>();
 			iMapMenuObject.forEach(null);

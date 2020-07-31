@@ -22,7 +22,7 @@ import com.swifthive.model.ResponseCode;
 import com.swifthive.model.function.FunctionRequest;
 import com.swifthive.model.menu.MenuRequest;
 import com.swifthive.model.menu.MapMenuRequest;
-import com.swifthive.model.profile.CreateProfileRequest;
+import com.swifthive.model.profile.ProfileRequest;
 import com.swifthive.model.profile.PasswordChangeRequest;
 import com.swifthive.model.profile.UserLoginRequest;
 import com.swifthive.model.profile.UserLoginResponse;
@@ -85,7 +85,7 @@ public class DefaultController {
 	public @ResponseBody Response createRole(HttpServletRequest request,
 			@Validated @RequestBody RoleRequest roleRequest) {
 		if (request.getHeader("Authorization")
-				.equals(util.accessValidation(roleRequest.getUserId() + roleRequest.getClientId()))) {
+				.equals(util.accessValidation(roleRequest.getUserName() + roleRequest.getClientId()))) {
 			return userRole.processCreateRole(roleRequest);
 		} else {
 			return util.responseBuilder(0L, roleRequest.getClientId(), 96);
@@ -141,7 +141,7 @@ public class DefaultController {
 	
 	@RequestMapping(value = "/createProfile", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public @ResponseBody Response createProfile(HttpServletRequest request,
-			@Validated @RequestBody CreateProfileRequest createProfileRequest) {
+			@Validated @RequestBody ProfileRequest createProfileRequest) {
 		if (request.getHeader("Authorization").equals(
 				util.accessValidation(createProfileRequest.getUserId() + createProfileRequest.getClientId()))) {
 			return userProfile.processCreateUserProfile(createProfileRequest);

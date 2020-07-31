@@ -64,7 +64,7 @@ public class UserRole {
 				roleObject.setMerchantId(roleRequest.getMerchantId());
 				roleObject.setClientId(roleRequest.getClientId());
 				roleObject.setRoleName(roleRequest.getRoleName());
-				roleObject.setCreatedBy(roleRequest.getUserId());
+				roleObject.setCreatedBy(roleRequest.getUserName());
 				roleObject.setDateCreated(LocalDateTime.now());
 				roleObject.setStatus(0);
 				roleRepository.save(roleObject);
@@ -84,9 +84,9 @@ public class UserRole {
 		}
 	}
 
-	public Iterable<RoleObject> processListRole() {
+	public Iterable<RoleObject> processListRole(String merchantId) {
 		try {
-			iUserRoleObject = roleRepository.findAll();
+			iUserRoleObject = roleRepository.findByMerchantId(merchantId);
 		} catch (Exception ex) {
 			iUserRoleObject = new ArrayList<>();
 			iUserRoleObject.forEach(null);
@@ -94,10 +94,10 @@ public class UserRole {
 		return iUserRoleObject;
 	}
 
-	public Iterable<RoleObject> processListRoleAPL(int i) {
+	public Iterable<RoleObject> processListRoleAPL(String merchantId, int status) {
 		try {
 			iUserRoleObject = new ArrayList<>();
-			iUserRoleObject = roleRepository.findByStatus(i);
+			iUserRoleObject = roleRepository.findByMerchantIdAndStatus(merchantId, status);
 		} catch (Exception ex) {
 			iUserRoleObject = new ArrayList<>();
 			iUserRoleObject.forEach(null);

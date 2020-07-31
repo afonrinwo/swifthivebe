@@ -64,7 +64,6 @@ public class UserFunction {
 						"emmanuel.afonrinwo@swiftsystemsng.com", emailMessages.getPendingNotificationHeading(),
 						emailMessages.getPendingNotificationMessage());
 				return rsp;
-
 			}
 
 		} catch (Exception ex) {
@@ -73,10 +72,11 @@ public class UserFunction {
 		}
 	}
 
-	public Iterable<FunctionObject> processListFunction() {
+	
+	public Iterable<FunctionObject> processListFunction(String merchantId) {
 		try {
 			iUserFunctionObject = new ArrayList<>();
-			iUserFunctionObject = functionRepository.findAll();
+			iUserFunctionObject = functionRepository.findByMerchantId(merchantId);
 		} catch (Exception ex) {
 			iUserFunctionObject = new ArrayList<>();
 			iUserFunctionObject.forEach(null);
@@ -84,10 +84,10 @@ public class UserFunction {
 		return iUserFunctionObject;
 	}
 
-	public Iterable<FunctionObject> processListFunctionAPL(int status) {
+	public Iterable<FunctionObject> processListFunctionAPL(String merchantId, int status) {
 		try {
 			iUserFunctionObject = new ArrayList<>();
-			iUserFunctionObject = functionRepository.findByStatus(status);
+			iUserFunctionObject = functionRepository.findByMerchantIdAndStatus(merchantId, status);
 		} catch (Exception ex) {
 			iUserFunctionObject = new ArrayList<>();
 			iUserFunctionObject.forEach(null);
